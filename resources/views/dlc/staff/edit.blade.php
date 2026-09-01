@@ -62,11 +62,23 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label fw-semibold" for="id_department">Department <span class="text-danger">*</span></label>
-              <select class="form-select" id="id_department" name="id_department" required>
-                <option value="">-- Pilih Department --</option>
+              <label class="form-label fw-semibold" for="id_divisi">Divisi</label>
+              <select class="form-select" id="id_divisi" name="id_divisi">
+                <option value="">-- Tanpa Divisi (N/A) --</option>
+                @foreach($divisi as $div)
+                  <option value="{{ $div->id_divisi }}" {{ old('id_divisi', $staff->id_divisi) == $div->id_divisi ? 'selected' : '' }}>
+                    {{ $div->nama_divisi }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" for="id_department">Department</label>
+              <select class="form-select" id="id_department" name="id_department">
+                <option value="">-- Tanpa Department (N/A) --</option>
                 @foreach($departments as $dept)
-                  <option value="{{ $dept->id_department }}" {{ old('id_department', $staff->id_department) == $dept->id_department ? 'selected' : '' }}>
+                  <option value="{{ $dept->id_department }}" data-divisi="{{ $dept->id_divisi }}" {{ old('id_department', $staff->id_department) == $dept->id_department ? 'selected' : '' }}>
                     {{ $dept->nama_department }}
                   </option>
                 @endforeach
@@ -99,7 +111,7 @@
           </div>
 
           <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-            <a class="btn btn-outline-secondary" href="{{ route('immediate-manager') }}">Batal</a>
+            <a class="btn btn-outline-secondary" href="{{ route('member-list') }}">Batal</a>
             <button class="btn btn-primary" type="submit">
               <i class="bi bi-save me-1" aria-hidden="true"></i> Simpan Perubahan
             </button>
@@ -109,5 +121,52 @@
     </section>
   </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectDivisi = document.getElementById('id_divisi');
+    const selectDept = document.getElementById('id_department');
+
+    function filterDepartments() {
+        const selectedDivisiId = selectDivisi.value;
+        const currentDeptVal = selectDept.value;
+        let hasMatchingSelected = false;
+
+        Array.from(selectDept.options).forEach(opt => {
+            if (!opt.value) {
+                opt.hidden = false;
+                return;
+            }
+            const deptDivisi = opt.getAttribute('data-divisi');
+            if (!selectedDivisiId) {
+                opt.hidden = false;
+            } else {
+                if (deptDivisi === selectedDivisiId) {
+                    opt.hidden = false;
+                    if (opt.value === currentDeptVal) hasMatchingSelected = true;
+                } else {
+                    opt.hidden = true;
+                }
+            }
+        });
+
+        if (selectedDivisiId && currentDeptVal && !hasMatchingSelected) {
+            selectDept.value = '';
+        }
+    }
+
+    selectDept.addEventListener('change', function () {
+        const selectedOpt = this.options[this.selectedIndex];
+        const deptDivisi = selectedOpt?.getAttribute('data-divisi');
+        if (deptDivisi && selectDivisi.value !== deptDivisi) {
+            selectDivisi.value = deptDivisi;
+            filterDepartments();
+        }
+    });
+
+    selectDivisi.addEventListener('change', filterDepartments);
+    filterDepartments();
+});
+</script>
 
 @endsection

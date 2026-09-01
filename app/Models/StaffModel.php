@@ -13,6 +13,7 @@ class StaffModel extends Model
         'npk_staff',
         'nama_staff',
         'tanggal_lahir',
+        'id_divisi',
         'id_department',
         'id_jabatan_staff',
         'id_immediate_manager',
@@ -28,6 +29,11 @@ class StaffModel extends Model
             return '-';
         }
         return \Carbon\Carbon::parse($this->tanggal_lahir)->age . ' Tahun';
+    }
+
+    public function divisi()
+    {
+        return $this->belongsTo(DivisiModel::class, 'id_divisi', 'id_divisi');
     }
 
     public function department()

@@ -46,10 +46,7 @@
           <span class="nav-text">Users</span>
         </a>
    
-        <!-- <a class="nav-link" href="{{ route('profile') }}">
-          <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-          <span class="nav-text">Profile</span>
-        </a> -->
+
         <!-- <a class="nav-link" href="charts.html">
           <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
           <span class="nav-text">Charts</span>

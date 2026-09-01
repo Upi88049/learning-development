@@ -73,9 +73,10 @@
                     <p class="eyebrow mb-1">Staff Training Profile</p>
                     <h1 class="h3 mb-1">{{ $staff->nama_staff }} <span class="text-muted fs-5">({{ $staff->npk_staff }})</span></h1>
                     <p class="text-muted mb-0 small">
+                        Divisi: <strong>{{ $staff->divisi ? $staff->divisi->nama_divisi : '-' }}</strong> | 
                         Department: <strong>{{ $staff->department ? $staff->department->nama_department : '-' }}</strong> | 
                         Level: <strong>{{ $staff->levelJabatan ? $staff->levelJabatan->kode_level_jabatan : '-' }}</strong> | 
-                        Umur: <strong>{{ $staff->umur ? $staff->umur.' tahun' : '-' }}</strong> | 
+                        Umur: <strong>{{ $staff->umur ?: '-' }}</strong> | 
                         Manager: <strong>{{ $staff->immediateManager ? $staff->immediateManager->nama_staff : '-' }}</strong>
                     </p>
                 </div>

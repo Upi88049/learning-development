@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <meta name="description" content="adminHMD professional admin dashboard template">
+  <meta name="description" content="adminHMD professional admin dashboard">
   <title>@yield('title', 'Dashboard | Learning & Development')</title>
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
@@ -29,7 +29,7 @@
           </span>
           <span class="brand-copy">
             <span class="brand-title">Learning & <br>Development</span>
-            <span class="brand-subtitle">Admin</span>
+            <!-- <span class="brand-subtitle">Admin</span> -->
           </span>
         </a>
       </div>
@@ -39,25 +39,25 @@
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
         </a>
+        <a class="nav-link" href="{{ route('divisi.index') }}">
+          <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+          <span class="nav-text">Master Divisi</span>
+        </a>
+        <a class="nav-link" href="{{ route('department.index') }}">
+          <span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+          <span class="nav-text">Master Department</span>
+        </a>
+        <a class="nav-link" href="{{ route('training.index') }}">
+          <span class="nav-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
+          <span class="nav-text">Master Training</span>
+        </a>
         <a class="nav-link" href="{{ route('member-list') }}">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Member List</span>
         </a>
-        <a class="nav-link" href="{{ route('training.index') }}">
-          <span class="nav-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
-          <span class="nav-text">Training</span>
-        </a>
-        <a class="nav-link" href="{{ route('divisi.index') }}">
-          <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
-          <span class="nav-text">Divisi</span>
-        </a>
-        <a class="nav-link" href="{{ route('department.index') }}">
-          <span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
-          <span class="nav-text">Department</span>
-        </a>
         <a class="nav-link" href="{{ route('penerima-email') }}">
           <span class="nav-icon"><i class="bi bi-envelope-at" aria-hidden="true"></i></span>
-          <span class="nav-text">Penerima Email</span>
+          <span class="nav-text">Konfigurasi Email</span>
         </a>
         <a class="nav-link" href="{{ route('body-email') }}">
           <span class="nav-icon"><i class="bi bi-card-text" aria-hidden="true"></i></span>
@@ -67,26 +67,6 @@
           <span class="nav-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
           <span class="nav-text">Periode TNA</span>
         </a>
-        <!-- <a class="nav-link" href="components.html">
-          <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
-          <span class="nav-text">Components</span>
-        </a>
-        <a class="nav-link" href="alerts.html">
-          <span class="nav-icon"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-          <span class="nav-text">Alerts</span>
-        </a>
-        <a class="nav-link" href="modals.html">
-          <span class="nav-icon"><i class="bi bi-window-stack" aria-hidden="true"></i></span>
-          <span class="nav-text">Modals</span>
-        </a>
-        <a class="nav-link" href="settings.html">
-          <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
-          <span class="nav-text">Settings</span>
-        </a>
-        <a class="nav-link" href="blank.html">
-          <span class="nav-icon"><i class="bi bi-file-earmark" aria-hidden="true"></i></span>
-          <span class="nav-text">Blank Page</span>
-        </a> -->
       </nav>
 
       <!-- <div class="sidebar-user">
@@ -100,7 +80,7 @@
         <span class="sidebar-footer-text">System running smoothly</span>
       </div>
     </aside>
-
+    <!-- ==========NAVBAR========== -->
     <div class="admin-main">
       <nav class="navbar admin-navbar navbar-expand bg-white">
         <div class="container-fluid px-3 px-lg-4">
@@ -109,16 +89,10 @@
             <span></span>
             <span></span>
           </button>
-
-          <!-- <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
-            <input class="form-control search-input" type="search" placeholder="Search users, orders, reports" aria-label="Search">
-          </form> -->
-
           <div class="navbar-actions ms-auto">
             <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme" title="Switch color theme">
               <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
             </button>
-
             @if(session('user'))
             <div class="dropdown ms-2">
               <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -141,7 +115,7 @@
           </div>
         </div>
       </nav>
-
+      <!-- ==========NAVBAR========== -->
       @yield('content')
     </div>
   </div>

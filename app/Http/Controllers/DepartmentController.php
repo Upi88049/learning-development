@@ -27,12 +27,12 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'id_divisi' => 'required|integer|exists:divisi,id_divisi',
+            'id_divisi' => 'nullable|integer|exists:divisi,id_divisi',
             'nama_department' => 'required|string|max:255|unique:department,nama_department',
         ]);
 
         DepartmentModel::create([
-            'id_divisi' => $request->id_divisi,
+            'id_divisi' => $request->id_divisi ?: null,
             'nama_department' => $request->nama_department,
         ]);
 
@@ -49,13 +49,13 @@ class DepartmentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'id_divisi' => 'required|integer|exists:divisi,id_divisi',
+            'id_divisi' => 'nullable|integer|exists:divisi,id_divisi',
             'nama_department' => 'required|string|max:255|unique:department,nama_department,' . $id . ',id_department',
         ]);
 
         $department = DepartmentModel::findOrFail($id);
         $department->update([
-            'id_divisi' => $request->id_divisi,
+            'id_divisi' => $request->id_divisi ?: null,
             'nama_department' => $request->nama_department,
         ]);
 

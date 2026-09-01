@@ -41,6 +41,8 @@ Route::middleware(['checkLogin'])->group(function () {
     Route::get('/staff/export', [UsersController::class, 'exportStaff'])->name('staff.export');
     Route::get('/staff/template', [UsersController::class, 'templateStaff'])->name('staff.template');
     Route::post('/staff/import', [UsersController::class, 'importStaff'])->name('staff.import');
+    Route::get('/staff-training/template', [UsersController::class, 'templateStaffTraining'])->name('staffTraining.template');
+    Route::post('/staff-training/import', [UsersController::class, 'importStaffTraining'])->name('staffTraining.import');
 
     Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
     Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
@@ -79,5 +81,4 @@ Route::middleware(['checkLogin'])->group(function () {
     Route::get('/users/tidakhadir', [UsersController::class, 'tidakhadir'])->name('users.tidakhadir');
     // ==========DEPHEAD / IMMEDIATE MANAGER==========
 
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });

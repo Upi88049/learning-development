@@ -46,9 +46,9 @@
 
                     <div class="row g-3">
                         <div class="col-12">
-                            <label class="form-label fw-semibold" for="id_divisi">Divisi <span class="text-danger">*</span></label>
-                            <select class="form-select" id="id_divisi" name="id_divisi" required>
-                                <option value="">-- Pilih Divisi --</option>
+                            <label class="form-label fw-semibold" for="id_divisi">Divisi</label>
+                            <select class="form-select" id="id_divisi" name="id_divisi">
+                                <option value="">-- Tanpa Divisi (N/A) --</option>
                                 @foreach($divisi as $div)
                                     <option value="{{ $div->id_divisi }}" {{ old('id_divisi', $department->id_divisi) == $div->id_divisi ? 'selected' : '' }}>
                                         {{ $div->nama_divisi }}

@@ -41,7 +41,7 @@
                     <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Department List</span></h2>
                 </div>
                 <div class="d-flex flex-wrap gap-2">
-                    <input class="form-control form-control-sm table-search" type="search" placeholder="Search department" data-table-search="deptTable" aria-label="Search department">
+                    <input class="form-control form-control-sm table-search" type="search" placeholder="Search" data-table-search="deptTable" aria-label="Search department">
                 </div>
             </div>
             <div class="table-responsive">

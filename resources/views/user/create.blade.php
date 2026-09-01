@@ -61,11 +61,23 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label fw-semibold" for="id_department">Department <span class="text-danger">*</span></label>
-              <select class="form-select" id="id_department" name="id_department" required>
-                <option value="">-- Pilih Department --</option>
+              <label class="form-label fw-semibold" for="id_divisi">Divisi</label>
+              <select class="form-select" id="id_divisi" name="id_divisi">
+                <option value="">-- Tanpa Divisi (N/A) --</option>
+                @foreach($divisi as $div)
+                  <option value="{{ $div->id_divisi }}" {{ old('id_divisi') == $div->id_divisi ? 'selected' : '' }}>
+                    {{ $div->nama_divisi }}
+                  </option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold" for="id_department">Department</label>
+              <select class="form-select" id="id_department" name="id_department">
+                <option value="">-- Tanpa Department (N/A) --</option>
                 @foreach($departments as $dept)
-                  <option value="{{ $dept->id_department }}" {{ old('id_department') == $dept->id_department ? 'selected' : '' }}>
+                  <option value="{{ $dept->id_department }}" data-divisi="{{ $dept->id_divisi }}" {{ old('id_department') == $dept->id_department ? 'selected' : '' }}>
                     {{ $dept->nama_department }}
                   </option>
                 @endforeach
@@ -105,37 +117,55 @@
           </div>
         </form>
       </div>
-
-      <!-- <div class="col-12 col-xl-4">
-        <div class="panel h-100 p-4">
-          <h2 class="h5 mb-3 section-title"><i class="bi bi-info-circle me-2" aria-hidden="true"></i><span>Panduan Pengisian</span></h2>
-          <div class="activity-list">
-            <div class="activity-item mb-3">
-              <span class="activity-dot bg-success"></span>
-              <div>
-                <p class="mb-1 fw-semibold">NPK &amp; Nama</p>
-                <p class="text-muted small mb-0">NPK harus unik dan berupa angka integer.</p>
-              </div>
-            </div>
-            <div class="activity-item mb-3">
-              <span class="activity-dot bg-primary"></span>
-              <div>
-                <p class="mb-1 fw-semibold">Tanggal Lahir &amp; Umur</p>
-                <p class="text-muted small mb-0">Tanggal lahir digunakan untuk menghitung umur staff secara otomatis.</p>
-              </div>
-            </div>
-            <div class="activity-item mb-3">
-              <span class="activity-dot bg-warning"></span>
-              <div>
-                <p class="mb-1 fw-semibold">Pengurutan</p>
-                <p class="text-muted small mb-0">Data staff baru akan langsung diurutkan berdasarkan Department secara alfabetis.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
     </section>
   </div>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const selectDivisi = document.getElementById('id_divisi');
+    const selectDept = document.getElementById('id_department');
+
+    function filterDepartments() {
+        const selectedDivisiId = selectDivisi.value;
+        const currentDeptVal = selectDept.value;
+        let hasMatchingSelected = false;
+
+        Array.from(selectDept.options).forEach(opt => {
+            if (!opt.value) {
+                opt.hidden = false;
+                return;
+            }
+            const deptDivisi = opt.getAttribute('data-divisi');
+            if (!selectedDivisiId) {
+                opt.hidden = false;
+            } else {
+                if (deptDivisi === selectedDivisiId) {
+                    opt.hidden = false;
+                    if (opt.value === currentDeptVal) hasMatchingSelected = true;
+                } else {
+                    opt.hidden = true;
+                }
+            }
+        });
+
+        if (selectedDivisiId && currentDeptVal && !hasMatchingSelected) {
+            selectDept.value = '';
+        }
+    }
+
+    selectDept.addEventListener('change', function () {
+        const selectedOpt = this.options[this.selectedIndex];
+        const deptDivisi = selectedOpt?.getAttribute('data-divisi');
+        if (deptDivisi && selectDivisi.value !== deptDivisi) {
+            selectDivisi.value = deptDivisi;
+            filterDepartments();
+        }
+    });
+
+    selectDivisi.addEventListener('change', filterDepartments);
+    filterDepartments();
+});
+</script>
 
 @endsection
