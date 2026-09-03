@@ -56,6 +56,11 @@ class StaffModel extends Model
         return $this->hasMany(StaffModel::class, 'id_immediate_manager', 'id_staff');
     }
 
+    public function outhouseRequests()
+    {
+        return $this->hasMany(RequestOuthouseModel::class, 'id_staff', 'id_staff');
+    }
+
     public function isDlc()
     {
         // Department 3 is Learning & Development (DLC)

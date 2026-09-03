@@ -55,6 +55,14 @@
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Member List</span>
         </a>
+        <a class="nav-link" href="{{ route('outhouse.index') }}">
+          <span class="nav-icon"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></span>
+          <span class="nav-text">Request Out House</span>
+        </a>
+        <a class="nav-link" href="{{ route('penugasan.index') }}">
+          <span class="nav-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></span>
+          <span class="nav-text">Form Penugasan</span>
+        </a>
         <a class="nav-link" href="{{ route('penerima-email') }}">
           <span class="nav-icon"><i class="bi bi-envelope-at" aria-hidden="true"></i></span>
           <span class="nav-text">Konfigurasi Email</span>

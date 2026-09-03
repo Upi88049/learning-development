@@ -9,6 +9,7 @@ use App\Models\DepartmentModel;
 use App\Models\DivisiModel;
 use App\Models\LevelJabatanModel;
 use App\Models\EmailConfigModel;
+use App\Models\RequestOuthouseModel;
 use App\Helpers\StaffSpreadsheetHelper;
 use Illuminate\Http\Request;
 
@@ -113,15 +114,20 @@ class UsersController extends Controller
             ->get()
             ->keyBy('id_training');
 
+        // Ambil semua riwayat request Out House training untuk staff ini
+        $outhouseRequests = RequestOuthouseModel::where('id_staff', $id_staff)
+            ->orderBy('id_request_outhouse', 'desc')
+            ->get();
+
         if (session('role') === 'DLC') {
-            return view('dlc.staffdetail', compact('staff', 'trainings', 'staffTrainings'));
+            return view('dlc.staffdetail', compact('staff', 'trainings', 'staffTrainings', 'outhouseRequests'));
         }
 
         $isTnaActive = EmailConfigModel::isTnaActive();
         $tnaStartDate = EmailConfigModel::getTnaStartDate();
         $tnaEndDate = EmailConfigModel::getTnaEndDate();
 
-        return view('user.userdetail', compact('staff', 'trainings', 'staffTrainings', 'isTnaActive', 'tnaStartDate', 'tnaEndDate'));
+        return view('user.userdetail', compact('staff', 'trainings', 'staffTrainings', 'isTnaActive', 'tnaStartDate', 'tnaEndDate', 'outhouseRequests'));
     }
 
     public function create()

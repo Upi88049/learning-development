@@ -12,6 +12,8 @@ use App\Http\Controllers\PeriodeTnaController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\RequestOuthouseController;
+use App\Http\Controllers\PenugasanTrainingController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -61,6 +63,16 @@ Route::middleware(['checkLogin'])->group(function () {
     // Department Management (CRUD)
     Route::resource('department', DepartmentController::class);
 
+    // Out House Training Management (DLC)
+    Route::get('/dlc/request-outhouse', [RequestOuthouseController::class, 'index'])->name('outhouse.index');
+    Route::put('/dlc/request-outhouse/{id}/status', [RequestOuthouseController::class, 'updateStatus'])->name('outhouse.updateStatus');
+    Route::delete('/dlc/request-outhouse/{id}', [RequestOuthouseController::class, 'destroyDlc'])->name('outhouse.destroyDlc');
+
+    // Formulir Pendaftaran & Penugasan Training (DLC)
+    Route::get('/dlc/penugasan/{id}/pdf', [PenugasanTrainingController::class, 'downloadPdf'])->name('penugasan.downloadPdf');
+    Route::get('/dlc/penugasan/{id}/preview', [PenugasanTrainingController::class, 'previewPdf'])->name('penugasan.previewPdf');
+    Route::resource('/dlc/penugasan', PenugasanTrainingController::class)->names('penugasan');
+
     // Email & TNA Settings
     Route::get('/penerima-email', [PenerimaEmailController::class, 'index'])->name('penerima-email');
     Route::post('/penerima-email', [PenerimaEmailController::class, 'store'])->name('penerima-email.store');
@@ -79,6 +91,11 @@ Route::middleware(['checkLogin'])->group(function () {
     Route::get('/users/permintaan', [UsersController::class, 'permintaan'])->name('users.permintaan');
     Route::get('/users/terlaksana', [UsersController::class, 'terlaksana'])->name('users.terlaksana');
     Route::get('/users/tidakhadir', [UsersController::class, 'tidakhadir'])->name('users.tidakhadir');
+
+    // Request Training Out House (Immediate Manager)
+    Route::post('/request-outhouse/store', [RequestOuthouseController::class, 'store'])->name('outhouse.store');
+    Route::put('/request-outhouse/{id}', [RequestOuthouseController::class, 'update'])->name('outhouse.update');
+    Route::delete('/request-outhouse/{id}', [RequestOuthouseController::class, 'destroy'])->name('outhouse.destroy');
     // ==========DEPHEAD / IMMEDIATE MANAGER==========
 
 });
