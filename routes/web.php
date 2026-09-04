@@ -71,6 +71,8 @@ Route::middleware(['checkLogin'])->group(function () {
     // Formulir Pendaftaran & Penugasan Training (DLC)
     Route::get('/dlc/penugasan/{id}/pdf', [PenugasanTrainingController::class, 'downloadPdf'])->name('penugasan.downloadPdf');
     Route::get('/dlc/penugasan/{id}/preview', [PenugasanTrainingController::class, 'previewPdf'])->name('penugasan.previewPdf');
+    Route::post('/dlc/penugasan/{id}/send-to-im', [PenugasanTrainingController::class, 'sendToIm'])->name('penugasan.sendToIm');
+    Route::post('/dlc/penugasan/{id}/cancel-send-to-im', [PenugasanTrainingController::class, 'cancelSendToIm'])->name('penugasan.cancelSendToIm');
     Route::resource('/dlc/penugasan', PenugasanTrainingController::class)->names('penugasan');
 
     // Email & TNA Settings

@@ -232,11 +232,32 @@
                             <td class="text-end">
                                 <div class="btn-group" role="group">
                                     @if($req->status === 'Verified by DLC' || $req->status === 'Approve')
-                                    <a href="{{ route('penugasan.create', ['from_request' => $req->id_request_outhouse]) }}" class="btn btn-outline-success btn-sm" title="Buat Formulir Pendaftaran & Penugasan Training">
-                                        <i class="bi bi-file-earmark-text"></i>
-                                    </a>
+                                        @if($req->penugasan)
+                                            @if($req->penugasan->is_sent)
+                                                <a href="{{ route('penugasan.downloadPdf', $req->penugasan->id_penugasan) }}" class="btn btn-success btn-sm" title="Download Form (Terkirim ke IM)">
+                                                    <i class="bi bi-check2-all"></i>
+                                                </a>
+                                                <a href="{{ route('penugasan.edit', $req->penugasan->id_penugasan) }}" class="btn btn-outline-primary btn-sm" title="Edit Formulir Penugasan">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            @else
+                                                <form action="{{ route('penugasan.sendToIm', $req->penugasan->id_penugasan) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager?');">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-primary btn-sm" title="Kirim Formulir ke Immediate Manager">
+                                                        <i class="bi bi-send"></i>
+                                                    </button>
+                                                </form>
+                                                <a href="{{ route('penugasan.edit', $req->penugasan->id_penugasan) }}" class="btn btn-outline-secondary btn-sm" title="Edit Formulir">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            @endif
+                                        @else
+                                            <a href="{{ route('penugasan.create', ['from_request' => $req->id_request_outhouse]) }}" class="btn btn-outline-success btn-sm" title="Buat Formulir Pendaftaran &amp; Penugasan Training">
+                                                <i class="bi bi-file-earmark-text"></i>
+                                            </a>
+                                        @endif
                                     @endif
-                                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalStatus{{ $req->id_request_outhouse }}" title="Ubah Status Request">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalStatus{{ $req->id_request_outhouse }}" title="Ubah Status Request">
                                         <i class="bi bi-sliders"></i>
                                     </button>
                                     <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modalDeleteDlc{{ $req->id_request_outhouse }}" title="Hapus">

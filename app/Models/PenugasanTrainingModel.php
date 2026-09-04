@@ -30,16 +30,24 @@ class PenugasanTrainingModel extends Model
         'jabatan_atasan',
         'tempat_tanggal_training',
         'tempat_tanggal_persetujuan',
+        'nama_direktur',
+        'jabatan_direktur',
+        'nama_im',
+        'bagian_im',
         'penyetujui_nama',
         'penyetujui_jabatan',
         'konfirmasi_nama',
         'konfirmasi_jabatan',
+        'is_sent',
+        'sent_at',
     ];
 
     protected $casts = [
         'biaya_per_peserta' => 'decimal:2',
         'total_biaya' => 'decimal:2',
         'jumlah_peserta' => 'integer',
+        'is_sent' => 'boolean',
+        'sent_at' => 'datetime',
     ];
 
     /**

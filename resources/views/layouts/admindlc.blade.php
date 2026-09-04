@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <meta name="description" content="adminHMD professional admin dashboard">
+  <meta name="description" content="Muhamad Luthfi - 02 Mei 2002 - professional admin dashboard">
   <title>@yield('title', 'Dashboard | Learning & Development')</title>
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 <style>
-  .brand-icon img {
+  .muhamad-luthfi img {
     width: 32px;   /* sesuaikan ukuran */
     height: 32px;
     object-fit: contain;
@@ -24,7 +24,7 @@
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
       <div class="sidebar-header">
         <a class="brand-mark" href="{{ route('dashboarddlc') }}" aria-label="adminHMD dashboard">
-          <span class="brand-icon">
+          <span class="muhamad-luthfi">
             <img src="{{ asset('assets/images/logo-dharma.png') }}" alt="Logo Perusahaan">
           </span>
           <span class="brand-copy">

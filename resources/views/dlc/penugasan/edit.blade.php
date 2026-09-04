@@ -96,10 +96,13 @@
                         <select class="form-select form-select-sm" id="staffQuickPicker" style="max-width: 250px;">
                             <option value="">-- Tambah Cepat dari Staff --</option>
                             @foreach($allStaff as $st)
+                            @php
+                                $bagianSt = $st->department ? $st->department->nama_department : ($st->divisi ? $st->divisi->nama_divisi : '-');
+                            @endphp
                             <option value="{{ $st->id_staff }}" 
                                 data-npk="{{ $st->npk_staff }}" 
                                 data-nama="{{ $st->nama_staff }}"
-                                data-bagian="{{ $st->department ? $st->department->nama_department : '-' }}"
+                                data-bagian="{{ $bagianSt }}"
                                 data-jabatan="{{ $st->levelJabatan ? $st->levelJabatan->kode_level_jabatan : 'SF' }}"
                                 data-atasan="{{ $st->immediateManager ? $st->immediateManager->nama_staff : '-' }}">
                                 {{ $st->nama_staff }} ({{ $st->npk_staff }})
@@ -245,14 +248,39 @@
                         <textarea class="form-control" id="tempat_tanggal_training" name="tempat_tanggal_training" rows="2">{{ old('tempat_tanggal_training', $penugasan->tempat_tanggal_training) }}</textarea>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-12">
                         <label for="tempat_tanggal_persetujuan" class="form-label fw-semibold">Tempat &amp; Tanggal Dokumen</label>
                         <input type="text" class="form-control" id="tempat_tanggal_persetujuan" name="tempat_tanggal_persetujuan" value="{{ old('tempat_tanggal_persetujuan', $penugasan->tempat_tanggal_persetujuan) }}">
                     </div>
 
+                    {{-- Kolom Penyetuju: 2 Penyetuju (Immediate Manager & Direktur) --}}
+                    <div class="col-12 mt-3 pt-3 border-top">
+                        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-shield-check me-1 text-primary"></i> Penyetuju Dokumen (Disetujui,)</h6>
+                    </div>
+
                     <div class="col-md-6">
-                        <label for="penyetujui_jabatan" class="form-label fw-semibold">Jabatan Penyetujui (Disetujui,)</label>
-                        <input type="text" class="form-control" id="penyetujui_jabatan" name="penyetujui_jabatan" value="{{ old('penyetujui_jabatan', $penugasan->penyetujui_jabatan) }}">
+                        <label for="nama_im" class="form-label fw-semibold">Nama Immediate Manager</label>
+                        <input type="text" class="form-control" id="nama_im" name="nama_im" value="{{ old('nama_im', $penugasan->nama_im) }}" placeholder="Contoh: Tony Herdian">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="bagian_im" class="form-label fw-semibold">Bagian / Jabatan Immediate Manager</label>
+                        <input type="text" class="form-control" id="bagian_im" name="bagian_im" value="{{ old('bagian_im', $penugasan->bagian_im) }}" placeholder="Contoh: Business Unit Head Fastener">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="nama_direktur" class="form-label fw-semibold">Nama Direktur</label>
+                        <input type="text" class="form-control" id="nama_direktur" name="nama_direktur" value="{{ old('nama_direktur', $penugasan->nama_direktur ?: 'Yosaphat P. Simanjuntak') }}" placeholder="Contoh: Yosaphat P. Simanjuntak">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="jabatan_direktur" class="form-label fw-semibold">Jabatan Direktur</label>
+                        <input type="text" class="form-control" id="jabatan_direktur" name="jabatan_direktur" value="{{ old('jabatan_direktur', $penugasan->jabatan_direktur ?: 'Director') }}" placeholder="Director">
+                    </div>
+
+                    {{-- Kolom Konfirmasi DLC --}}
+                    <div class="col-12 mt-3 pt-3 border-top">
+                        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-patch-check me-1 text-info"></i> Konfirmasi DLC</h6>
                     </div>
 
                     <div class="col-md-6">
@@ -262,20 +290,39 @@
 
                     <div class="col-md-6">
                         <label for="konfirmasi_jabatan" class="form-label fw-semibold">Jabatan Konfirmasi DLC</label>
-                        <input type="text" class="form-control" id="konfirmasi_jabatan" name="konfirmasi_jabatan" value="{{ old('konfirmasi_jabatan', $penugasan->konfirmasi_jabatan) }}">
+                        <input type="text" class="form-control" id="konfirmasi_jabatan" name="konfirmasi_jabatan" value="{{ old('konfirmasi_jabatan', $penugasan->konfirmasi_jabatan ?: 'HRD Deputy Div. Head') }}">
                     </div>
                 </div>
             </div>
 
             {{-- FORM ACTIONS --}}
-            <div class="d-flex flex-wrap justify-content-end gap-3 my-4">
-                <a href="{{ route('penugasan.index') }}" class="btn btn-outline-secondary px-4">Batal</a>
-                <button type="submit" class="btn btn-primary px-4">
-                    <i class="bi bi-save me-1"></i> Simpan Perubahan
-                </button>
-                <button type="submit" name="action_save_download" value="1" class="btn btn-success px-4">
-                    <i class="bi bi-file-earmark-pdf me-1"></i> Simpan &amp; Download PDF
-                </button>
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 my-4">
+                <div class="form-check">
+                    <input type="hidden" name="is_sent_submitted" value="1">
+                    <input class="form-check-input" type="checkbox" name="is_sent" value="1" id="checkIsSent" {{ old('is_sent', $penugasan->is_sent) ? 'checked' : '' }}>
+                    <label class="form-check-label fw-semibold text-dark" for="checkIsSent">
+                        <i class="bi bi-send me-1 text-primary"></i> Buka akses unduh untuk Immediate Manager (Kirim ke IM)
+                    </label>
+                    @if($penugasan->is_sent && $penugasan->sent_at)
+                        <small class="text-success d-block" style="font-size: 0.75rem;">
+                            <i class="bi bi-check2-all me-1"></i>Telah dikirim: {{ $penugasan->sent_at->format('d/m/Y H:i') }}
+                        </small>
+                    @endif
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ route('penugasan.index') }}" class="btn btn-outline-secondary px-4">Batal</a>
+                    <button type="submit" class="btn btn-primary px-3">
+                        <i class="bi bi-save me-1"></i> Simpan
+                    </button>
+                    @if(!$penugasan->is_sent)
+                    <button type="submit" name="action_save_send" value="1" class="btn btn-info text-white px-3">
+                        <i class="bi bi-send me-1"></i> Simpan &amp; Kirim ke IM
+                    </button>
+                    @endif
+                    <button type="submit" name="action_save_download" value="1" class="btn btn-success px-3">
+                        <i class="bi bi-file-earmark-pdf me-1"></i> Simpan &amp; Unduh PDF
+                    </button>
+                </div>
             </div>
         </form>
     </div>

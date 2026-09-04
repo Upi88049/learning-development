@@ -114,8 +114,9 @@ class UsersController extends Controller
             ->get()
             ->keyBy('id_training');
 
-        // Ambil semua riwayat request Out House training untuk staff ini
-        $outhouseRequests = RequestOuthouseModel::where('id_staff', $id_staff)
+        // Ambil semua riwayat request Out House training untuk staff ini (termasuk dokumen penugasan)
+        $outhouseRequests = RequestOuthouseModel::with('penugasan')
+            ->where('id_staff', $id_staff)
             ->orderBy('id_request_outhouse', 'desc')
             ->get();
 

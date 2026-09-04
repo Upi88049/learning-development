@@ -106,7 +106,7 @@
                     <table class="table align-middle mb-0" id="usersTable" data-searchable-table>
                         <thead>
                             <tr>
-                                <th scope="col" style="width: 40px;" class="text-center">
+                                <th scope="col" style="min-width: 40px;" class="text-center">
                                     <input type="checkbox" class="form-check-input" id="selectAll" title="Pilih Semua">
                                 </th>
                                 <th scope="col">NPK</th>
@@ -123,7 +123,7 @@
                         <tbody>
                             @forelse ($staff as $s)
                             <tr>
-                                <td class="text-center">
+                                <td class="text-center" style="min-width: 40px;">
                                     <input type="checkbox" name="staff_ids[]" value="{{ $s->id_staff }}" class="form-check-input staff-checkbox">
                                 </td>
                                 <td>{{ $s->npk_staff }}</td>

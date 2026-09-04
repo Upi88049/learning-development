@@ -219,6 +219,7 @@
                                     <th scope="col">Deskripsi Training</th>
                                     <th scope="col">Reason</th>
                                     <th scope="col" style="width: 140px;">Status</th>
+                                    <th scope="col" style="width: 170px;">Dokumen Formulir</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -259,10 +260,40 @@
                                             <span class="badge bg-secondary">{{ $req->status }}</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if($req->status === 'Verified by DLC' || $req->status === 'Approve')
+                                            @if($req->penugasan)
+                                                @if($req->penugasan->is_sent)
+                                                    <a href="{{ route('penugasan.downloadPdf', $req->penugasan->id_penugasan) }}" class="btn btn-success btn-sm d-inline-flex align-items-center" title="Download Form (Terkirim ke IM)">
+                                                        <i class="bi bi-file-earmark-pdf-fill me-1"></i> Unduh
+                                                    </a>
+                                                    <small class="text-success d-block mt-1" style="font-size: 0.72rem;">
+                                                        <i class="bi bi-check2-all me-1"></i>Terkirim ke IM
+                                                    </small>
+                                                @else
+                                                    <form action="{{ route('penugasan.sendToIm', $req->penugasan->id_penugasan) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager?');">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-primary btn-sm" title="Kirim Dokumen ke Immediate Manager">
+                                                            <i class="bi bi-send me-1"></i> Kirim ke IM
+                                                        </button>
+                                                    </form>
+                                                    <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">
+                                                        Belum dikirim
+                                                    </small>
+                                                @endif
+                                            @else
+                                                <a href="{{ route('penugasan.create', ['from_request' => $req->id_request_outhouse]) }}" class="btn btn-outline-success btn-sm" title="Buat Formulir Pendaftaran Training">
+                                                    <i class="bi bi-file-earmark-plus me-1"></i> Buat Form
+                                                </a>
+                                            @endif
+                                        @else
+                                            <span class="text-muted small">-</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
+                                    <td colspan="7" class="text-center text-muted py-4">
                                         Belum ada permohonan training Out House untuk staff ini.
                                     </td>
                                 </tr>

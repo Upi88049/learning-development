@@ -59,4 +59,12 @@ class RequestOuthouseModel extends Model
     {
         return $this->belongsTo(StaffModel::class, 'id_immediate_manager', 'id_staff');
     }
+
+    /**
+     * Penugasan Training document created by DLC
+     */
+    public function penugasan()
+    {
+        return $this->hasOne(PenugasanTrainingModel::class, 'id_request_outhouse', 'id_request_outhouse');
+    }
 }

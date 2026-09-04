@@ -62,10 +62,14 @@ class PenugasanTrainingController extends Controller
             'jabatan_atasan' => '',
             'tempat_tanggal_training' => '',
             'tempat_tanggal_persetujuan' => 'Cikarang, ' . Carbon::now()->translatedFormat('d F Y'),
+            'nama_direktur' => 'Yosaphat P. Simanjuntak',
+            'jabatan_direktur' => 'Director',
+            'nama_im' => '',
+            'bagian_im' => '',
             'penyetujui_nama' => '',
             'penyetujui_jabatan' => 'Director',
             'konfirmasi_nama' => 'Herwin Gultom',
-            'konfirmasi_jabatan' => 'HRGA Deputy Div. Head',
+            'konfirmasi_jabatan' => 'HRD Deputy Div. Head',
         ];
 
         if ($fromRequestId) {
@@ -81,10 +85,11 @@ class PenugasanTrainingController extends Controller
                 $defaultData['alasan_pelatihan'] = $requestOuthouse->reason;
 
                 if ($staff) {
+                    $staffBagian = $staff->department ? $staff->department->nama_department : ($staff->divisi ? $staff->divisi->nama_divisi : '-');
                     $defaultData['peserta'][] = [
                         'npk' => $staff->npk_staff,
                         'nama' => $staff->nama_staff,
-                        'bagian' => $staff->department ? $staff->department->nama_department : '-',
+                        'bagian' => $staffBagian,
                         'jabatan' => $staff->levelJabatan ? $staff->levelJabatan->kode_level_jabatan : 'SF',
                         'atasan' => $manager ? $manager->nama_staff : '-',
                         'paraf' => '',
@@ -92,9 +97,12 @@ class PenugasanTrainingController extends Controller
                 }
 
                 if ($manager) {
+                    $managerBagian = $manager->department ? $manager->department->nama_department : ($manager->divisi ? $manager->divisi->nama_divisi : '');
                     $defaultData['nama_atasan'] = $manager->nama_staff;
                     $defaultData['divisi_atasan'] = $manager->divisi ? $manager->divisi->nama_divisi : $defaultData['divisi'];
                     $defaultData['jabatan_atasan'] = $manager->levelJabatan ? $manager->levelJabatan->kode_level_jabatan : 'Manager';
+                    $defaultData['nama_im'] = $manager->nama_staff;
+                    $defaultData['bagian_im'] = $manager->levelJabatan ? $manager->levelJabatan->kode_level_jabatan . ($managerBagian ? ' ' . $managerBagian : '') : ($managerBagian ?: 'Immediate Manager');
                 }
             }
         }
@@ -182,17 +190,27 @@ class PenugasanTrainingController extends Controller
             'jabatan_atasan' => $request->jabatan_atasan,
             'tempat_tanggal_training' => $request->tempat_tanggal_training,
             'tempat_tanggal_persetujuan' => $request->tempat_tanggal_persetujuan,
-            'penyetujui_nama' => $request->penyetujui_nama,
-            'penyetujui_jabatan' => $request->penyetujui_jabatan ?: 'Director',
+            'nama_direktur' => $request->nama_direktur ?: 'Yosaphat P. Simanjuntak',
+            'jabatan_direktur' => $request->jabatan_direktur ?: 'Director',
+            'nama_im' => $request->nama_im,
+            'bagian_im' => $request->bagian_im,
+            'penyetujui_nama' => $request->nama_direktur ?: $request->penyetujui_nama,
+            'penyetujui_jabatan' => $request->jabatan_direktur ?: ($request->penyetujui_jabatan ?: 'Director'),
             'konfirmasi_nama' => $request->konfirmasi_nama ?: 'Herwin Gultom',
-            'konfirmasi_jabatan' => $request->konfirmasi_jabatan ?: 'HRGA Deputy Div. Head',
+            'konfirmasi_jabatan' => $request->konfirmasi_jabatan ?: 'HRD Deputy Div. Head',
+            'is_sent' => $request->has('is_sent') || $request->has('action_save_send'),
+            'sent_at' => ($request->has('is_sent') || $request->has('action_save_send')) ? now() : null,
         ]);
 
         if ($request->has('action_save_download')) {
             return redirect()->route('penugasan.downloadPdf', $penugasan->id_penugasan);
         }
 
-        return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran & Penugasan Training ({$penugasan->nama_training}) berhasil dibuat.");
+        if ($request->has('action_save_send')) {
+            return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan langsung dikirim ke Immediate Manager.");
+        }
+
+        return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat.");
     }
 
     /**
@@ -266,17 +284,27 @@ class PenugasanTrainingController extends Controller
             'jabatan_atasan' => $request->jabatan_atasan,
             'tempat_tanggal_training' => $request->tempat_tanggal_training,
             'tempat_tanggal_persetujuan' => $request->tempat_tanggal_persetujuan,
-            'penyetujui_nama' => $request->penyetujui_nama,
-            'penyetujui_jabatan' => $request->penyetujui_jabatan ?: 'Director',
+            'nama_direktur' => $request->nama_direktur ?: 'Yosaphat P. Simanjuntak',
+            'jabatan_direktur' => $request->jabatan_direktur ?: 'Director',
+            'nama_im' => $request->nama_im,
+            'bagian_im' => $request->bagian_im,
+            'penyetujui_nama' => $request->nama_direktur ?: $request->penyetujui_nama,
+            'penyetujui_jabatan' => $request->jabatan_direktur ?: ($request->penyetujui_jabatan ?: 'Director'),
             'konfirmasi_nama' => $request->konfirmasi_nama ?: 'Herwin Gultom',
-            'konfirmasi_jabatan' => $request->konfirmasi_jabatan ?: 'HRGA Deputy Div. Head',
+            'konfirmasi_jabatan' => $request->konfirmasi_jabatan ?: 'HRD Deputy Div. Head',
+            'is_sent' => $request->has('action_save_send') ? true : ($request->has('is_sent') ? true : ($request->has('is_sent_submitted') ? false : $penugasan->is_sent)),
+            'sent_at' => ($request->has('action_save_send') || $request->has('is_sent')) ? ($penugasan->sent_at ?: now()) : ($request->has('is_sent_submitted') ? null : $penugasan->sent_at),
         ]);
 
         if ($request->has('action_save_download')) {
             return redirect()->route('penugasan.downloadPdf', $penugasan->id_penugasan);
         }
 
-        return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran & Penugasan Training ({$penugasan->nama_training}) berhasil diperbarui.");
+        if ($request->has('action_save_send')) {
+            return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan langsung dikirim ke Immediate Manager.");
+        }
+
+        return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui.");
     }
 
     /**
@@ -292,13 +320,16 @@ class PenugasanTrainingController extends Controller
     }
 
     /**
-     * Download Formulir Pendaftaran & Penugasan Training as PDF
+     * Download Formulir Pendaftaran Training as PDF
      */
     public function downloadPdf($id)
     {
         $penugasan = PenugasanTrainingModel::findOrFail($id);
 
-        $pdf = Pdf::loadView('dlc.penugasan.pdf', compact('penugasan'))
+        $logoPath = public_path('assets/images/LOGO DLC.png');
+        $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
+
+        $pdf = Pdf::loadView('dlc.penugasan.pdf', compact('penugasan', 'logoBase64'))
             ->setPaper('a4', 'portrait')
             ->setOption([
                 'isHtml5ParserEnabled' => true,
@@ -306,19 +337,22 @@ class PenugasanTrainingController extends Controller
                 'defaultFont' => 'sans-serif',
             ]);
 
-        $filename = 'Form_Pendaftaran_Penugasan_Training_' . preg_replace('/[^A-Za-z0-9]/', '_', $penugasan->nama_training) . '.pdf';
+        $filename = 'Form_Pendaftaran_Training_' . preg_replace('/[^A-Za-z0-9]/', '_', $penugasan->nama_training) . '.pdf';
 
         return $pdf->download($filename);
     }
 
     /**
-     * Preview Formulir Pendaftaran & Penugasan Training in browser
+     * Preview Formulir Pendaftaran Training in browser
      */
     public function previewPdf($id)
     {
         $penugasan = PenugasanTrainingModel::findOrFail($id);
 
-        $pdf = Pdf::loadView('dlc.penugasan.pdf', compact('penugasan'))
+        $logoPath = public_path('assets/images/LOGO DLC.png');
+        $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
+
+        $pdf = Pdf::loadView('dlc.penugasan.pdf', compact('penugasan', 'logoBase64'))
             ->setPaper('a4', 'portrait')
             ->setOption([
                 'isHtml5ParserEnabled' => true,
@@ -326,6 +360,34 @@ class PenugasanTrainingController extends Controller
                 'defaultFont' => 'sans-serif',
             ]);
 
-        return $pdf->stream('Form_Pendaftaran_Penugasan_Training.pdf');
+        return $pdf->stream('Form_Pendaftaran_Training.pdf');
+    }
+
+    /**
+     * Kirim atau buka dokumen formulir ke akun Immediate Manager
+     */
+    public function sendToIm($id)
+    {
+        $penugasan = PenugasanTrainingModel::findOrFail($id);
+        $penugasan->update([
+            'is_sent' => true,
+            'sent_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', "Dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dikirim ke akun Immediate Manager. Akses download telah aktif.");
+    }
+
+    /**
+     * Batalkan pengiriman dokumen formulir ke akun Immediate Manager
+     */
+    public function cancelSendToIm($id)
+    {
+        $penugasan = PenugasanTrainingModel::findOrFail($id);
+        $penugasan->update([
+            'is_sent' => false,
+            'sent_at' => null,
+        ]);
+
+        return redirect()->back()->with('info', "Pengiriman dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) ke akun Immediate Manager telah dinonaktifkan.");
     }
 }

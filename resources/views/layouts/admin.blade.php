@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="adminHMD professional admin dashboard template">
+  <meta name="description" content="Muhamad Luthfi - 02 Mei 2002 - professional admin dashboard">
   <!-- ==========TEST========== -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- ==========TEST========== -->
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 <style>
-  .brand-icon img {
+  .muhamad-luthfi img {
     width: 32px;   /* sesuaikan ukuran */
     height: 32px;
     object-fit: contain;
@@ -26,7 +26,7 @@
     <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
       <div class="sidebar-header">
         <a class="brand-mark" href="{{ route('dashboard') }}" aria-label="adminHMD dashboard">
-          <span class="brand-icon">
+          <span class="muhamad-luthfi">
             <img src="{{ asset('assets/images/logo-dharma.png') }}" alt="Logo Perusahaan">
           </span>
           <span class="brand-copy">

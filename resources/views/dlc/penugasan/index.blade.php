@@ -71,6 +71,7 @@
                             <th scope="col">Peserta</th>
                             <th scope="col">Total Biaya Investasi</th>
                             <th scope="col">Tempat &amp; Tanggal</th>
+                            <th scope="col">Status Kirim IM</th>
                             <th scope="col">Tanggal Dibuat</th>
                             <th scope="col" class="text-end" style="width: 170px;">Action</th>
                         </tr>
@@ -85,6 +86,13 @@
                             <td>
                                 <strong class="text-dark d-block">{{ $item->nama_training }}</strong>
                                 <small class="text-muted">{{ $item->no_form }}</small>
+                                @if($item->requestOuthouse)
+                                    <div class="mt-1">
+                                        <span class="badge bg-light text-primary border font-monospace" style="font-size: 0.72rem;" title="Terkait Request OH">
+                                            <i class="bi bi-link-45deg"></i> {{ $item->requestOuthouse->no_request }}
+                                        </span>
+                                    </div>
+                                @endif
                             </td>
                             <td>
                                 <span class="badge bg-light text-dark border">{{ $item->jenis_training }}</span>
@@ -108,6 +116,38 @@
                             </td>
                             <td>
                                 <small class="text-muted">{{ $item->tempat_tanggal_training ?: '-' }}</small>
+                            </td>
+                            <td>
+                                @if($item->is_sent)
+                                    <div class="d-flex flex-column gap-1">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1 status-badge">
+                                            <i class="bi bi-check2-all"></i> Terkirim ke IM
+                                        </span>
+                                        <small class="text-muted ps-1" style="font-size: 0.72rem;">
+                                            <i class="bi bi-clock-history me-1"></i>{{ $item->sent_at ? $item->sent_at->format('d/m/Y H:i') : '' }}
+                                        </small>
+                                        <form action="{{ route('penugasan.cancelSendToIm', $item->id_penugasan) }}" method="POST"
+                                            onsubmit="return confirm('Batalkan akses download dokumen ini untuk Immediate Manager?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-danger btn-cancel-im" title="Batalkan Pengiriman">
+                                                <i class="bi bi-x-circle me-1"></i>Batal Kirim
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="d-flex flex-column gap-1">
+                                        <form action="{{ route('penugasan.sendToIm', $item->id_penugasan) }}" method="POST"
+                                            onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager? Immediate Manager akan dapat mengunduh dokumen.');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-primary btn-sm px-3 py-2 btn-send-im" title="Kirim / Buka Akses Dokumen ke Immediate Manager">
+                                                <i class="bi bi-send-fill me-1"></i> Kirim
+                                            </button>
+                                        </form>
+                                        <small class="text-muted ps-1" style="font-size: 0.72rem;">
+                                            <i class="bi bi-hourglass-split me-1"></i>Belum dikirim
+                                        </small>
+                                    </div>
+                                @endif
                             </td>
                             <td>
                                 <small class="text-muted">{{ $item->created_at ? $item->created_at->format('d/m/Y') : '-' }}</small>

@@ -95,7 +95,8 @@ class RequestOuthouseController extends Controller
         $query = RequestOuthouseModel::with([
             'staff.divisi',
             'staff.department',
-            'immediateManager'
+            'immediateManager',
+            'penugasan',
         ])->orderBy('id_request_outhouse', 'desc');
 
         if ($selectedStatus && $selectedStatus !== 'all') {
