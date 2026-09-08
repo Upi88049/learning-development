@@ -432,7 +432,7 @@
                         </td>
                         <td style="width: 50%; border: none; padding: 0 0 0 4px; vertical-align: top;">
                             <div style="font-weight: bold; text-decoration: none;">
-                                {{ $penugasan->nama_direktur ?: 'Yosaphat P. Simanjuntak' }}
+                                {{ $penugasan->nama_direktur ?: 'Dian Eka Hartiningsih' }}
                             </div>
                             <div style="font-size: 6.5pt; color: #000;">
                                 {{ $penugasan->jabatan_direktur ?: 'Director' }}

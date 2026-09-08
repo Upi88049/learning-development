@@ -3,54 +3,30 @@
 @section('title', 'Dashboard | Learning & Development')
 
 @section('content')
-<style>
-.metric-card-link {
-  display: block;
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-}
-
-.metric-card-link:hover,
-.metric-card-link:focus {
-  text-decoration: none;
-  color: inherit;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.metric-card-link:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.metric-card-link:focus-visible {
-  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.35);
-}
-
-.accordion-button:not(.collapsed) {
-  background-color: #e7f1ff;
-  color: #0c63e4;
-}
-</style>
-
 <main class="dashboard-content">
   <div class="container-fluid px-3 px-lg-4 py-4">
-    <div class="page-heading">
-      <div class="page-heading-copy">
-        <span class="page-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
-        <div>
-          <p class="eyebrow mb-1">TNA</p>
-          <h1 class="h3 mb-1">{{ $departmentName }}</h1>
-          <p class="text-muted mb-0">Training Need Analysis<br>PT Dharma Polimetal Tbk</p>
+
+    {{-- Hero Header Card --}}
+    <div class="hero-header-card mb-4">
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem;">
+            <i class="bi bi-people" aria-hidden="true"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">TNA Portal</span>
+              <span class="text-muted small">Immediate Manager</span>
+            </div>
+            <h1 class="h3 mb-1 fw-bold text-dark">{{ $departmentName }}</h1>
+            <p class="text-muted mb-0 small">Training Need Analysis &bull; PT Dharma Polimetal Tbk</p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- ========== KARTU METRIK UTAMA ========== -->
-    <section class="row g-3 mt-1" aria-label="User summary">
+    <section class="row g-3" aria-label="User summary">
       <!-- ==========TOTAL PERMINTAAN TRAINING IN HOUSE========== -->
       <div class="col-12 col-sm-6 col-xl-4">
         <a href="{{ route('users.permintaan') }}" class="metric-card metric-warning metric-card-link">
@@ -60,11 +36,10 @@
           </div>
           <div class="metric-value">{{ $totalPermintaan }}</div>
           <div class="metric-meta">
-            <span>Klik untuk melihat detail</span>
+            <span>Klik untuk melihat rincian</span>
           </div>
         </a>
       </div>
-      <!-- ==========TOTAL PERMINTAAN TRAINING IN HOUSE========== -->
       
       <!-- ==========TOTAL TERLAKSANA========== -->
       <div class="col-12 col-sm-6 col-xl-4">
@@ -75,11 +50,10 @@
           </div>
           <div class="metric-value">{{ $totalTerlaksana }}</div>
           <div class="metric-meta">
-            <span>Klik untuk melihat detail</span>
+            <span>Klik untuk melihat rincian</span>
           </div>
         </a>
       </div>
-      <!-- ==========TOTAL TERLAKSANA========== -->
       
       <!-- ==========TOTAL KETIDAKHADIRAN TRAINING========== -->
       <div class="col-12 col-sm-6 col-xl-4">
@@ -90,58 +64,77 @@
           </div>
           <div class="metric-value">{{ $totalKetidakhadiran }}</div>
           <div class="metric-meta">
-            <span>Klik untuk melihat detail</span>
+            <span>Klik untuk melihat rincian</span>
           </div>
         </a>
       </div>
-      <!-- ==========TOTAL KETIDAKHADIRAN TRAINING========== -->
     </section>
 
-    <!-- ========== DAFTAR STAFF (HANYA BAWAHAN & DIRI SENDIRI) ========== -->
+    <!-- ========== DAFTAR STAFF ========== -->
     <section class="panel mt-4">
-      <div class="panel-header">
+      <div class="panel-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-3 border-bottom mb-3">
         <div>
-          <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Staff List</span></h2>
-          <p class="text-muted mb-0">{{ $departmentName }}</p>
+          <h2 class="h5 mb-1 section-title">
+            <i class="bi bi-person-lines-fill text-primary me-1" aria-hidden="true"></i>
+            <span>Daftar Anggota Staff</span>
+          </h2>
+          <p class="text-muted mb-0 small">Bawahan langsung dalam lingkup departemen <strong>{{ $departmentName }}</strong></p>
         </div>
         <div class="d-flex flex-wrap gap-2">
-          <input class="form-control form-control-sm table-search" type="search" placeholder="Search staff" data-table-search="usersTable" aria-label="Search staff">
+          <div class="input-group input-group-sm" style="max-width: 280px;">
+            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+            <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari nama / NPK..." data-table-search="usersTable" aria-label="Search staff">
+          </div>
         </div>
       </div>
+
       <div class="table-responsive">
-        <table class="table align-middle mb-0" id="usersTable" data-searchable-table>
+        <table class="table table-hover align-middle mb-0" id="usersTable" data-searchable-table>
           <thead>
             <tr>
-              <th scope="col">NPK</th>
-              <th scope="col">Nama Peserta</th>
-              <!-- <th class="text-center" scope="col">Tanggal Lahir</th> -->
-              <th class="text-center" scope="col">Umur</th>
-              <th class="text-center" scope="col">Department</th>
-              <th class="text-center" scope="col">Level Jabatan</th>
-              <th scope="col" class="text-end">Action</th>
+              <th scope="col" style="min-width: 100px;">NPK</th>
+              <th scope="col" style="min-width: 180px;">Nama Peserta</th>
+              <th class="text-center" scope="col" style="min-width: 80px;">Umur</th>
+              <th class="text-center" scope="col" style="min-width: 140px;">Department</th>
+              <th class="text-center" scope="col" style="min-width: 120px;">Level Jabatan</th>
+              <th scope="col" class="text-end" style="min-width: 100px;">Aksi</th>
             </tr>
           </thead>
           <tbody>
             @forelse ($staff as $s)
             <tr>
-              <td>{{ $s->npk_staff }}</td>
               <td>
-                  <div>
-                    <p class="fw-semibold mb-0">{{ $s->nama_staff }}</p>
-                    @if(session('user') && session('user')->id_staff == $s->id_staff)
-                      <span class="badge bg-info text-dark">Saya</span>
-                    @endif
-                  </div>
+                <span class="badge bg-light text-dark border font-monospace">{{ $s->npk_staff }}</span>
               </td>
-              <!-- <td class="text-center">{{ $s->tanggal_lahir ? $s->tanggal_lahir->format('d/m/Y') : '-' }}</td> -->
-              <td class="text-center">{{ $s->umur }}</td>
-              <td class="text-center">{{ $s->department ? $s->department->nama_department : '-' }}</td>
-              <td class="text-center">{{ $s->levelJabatan ? $s->levelJabatan->kode_level_jabatan : '-' }}</td>
-              <td class="text-end"><a class="btn btn-light btn-sm" href="{{ route('users.detail', $s->id_staff) }}">View</a></td>
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-semibold text-dark">{{ $s->nama_staff }}</span>
+                  @if(session('user') && session('user')->id_staff == $s->id_staff)
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" style="font-size: 0.7rem;">Saya</span>
+                  @endif
+                </div>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-light text-secondary border">{{ $s->umur ?: '-' }}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-secondary">{{ $s->department ? $s->department->nama_department : '-' }}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-info text-dark">{{ $s->levelJabatan ? $s->levelJabatan->kode_level_jabatan : '-' }}</span>
+              </td>
+              <td class="text-end">
+                <a class="btn btn-outline-primary btn-sm px-3" href="{{ route('users.detail', $s->id_staff) }}">
+                  <i class="bi bi-eye me-1"></i> Detail
+                </a>
+              </td>
             </tr>
             @empty
             <tr>
-              <td colspan="7" class="text-center text-muted py-4">Belum ada data staff.</td>
+              <td colspan="6" class="text-center text-muted py-5">
+                <i class="bi bi-inbox fs-2 d-block mb-2 text-muted opacity-50"></i>
+                Belum ada data staff yang terdaftar.
+              </td>
             </tr>
             @endforelse
           </tbody>

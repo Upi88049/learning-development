@@ -6,13 +6,31 @@
 
 <main class="dashboard-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
-        <div class="page-heading">
-            <div class="page-heading-copy">
-                <span class="page-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
-                <div>
-                    <p class="eyebrow mb-1">Setting</p>
-                    <h1 class="h3 mb-1">Periode TNA</h1>
-                    <p class="text-muted mb-0">Pengaturan jadwal pembukaan periode TNA bagi Immediate Manager dan notifikasi email.</p>
+        <div class="hero-header-card mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
+                        <i class="bi bi-calendar-event"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Setting Sistem</span>
+                            <span class="text-muted small">Training Needs Analysis</span>
+                        </div>
+                        <h1 class="h3 mb-1 fw-bold text-dark">Periode TNA</h1>
+                        <p class="text-muted mb-0 small">Pengaturan jadwal pembukaan periode pengisian TNA bagi Immediate Manager dan pengiriman notifikasi email.</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    @if($isTnaActive)
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-check-circle-fill me-1"></i> Periode Sedang Aktif
+                        </span>
+                    @else
+                        <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-2 rounded-pill fw-semibold">
+                            <i class="bi bi-dash-circle me-1"></i> Periode Tidak Aktif
+                        </span>
+                    @endif
                 </div>
             </div>   
         </div>
@@ -27,6 +45,13 @@
         @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
             <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if(session('warning'))
+        <div class="alert alert-warning alert-dismissible fade show my-3" role="alert">
+            <i class="bi bi-exclamation-circle me-1"></i> {{ session('warning') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         @endif
@@ -53,14 +78,7 @@
                                 <i class="bi bi-calendar-check me-2 text-primary" aria-hidden="true"></i>
                                 <span>Input Periode TNA</span>
                             </h2>
-                            <p class="text-muted mb-0">Tentukan rentang tanggal pembukaan pengisian TNA.</p>
-                        </div>
-                        <div>
-                            @if($isTnaActive)
-                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Sedang Aktif</span>
-                            @else
-                                <span class="badge bg-secondary"><i class="bi bi-dash-circle me-1"></i> Tidak Aktif</span>
-                            @endif
+                            <p class="text-muted mb-0 small">Tentukan rentang tanggal pembukaan pengisian TNA.</p>
                         </div>
                     </div>
 

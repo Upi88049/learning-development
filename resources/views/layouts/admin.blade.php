@@ -37,48 +37,22 @@
       </div>
 
       <nav class="sidebar-nav">
-        <!-- <a class="nav-link {{ request()->routeIs('dashboard') || request()->is('/') ? 'active' : '' }}" href="{{ route('dashboard') }}" aria-current="{{ request()->routeIs('dashboard') || request()->is('/') ? 'page' : 'false' }}">
-          <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
-          <span class="nav-text">Dashboard</span>
-        </a> -->
-        <a class="nav-link {{ request()->routeIs('users') ? 'active' : '' }}" href="{{ route('users') }}" aria-current="{{ request()->routeIs('users') ? 'page' : 'false' }}">
+        <a class="nav-link {{ request()->routeIs('users', 'users.detail') ? 'active' : '' }}" href="{{ route('users') }}" aria-current="{{ request()->routeIs('users') ? 'page' : 'false' }}">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
-          <span class="nav-text">Users</span>
+          <span class="nav-text">Daftar Staff</span>
         </a>
-   
-
-        <!-- <a class="nav-link" href="charts.html">
-          <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
-          <span class="nav-text">Charts</span>
+        <a class="nav-link {{ request()->routeIs('users.permintaan') ? 'active' : '' }}" href="{{ route('users.permintaan') }}">
+          <span class="nav-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
+          <span class="nav-text">Permintaan Training</span>
         </a>
-        <a class="nav-link" href="tables.html">
-          <span class="nav-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
-          <span class="nav-text">Tables</span>
+        <a class="nav-link {{ request()->routeIs('users.terlaksana') ? 'active' : '' }}" href="{{ route('users.terlaksana') }}">
+          <span class="nav-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+          <span class="nav-text">Training Terlaksana</span>
         </a>
-        <a class="nav-link" href="forms.html">
-          <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
-          <span class="nav-text">Forms</span>
+        <a class="nav-link {{ request()->routeIs('users.tidakhadir') ? 'active' : '' }}" href="{{ route('users.tidakhadir') }}">
+          <span class="nav-icon"><i class="bi bi-x-circle" aria-hidden="true"></i></span>
+          <span class="nav-text">Tidak Hadir</span>
         </a>
-        <a class="nav-link" href="components.html">
-          <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
-          <span class="nav-text">Components</span>
-        </a>
-        <a class="nav-link" href="alerts.html">
-          <span class="nav-icon"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-          <span class="nav-text">Alerts</span>
-        </a>
-        <a class="nav-link" href="modals.html">
-          <span class="nav-icon"><i class="bi bi-window-stack" aria-hidden="true"></i></span>
-          <span class="nav-text">Modals</span>
-        </a>
-        <a class="nav-link" href="settings.html">
-          <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
-          <span class="nav-text">Settings</span>
-        </a>
-        <a class="nav-link" href="blank.html">
-          <span class="nav-icon"><i class="bi bi-file-earmark" aria-hidden="true"></i></span>
-          <span class="nav-text">Blank Page</span>
-        </a> -->
       </nav>
 
       <!-- <div class="sidebar-user">

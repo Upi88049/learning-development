@@ -6,19 +6,27 @@
 
 <main class="dashboard-content">
   <div class="container-fluid px-3 px-lg-4 py-4">
-    <div class="page-heading">
-      <div class="page-heading-copy">
-        <span class="page-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
-        <div>
-          <p class="eyebrow mb-1">Management</p>
-          <h1 class="h3 mb-1">Tambah Staff Baru</h1>
-          <p class="text-muted mb-0">Isi formulir berikut untuk menambahkan data staff ke dalam sistem.</p>
+    {{-- Hero Header Card --}}
+    <div class="hero-header-card mb-4">
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
+            <i class="bi bi-person-plus" aria-hidden="true"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Staff Management</span>
+              <span class="text-muted small">Tambah Baru</span>
+            </div>
+            <h1 class="h3 mb-1 fw-bold text-dark">Tambah Staff Baru</h1>
+            <p class="text-muted mb-0 small">Isi formulir berikut untuk menambahkan data karyawan baru ke dalam sistem.</p>
+          </div>
         </div>
-      </div>
-      <div class="heading-actions">
-        <a class="btn btn-outline-secondary btn-sm" href="{{ route('member-list') }}">
-          <i class="bi bi-arrow-left" aria-hidden="true"></i> Kembali ke Staff List
-        </a>
+        <div class="d-flex gap-2">
+          <a class="btn btn-outline-secondary btn-sm" href="{{ route('member-list') }}">
+            <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Kembali ke Staff List
+          </a>
+        </div>
       </div>
     </div>
 

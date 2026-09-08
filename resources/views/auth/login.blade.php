@@ -9,95 +9,173 @@
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
   <style>
     body {
-      background-color: #f4f6f9;
+      background: radial-gradient(circle at 50% 15%, #f0f7ff 0%, #f8fafc 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       margin: 0;
+      padding: 1.5rem 1rem;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .login-card {
       width: 100%;
-      max-width: 440px;
-      padding: 2.5rem;
+      max-width: 450px;
+      padding: 2.75rem 2.5rem;
       background: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(226, 232, 240, 0.85);
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.09), 0 8px 20px -4px rgba(15, 23, 42, 0.04);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .login-logo-wrap {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 1.25rem auto;
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.12);
+      border: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
     }
     .login-logo {
-      display: block;
-      margin: 0 auto 1.5rem auto;
-      max-height: 60px;
+      max-height: 48px;
+      max-width: 48px;
       object-fit: contain;
     }
     .login-title {
-      font-size: 1.5rem;
-      font-weight: 700;
+      font-size: 1.55rem;
+      font-weight: 800;
       text-align: center;
-      color: #333;
-      margin-bottom: 0.25rem;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.35rem;
     }
     .login-subtitle {
       font-size: 0.875rem;
       text-align: center;
-      color: #6c757d;
-      margin-bottom: 1.5rem;
+      color: #64748b;
+      margin-bottom: 1.75rem;
+    }
+    .segmented-tabs {
+      background: #f1f5f9;
+      padding: 5px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      gap: 4px;
+    }
+    .segmented-tabs .nav-item {
+      flex: 1;
+    }
+    .segmented-tabs .nav-link {
+      width: 100%;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 0.825rem;
+      color: #64748b;
+      padding: 8px 12px;
+      border: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .segmented-tabs .nav-link:hover:not(.active) {
+      color: #1e293b;
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .segmented-tabs .nav-link.active {
+      background: #ffffff;
+      color: #2563eb;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+    }
+    .form-control {
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.88rem;
+      transition: all 0.15s ease;
+      background-color: #ffffff;
+    }
+    .form-control:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3.5px rgba(59, 130, 246, 0.15);
+    }
+    .input-group-text {
+      background-color: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      color: #64748b;
+      padding-left: 14px;
+      padding-right: 12px;
+    }
+    .input-group .form-control {
+      border-left: none;
+      border-radius: 0 10px 10px 0;
+    }
+    .input-group:focus-within .input-group-text {
+      border-color: #3b82f6;
+      color: #2563eb;
     }
     .btn-primary-custom {
-      background-color: #0d6efd;
-      border-color: #0d6efd;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      border: none;
       font-weight: 600;
-      padding: 0.6rem;
-      border-radius: 8px;
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .btn-primary-custom:hover {
-      background-color: #0b5ed7;
-      border-color: #0a58ca;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      transform: translateY(-1.5px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.36);
     }
-    .nav-pills .nav-link {
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      color: #495057;
-    }
-    .nav-pills .nav-link.active {
-      background-color: #0d6efd;
-      color: #fff;
+    .btn-primary-custom:active {
+      transform: translateY(0);
     }
   </style>
 </head>
 <body>
 
 <div class="login-card">
-  <img src="{{ asset('assets/images/logo-dharma.png') }}" alt="Logo" class="login-logo" onerror="this.style.display='none'">
-  <h1 class="login-title">Learning & Development</h1>
+  <div class="login-logo-wrap">
+    <img src="{{ asset('assets/images/logo-dharma.png') }}" alt="Logo" class="login-logo" onerror="this.style.display='none'">
+  </div>
+  <h1 class="login-title">Learning &amp; Development</h1>
   <p class="login-subtitle">Silakan pilih metode login sesuai peran Anda</p>
 
   {{-- Pesan Sukses --}}
   @if(session('success'))
-      <div class="alert alert-success text-center mb-3 py-2 small">
+      <div class="alert alert-success text-center mb-3 py-2 small rounded-3">
           <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
       </div>
   @endif
 
   {{-- Pesan Error --}}
   @if(session('error'))
-      <div class="alert alert-danger text-center mb-3 py-2 small">
+      <div class="alert alert-danger text-center mb-3 py-2 small rounded-3">
           <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
       </div>
   @endif
 
   {{-- Tab Navigation --}}
-  <ul class="nav nav-pills nav-justified mb-3" id="loginTab" role="tablist">
+  <ul class="nav segmented-tabs mb-4" id="loginTab" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="im-tab" data-bs-toggle="pill" data-bs-target="#im-login" type="button" role="tab">
-        <i class="bi bi-person-badge me-1"></i> Immediate Manager
+        <i class="bi bi-person-badge me-1.5"></i> Immediate Manager
       </button>
     </li>
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="dlc-tab" data-bs-toggle="pill" data-bs-target="#dlc-login" type="button" role="tab">
-        <i class="bi bi-shield-lock me-1"></i> DLC
+        <i class="bi bi-shield-lock me-1.5"></i> Admin DLC
       </button>
     </li>
   </ul>

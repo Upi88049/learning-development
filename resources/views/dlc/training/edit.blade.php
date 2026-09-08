@@ -6,18 +6,27 @@
 
 <main class="dashboard-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
-        <div class="page-heading">
-            <div class="page-heading-copy">
-                <span class="page-icon"><i class="bi bi-pencil-square" aria-hidden="true"></i></span>
-                <div>
-                    <p class="eyebrow mb-1">Master Data</p>
-                    <h1 class="h3 mb-1">Edit Training</h1>
+        {{-- Hero Header Card --}}
+        <div class="hero-header-card mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
+                        <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Master Data</span>
+                            <span class="text-muted small">Edit Kurikulum</span>
+                        </div>
+                        <h1 class="h3 mb-1 fw-bold text-dark">Edit Data Training</h1>
+                        <p class="text-muted mb-0 small">Perbarui judul, mandatory status, atau golongan training.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="heading-actions">
-                <a class="btn btn-outline-secondary btn-sm" href="{{ route('training.index') }}">
-                    <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Training
-                </a>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ route('training.index') }}">
+                        <i class="bi bi-arrow-left me-1"></i> Kembali ke Daftar Training
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -46,13 +55,28 @@
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="jenis_training">Jenis Training <span class="text-danger">*</span></label>
-                            <input class="form-control" id="jenis_training" name="jenis_training" type="text" value="{{ old('jenis_training', $training->jenis_training) }}" required>
+                            <label class="form-label fw-semibold" for="kode_training">Kode Training <span class="text-muted small">(Opsional)</span></label>
+                            <input class="form-control font-monospace" id="kode_training" name="kode_training" type="text" value="{{ old('kode_training', $training->kode_training) }}" placeholder="Contoh: TRN-001">
+                            <small class="text-muted d-block mt-1">Kode identifikasi unik untuk silabus training.</small>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="scope_training">Scope Training <span class="text-danger">*</span></label>
+                            <select class="form-select" id="scope_training" name="scope_training" required>
+                                <option value="In House" {{ old('scope_training', $training->scope_training) == 'In House' ? 'selected' : '' }}>In House</option>
+                                <option value="Out House" {{ old('scope_training', $training->scope_training) == 'Out House' ? 'selected' : '' }}>Out House</option>
+                            </select>
+                            <small class="text-muted d-block mt-1">Lingkup penyelenggaraan training (In House atau Out House).</small>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold" for="nama_training">Judul / Nama Training <span class="text-danger">*</span></label>
                             <input class="form-control" id="nama_training" name="nama_training" type="text" value="{{ old('nama_training', $training->nama_training) }}" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="jenis_training">Jenis Training <span class="text-danger">*</span></label>
+                            <input class="form-control" id="jenis_training" name="jenis_training" type="text" value="{{ old('jenis_training', $training->jenis_training) }}" required>
                         </div>
 
                         <div class="col-md-6">

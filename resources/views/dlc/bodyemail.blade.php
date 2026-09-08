@@ -6,12 +6,28 @@
 
 <main class="dashboard-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
-        <div class="page-heading">
-            <div class="page-heading-copy">
-                <span class="page-icon"><i class="bi bi-card-text" aria-hidden="true"></i></span>
-                <div>
-                    <h1 class="h3 mb-1">Pengaturan Body Email</h1>
-                    <p class="text-muted mb-0">Atur penerima, subjek, dan konten body email notifikasi untuk Immediate Manager.</p>
+        <div class="hero-header-card mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
+                        <i class="bi bi-card-text"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Setting Notifikasi</span>
+                            <span class="text-muted small">Template Pesan</span>
+                        </div>
+                        <h1 class="h3 mb-1 fw-bold text-dark">Pengaturan Body Email</h1>
+                        <p class="text-muted mb-0 small">Atur daftar penerima, subjek, dan template konten pesan email notifikasi TNA bagi Immediate Manager.</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('periode-tna') }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left me-1"></i> Kembali ke Periode TNA
+                    </a>
+                    <a href="{{ route('penerima-email') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-people me-1"></i> Kelola Penerima
+                    </a>
                 </div>
             </div>
         </div>

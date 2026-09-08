@@ -35,53 +35,69 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a class="nav-link" href="{{ route('dashboarddlc') }}">
+        <a class="nav-link {{ request()->routeIs('dashboarddlc') ? 'active' : '' }}" href="{{ route('dashboarddlc') }}">
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
         </a>
-        <a class="nav-link" href="{{ route('divisi.index') }}">
-          <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
-          <span class="nav-text">Master Divisi</span>
+
+        <!-- ========== MASTER DATA (COLLAPSIBLE SUBMENU) ========== -->
+        @php
+            $isMasterDataActive = request()->routeIs('divisi.*', 'department.*', 'training.*');
+        @endphp
+        <a class="nav-link submenu-toggle {{ $isMasterDataActive ? 'active' : 'collapsed' }}"
+           href="#masterDataSubmenu"
+           data-bs-toggle="collapse"
+           role="button"
+           aria-expanded="{{ $isMasterDataActive ? 'true' : 'false' }}"
+           aria-controls="masterDataSubmenu">
+          <span class="nav-icon"><i class="bi bi-database" aria-hidden="true"></i></span>
+          <span class="nav-text">Master Data</span>
+          <i class="bi bi-chevron-down submenu-arrow" aria-hidden="true"></i>
         </a>
-        <a class="nav-link" href="{{ route('department.index') }}">
-          <span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
-          <span class="nav-text">Master Department</span>
-        </a>
-        <a class="nav-link" href="{{ route('training.index') }}">
-          <span class="nav-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
-          <span class="nav-text">Master Training</span>
-        </a>
-        <a class="nav-link" href="{{ route('member-list') }}">
+
+        <div class="collapse {{ $isMasterDataActive ? 'show' : '' }}" id="masterDataSubmenu">
+          <div class="sidebar-submenu">
+            <a class="nav-link {{ request()->routeIs('divisi.*') ? 'active' : '' }}" href="{{ route('divisi.index') }}">
+              <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+              <span class="nav-text">Master Divisi</span>
+            </a>
+            <a class="nav-link {{ request()->routeIs('department.*') ? 'active' : '' }}" href="{{ route('department.index') }}">
+              <span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
+              <span class="nav-text">Master Department</span>
+            </a>
+            <a class="nav-link {{ request()->routeIs('training.*') ? 'active' : '' }}" href="{{ route('training.index') }}">
+              <span class="nav-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
+              <span class="nav-text">Master Training</span>
+            </a>
+          </div>
+        </div>
+        <!-- ========== END MASTER DATA ========== -->
+
+        <a class="nav-link {{ request()->routeIs('member-list', 'users.create', 'staff.edit', 'staff.detail') ? 'active' : '' }}" href="{{ route('member-list') }}">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Member List</span>
         </a>
-        <a class="nav-link" href="{{ route('outhouse.index') }}">
+        <a class="nav-link {{ request()->routeIs('outhouse.*') ? 'active' : '' }}" href="{{ route('outhouse.index') }}">
           <span class="nav-icon"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></span>
           <span class="nav-text">Request Out House</span>
         </a>
-        <a class="nav-link" href="{{ route('penugasan.index') }}">
+        <a class="nav-link {{ request()->routeIs('penugasan.*') ? 'active' : '' }}" href="{{ route('penugasan.index') }}">
           <span class="nav-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></span>
           <span class="nav-text">Form Penugasan</span>
         </a>
-        <a class="nav-link" href="{{ route('penerima-email') }}">
+        <a class="nav-link {{ request()->routeIs('penerima-email*') ? 'active' : '' }}" href="{{ route('penerima-email') }}">
           <span class="nav-icon"><i class="bi bi-envelope-at" aria-hidden="true"></i></span>
-          <span class="nav-text">Konfigurasi Email</span>
+          <span class="nav-text">Penerima Email</span>
         </a>
-        <a class="nav-link" href="{{ route('body-email') }}">
+        <a class="nav-link {{ request()->routeIs('body-email*') ? 'active' : '' }}" href="{{ route('body-email') }}">
           <span class="nav-icon"><i class="bi bi-card-text" aria-hidden="true"></i></span>
           <span class="nav-text">Body Email</span>
         </a>
-        <a class="nav-link" href="{{ route('periode-tna') }}">
+        <a class="nav-link {{ request()->routeIs('periode-tna*') ? 'active' : '' }}" href="{{ route('periode-tna') }}">
           <span class="nav-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
           <span class="nav-text">Periode TNA</span>
         </a>
       </nav>
-
-      <!-- <div class="sidebar-user">
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="{{ asset('assets/images/avatar/avatar.jpg') }}" alt="Admin Hasan">
-        <strong>Admin Hasan</strong>
-        <small>Active Workspace</small>
-      </div> -->
 
       <div class="sidebar-footer">
         <span class="status-dot"></span>

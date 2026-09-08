@@ -77,6 +77,10 @@ Route::middleware(['checkLogin'])->group(function () {
 
     // Email & TNA Settings
     Route::get('/penerima-email', [PenerimaEmailController::class, 'index'])->name('penerima-email');
+    Route::get('/penerima-email/export', [PenerimaEmailController::class, 'export'])->name('penerima-email.export');
+    Route::get('/penerima-email/template', [PenerimaEmailController::class, 'template'])->name('penerima-email.template');
+    Route::post('/penerima-email/import', [PenerimaEmailController::class, 'import'])->name('penerima-email.import');
+    Route::put('/penerima-email/{id}', [PenerimaEmailController::class, 'update'])->name('penerima-email.update');
     Route::post('/penerima-email', [PenerimaEmailController::class, 'store'])->name('penerima-email.store');
     Route::get('/body-email', [BodyEmailController::class, 'index'])->name('body-email');
     Route::post('/body-email', [BodyEmailController::class, 'store'])->name('body-email.store');

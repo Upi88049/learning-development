@@ -27,17 +27,82 @@
 .metric-card-link:focus-visible {
   box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.35);
 }
+
+/* Modern Pill Badges */
+.badge-pill-soft {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+.badge-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+.badge-verified {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+.badge-approve {
+    background-color: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+.badge-rejected {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* Action Icon Buttons */
+.btn-action-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    color: #475569;
+    transition: all 0.15s ease;
+}
+.btn-action-icon:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+}
 </style>
 <main class="admin-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
 
-        {{-- Page Heading --}}
-        <div class="page-heading mb-4">
-            <div class="page-heading-copy">
-                <span class="page-icon"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></span>
-                <div>
-                    <h1 class="h3 mb-1">Request Training Out House (OH)</h1>
-                    <p class="text-muted mb-0">Daftar permohonan training Out House yang diajukan oleh Immediate Manager untuk staff masing-masing.</p>
+        {{-- Hero Header Card --}}
+        <div class="hero-header-card mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
+                        <i class="bi bi-box-arrow-up-right"></i>
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Permohonan Pelatihan</span>
+                            <span class="text-muted small">Out House Training</span>
+                        </div>
+                        <h1 class="h3 mb-1 fw-bold text-dark">Request Training Out House (OH)</h1>
+                        <p class="text-muted mb-0 small">Daftar permohonan training Out House yang diajukan oleh Immediate Manager untuk diproses dan diverifikasi DLC.</p>
+                    </div>
+                </div>
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm px-3 py-2" href="{{ route('penugasan.index') }}">
+                        <i class="bi bi-file-earmark-text"></i> Daftar Form Penugasan
+                    </a>
                 </div>
             </div>
         </div>
@@ -213,20 +278,20 @@
                             </td>
                             <td>
                                 @if($req->status === 'Pending')
-                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split me-1"></i>Pending</span>
+                                    <span class="badge-pill-soft badge-pending"><i class="bi bi-hourglass-split"></i> Pending</span>
                                 @elseif($req->status === 'Verified by DLC')
-                                    <span class="badge bg-info text-white"><i class="bi bi-patch-check me-1"></i>Verified by DLC</span>
+                                    <span class="badge-pill-soft badge-verified"><i class="bi bi-patch-check"></i> Verified by DLC</span>
                                 @elseif($req->status === 'Approve')
-                                    <span class="badge bg-success text-white"><i class="bi bi-check-circle me-1"></i>Approve</span>
+                                    <span class="badge-pill-soft badge-approve"><i class="bi bi-check-circle"></i> Approve</span>
                                 @elseif($req->status === 'Rejected With Reason')
-                                    <span class="badge bg-danger text-white"><i class="bi bi-x-circle me-1"></i>Rejected</span>
+                                    <span class="badge-pill-soft badge-rejected"><i class="bi bi-x-circle"></i> Rejected</span>
                                     @if($req->alasan_reject)
-                                        <div class="mt-1 small text-danger" style="max-width: 180px; white-space: normal;">
+                                        <div class="mt-1 small text-danger" style="max-width: 180px; font-size: 0.72rem; white-space: normal;">
                                             <strong>Alasan:</strong> {{ $req->alasan_reject }}
                                         </div>
                                     @endif
                                 @else
-                                    <span class="badge bg-secondary">{{ $req->status }}</span>
+                                    <span class="badge bg-secondary rounded-pill">{{ $req->status }}</span>
                                 @endif
                             </td>
                             <td class="text-end">

@@ -60,19 +60,34 @@ class PeriodeTnaController extends Controller
         $body = EmailConfigModel::getValue('body', "Yth. Immediate Manager,\n\nPeriode TNA telah dibuka. Akses link: http://localhost/learningDevelopment/public/users");
 
         $successCount = 0;
+        $failedEmails = [];
+        $lastErrorMessage = '';
+
         foreach ($recipients as $toEmail) {
             try {
                 Mail::raw($body, function ($message) use ($toEmail, $subject) {
                     $message->to($toEmail)->subject($subject);
                 });
                 $successCount++;
+                Log::info('Email notifikasi TNA berhasil dikirim ke: ' . $toEmail);
             } catch (\Exception $e) {
+                $lastErrorMessage = $e->getMessage();
+                $failedEmails[] = $toEmail;
                 Log::warning('Email sending failed for ' . $toEmail . ': ' . $e->getMessage());
-                // Count as simulated/processed delivery for local environment
-                $successCount++;
             }
         }
 
-        return redirect()->route('periode-tna')->with('success', 'Email notifikasi TNA berhasil dikirim ke ' . count($recipients) . ' alamat penerima.');
+        if ($successCount === 0 && !empty($failedEmails)) {
+            $hint = str_contains($lastErrorMessage, '535') || str_contains($lastErrorMessage, 'BadCredentials')
+                ? 'Autentikasi SMTP Gmail ditolak (Password salah/bukan App Password 16 karakter).'
+                : 'Koneksi SMTP gagal: ' . \Illuminate\Support\Str::limit($lastErrorMessage, 120);
+            return redirect()->route('periode-tna')->with('error', "Gagal mengirim email: Seluruh penerima (" . count($failedEmails) . " alamat) tidak dapat dikirim. {$hint}");
+        }
+
+        if (!empty($failedEmails)) {
+            return redirect()->route('periode-tna')->with('warning', "Email berhasil dikirim ke {$successCount} alamat, namun gagal ke " . count($failedEmails) . " alamat (" . implode(', ', $failedEmails) . ").");
+        }
+
+        return redirect()->route('periode-tna')->with('success', 'Email notifikasi TNA berhasil dikirim ke ' . $successCount . ' alamat penerima. Anda juga dapat memeriksa folder "Terkirim" di akun Gmail.');
     }
 }

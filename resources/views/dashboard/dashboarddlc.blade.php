@@ -5,13 +5,28 @@
 @section('content')
 <main class="dashboard-content">
   <div class="container-fluid px-3 px-lg-4 py-4">
-    <div class="page-heading">
-      <div class="page-heading-copy">
-        <span class="page-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
-        <div>
-          <p class="eyebrow mb-1">Overview</p>
-          <h1 class="h3 mb-1">Dashboard</h1>
-          <p class="text-muted mb-0">Monitor performance, sales, users, and support from one clean workspace.</p>
+    <div class="hero-header-card mb-4">
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
+            <i class="bi bi-speedometer2"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Administrator Portal</span>
+              <span class="text-muted small">Dharma Learning Center</span>
+            </div>
+            <h1 class="h3 mb-1 fw-bold text-dark">DLC Dashboard</h1>
+            <p class="text-muted mb-0 small">Pusat kendali pelatihan, verifikasi permintaan training out-house, dan manajemen formulir penugasan.</p>
+          </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+          <a class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm px-3 py-2" href="{{ route('member-list') }}">
+            <i class="bi bi-people"></i> Member List
+          </a>
+          <a class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm px-3 py-2" href="{{ route('outhouse.index') }}">
+            <i class="bi bi-box-arrow-up-right"></i> Request OH
+          </a>
         </div>
       </div>
     </div>

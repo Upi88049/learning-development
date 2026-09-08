@@ -17,6 +17,7 @@ class StaffModel extends Model
         'id_department',
         'id_jabatan_staff',
         'id_immediate_manager',
+        'email',
     ];
 
     protected $casts = [
