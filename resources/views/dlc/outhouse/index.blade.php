@@ -306,9 +306,9 @@
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
                                             @else
-                                                <form action="{{ route('penugasan.sendToIm', $req->penugasan->id_penugasan) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager?');">
+                                                <form action="{{ route('penugasan.sendToIm', $req->penugasan->id_penugasan) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim dokumen formulir ini ke akun dan email Immediate Manager?');">
                                                     @csrf
-                                                    <button type="submit" class="btn btn-primary btn-sm" title="Kirim Formulir ke Immediate Manager">
+                                                    <button type="submit" class="btn btn-primary btn-sm" title="Kirim Formulir ke Akun &amp; Email Immediate Manager">
                                                         <i class="bi bi-send"></i>
                                                     </button>
                                                 </form>

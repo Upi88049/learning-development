@@ -1,6 +1,6 @@
 @extends('layouts.admindlc')
 
-@section('title', 'Daftar Penerima Email Immediate Manager | Learning & Development')
+@section('title', 'Daftar Penerima Email Immediate Manager | Dharma Learning Center')
 
 @section('content')
 <style>

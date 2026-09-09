@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Learning & Development</title>
+  <title>Login | Dharma Learning Center</title>
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
@@ -149,7 +149,7 @@
   <div class="login-logo-wrap">
     <img src="{{ asset('assets/images/logo-dharma.png') }}" alt="Logo" class="login-logo" onerror="this.style.display='none'">
   </div>
-  <h1 class="login-title">Learning &amp; Development</h1>
+  <h1 class="login-title">Dharma Learning Center</h1>
   <p class="login-subtitle">Silakan pilih metode login sesuai peran Anda</p>
 
   {{-- Pesan Sukses --}}
@@ -257,7 +257,7 @@
   </div>
 
   <div class="text-center mt-4 text-muted small">
-      &copy; {{ date('Y') }} Learning & Development Team
+      &copy; {{ date('Y') }} Dharm Learning Center
   </div>
 </div>
 

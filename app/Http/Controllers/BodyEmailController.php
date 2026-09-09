@@ -12,7 +12,7 @@ class BodyEmailController extends Controller
         $rawRecipients = EmailConfigModel::getValue('recipients', '');
         $recipientsList = array_filter(array_map('trim', explode("\n", $rawRecipients)));
         $subject = EmailConfigModel::getValue('subject', 'Pemberitahuan Periode Training Need Analysis (TNA)');
-        $defaultBody = "Yth. Immediate Manager,\n\nPeriode pengisian dan peninjauan Training Need Analysis (TNA) telah dibuka.\nSilakan akses dashboard Anda melalui link berikut untuk melihat daftar staff dan status training staff Anda:\n\nhttp://localhost/learningDevelopment/public/users\n\nTerima kasih,\nLearning & Development DLC";
+        $defaultBody = "Yth. Immediate Manager,\n\nPeriode pengisian dan peninjauan Training Need Analysis (TNA) telah dibuka.\nSilakan akses dashboard Anda melalui link berikut untuk melihat daftar staff dan status training staff Anda:\n\nhttp://localhost/learningDevelopment/public/users\n\nTerima kasih,\nDharma Learning Center";
         $body = EmailConfigModel::getValue('body', $defaultBody);
 
         return view('dlc.bodyemail', compact('recipientsList', 'subject', 'body'));

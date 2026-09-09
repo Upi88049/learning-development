@@ -1,6 +1,6 @@
 @extends('layouts.admindlc')
 
-@section('title', 'Detail Training Staff | Learning & Development')
+@section('title', 'Detail Training Staff | Dharma Learning Center')
 
 @section('content')
 <style>
@@ -408,9 +408,9 @@
                                                         <i class="bi bi-check2-all me-1"></i>Terkirim ke IM
                                                     </small>
                                                 @else
-                                                    <form action="{{ route('penugasan.sendToIm', $req->penugasan->id_penugasan) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager?');">
+                                                    <form action="{{ route('penugasan.sendToIm', $req->penugasan->id_penugasan) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim dokumen formulir ini ke akun dan email Immediate Manager?');">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-primary btn-sm" title="Kirim Dokumen ke Immediate Manager">
+                                                        <button type="submit" class="btn btn-primary btn-sm" title="Kirim Dokumen ke Akun &amp; Email Immediate Manager">
                                                             <i class="bi bi-send me-1"></i> Kirim ke IM
                                                         </button>
                                                     </form>

@@ -1,6 +1,6 @@
 @extends('layouts.admindlc')
 
-@section('title', 'Dashboard | Learning & Development')
+@section('title', 'Dashboard | Dharma Learning Center')
 
 @section('content')
 <main class="dashboard-content">

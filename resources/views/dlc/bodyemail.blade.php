@@ -1,6 +1,6 @@
 @extends('layouts.admindlc')
 
-@section('title', 'Body Email Notifikasi | Learning & Development')
+@section('title', 'Body Email Notifikasi | Dharma Learning Center')
 
 @section('content')
 

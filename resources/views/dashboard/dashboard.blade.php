@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard | Learning & Development')
+@section('title', 'Dashboard | Dharma Learning Center')
 
 @section('content')
 <main class="dashboard-content">
@@ -14,7 +14,7 @@
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Manager Portal</span>
-              <span class="text-muted small">Learning &amp; Development</span>
+              <span class="text-muted small">Dharma Learning Center</span>
             </div>
             <h1 class="h3 mb-1 fw-bold text-dark">Dashboard</h1>
             <p class="text-muted mb-0 small">Pantau status pelatihan tim kerja dan kelola kebutuhan training staff.</p>

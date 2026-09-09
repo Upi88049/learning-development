@@ -320,10 +320,10 @@
                                 @else
                                     <div class="d-flex flex-column gap-1">
                                         <form action="{{ route('penugasan.sendToIm', $item->id_penugasan) }}" method="POST"
-                                            onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager? Immediate Manager akan dapat mengunduh dokumen.');">
+                                            onsubmit="return confirm('Kirim dokumen formulir ini ke akun dan email Immediate Manager?');">
                                             @csrf
-                                            <button type="submit" class="btn-send-im" title="Kirim / Buka Akses Dokumen ke Immediate Manager">
-                                                <i class="bi bi-send-fill"></i> Kirim ke IM
+                                            <button type="submit" class="btn-send-im" title="Kirim Formulir ke Akun &amp; Email Immediate Manager">
+                                                <i class="bi bi-send-fill"></i> Kirim ke IM &amp; Email
                                             </button>
                                         </form>
                                         <small class="text-muted" style="font-size: 0.72rem;">

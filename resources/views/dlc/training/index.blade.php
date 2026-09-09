@@ -1,6 +1,6 @@
 @extends('layouts.admindlc')
 
-@section('title', 'Master Training | Learning & Development')
+@section('title', 'Master Training | Dharma Learning Center')
 
 @section('content')
 <style>

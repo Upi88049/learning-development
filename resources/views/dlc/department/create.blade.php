@@ -1,6 +1,6 @@
 @extends('layouts.admindlc')
 
-@section('title', 'Tambah Department | Learning & Development')
+@section('title', 'Tambah Department | Dharma Learning Center')
 
 @section('content')
 

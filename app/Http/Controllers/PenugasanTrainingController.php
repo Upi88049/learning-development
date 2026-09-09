@@ -9,6 +9,9 @@ use App\Models\StaffModel;
 use App\Helpers\TerbilangHelper;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class PenugasanTrainingController extends Controller
 {
@@ -207,7 +210,14 @@ class PenugasanTrainingController extends Controller
         }
 
         if ($request->has('action_save_send')) {
-            return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan langsung dikirim ke Immediate Manager.");
+            $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+            if ($emailResult['sent']) {
+                return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan dikirim ke akun serta email Immediate Manager ({$emailResult['email']}).");
+            }
+            if ($emailResult['reason'] === 'no_email') {
+                return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan diaktifkan di akun IM. Namun email tidak dapat dikirim karena kontak email Immediate Manager belum terdaftar.");
+            }
+            return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan diaktifkan di akun IM, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 100));
         }
 
         return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat.");
@@ -301,7 +311,14 @@ class PenugasanTrainingController extends Controller
         }
 
         if ($request->has('action_save_send')) {
-            return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan langsung dikirim ke Immediate Manager.");
+            $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+            if ($emailResult['sent']) {
+                return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan dikirim ke akun serta email Immediate Manager ({$emailResult['email']}).");
+            }
+            if ($emailResult['reason'] === 'no_email') {
+                return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan diaktifkan di akun IM. Namun email tidak dapat dikirim karena kontak email Immediate Manager belum terdaftar.");
+            }
+            return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan diaktifkan di akun IM, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 100));
         }
 
         return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui.");
@@ -364,7 +381,7 @@ class PenugasanTrainingController extends Controller
     }
 
     /**
-     * Kirim atau buka dokumen formulir ke akun Immediate Manager
+     * Kirim atau buka dokumen formulir ke akun Immediate Manager dan kirim email
      */
     public function sendToIm($id)
     {
@@ -374,7 +391,17 @@ class PenugasanTrainingController extends Controller
             'sent_at' => now(),
         ]);
 
-        return redirect()->back()->with('success', "Dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dikirim ke akun Immediate Manager. Akses download telah aktif.");
+        $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+
+        if ($emailResult['sent']) {
+            return redirect()->back()->with('success', "Dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dikirim ke akun dan email Immediate Manager ({$emailResult['email']}). Akses download telah aktif.");
+        }
+
+        if ($emailResult['reason'] === 'no_email') {
+            return redirect()->back()->with('warning', "Dokumen Formulir ({$penugasan->nama_training}) berhasil diaktifkan di portal Immediate Manager, namun email tidak dapat dikirim karena alamat email {$emailResult['recipientName']} belum terdaftar di menu Penerima Email.");
+        }
+
+        return redirect()->back()->with('warning', "Dokumen Formulir ({$penugasan->nama_training}) berhasil diaktifkan di portal Immediate Manager, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 120));
     }
 
     /**
@@ -389,5 +416,106 @@ class PenugasanTrainingController extends Controller
         ]);
 
         return redirect()->back()->with('info', "Pengiriman dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) ke akun Immediate Manager telah dinonaktifkan.");
+    }
+
+    /**
+     * Kirim email dokumen formulir pendaftaran & penugasan training ke Immediate Manager beserta lampiran PDF
+     */
+    protected function sendPenugasanEmailToIm(PenugasanTrainingModel $penugasan): array
+    {
+        $penugasan->loadMissing([
+            'requestOuthouse.immediateManager',
+            'requestOuthouse.staff.immediateManager',
+            'requestOuthouse.staff',
+        ]);
+
+        $recipientEmail = null;
+        $recipientName = $penugasan->nama_im ?: 'Immediate Manager';
+
+        // 1. Cek dari relasi immediateManager pada request_outhouse
+        if ($penugasan->requestOuthouse && $penugasan->requestOuthouse->immediateManager && !empty($penugasan->requestOuthouse->immediateManager->email)) {
+            $recipientEmail = trim($penugasan->requestOuthouse->immediateManager->email);
+            $recipientName = $penugasan->requestOuthouse->immediateManager->nama_staff ?: $recipientName;
+        }
+
+        // 2. Cek dari relasi staff->immediateManager pada staff yang diajukan
+        if (empty($recipientEmail) && $penugasan->requestOuthouse && $penugasan->requestOuthouse->staff && $penugasan->requestOuthouse->staff->immediateManager && !empty($penugasan->requestOuthouse->staff->immediateManager->email)) {
+            $recipientEmail = trim($penugasan->requestOuthouse->staff->immediateManager->email);
+            $recipientName = $penugasan->requestOuthouse->staff->immediateManager->nama_staff ?: $recipientName;
+        }
+
+        // 3. Cek berdasarkan pencocokan nama_im di tabel staff
+        if (empty($recipientEmail) && !empty($penugasan->nama_im)) {
+            $imStaff = StaffModel::where('nama_staff', 'like', trim($penugasan->nama_im))->whereNotNull('email')->where('email', '!=', '')->first();
+            if ($imStaff) {
+                $recipientEmail = trim($imStaff->email);
+                $recipientName = $imStaff->nama_staff;
+            }
+        }
+
+        if (empty($recipientEmail)) {
+            return [
+                'sent' => false,
+                'reason' => 'no_email',
+                'email' => null,
+                'recipientName' => $recipientName,
+            ];
+        }
+
+        try {
+            $logoPath = public_path('assets/images/LOGO DLC.png');
+            $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
+
+            $pdf = Pdf::loadView('dlc.penugasan.pdf', compact('penugasan', 'logoBase64'))
+                ->setPaper('a4', 'portrait')
+                ->setOption([
+                    'isHtml5ParserEnabled' => true,
+                    'isRemoteEnabled' => true,
+                    'defaultFont' => 'sans-serif',
+                ]);
+
+            $pdfBinary = $pdf->output();
+            $safeTrainingName = preg_replace('/[^A-Za-z0-9]/', '_', $penugasan->nama_training);
+            $pdfFileName = "Form_Pendaftaran_Training_{$safeTrainingName}.pdf";
+
+            $portalUrl = ($penugasan->requestOuthouse && $penugasan->requestOuthouse->id_staff)
+                ? url('/users/detail/' . $penugasan->requestOuthouse->id_staff)
+                : url('/users');
+
+            $subject = "Formulir Pendaftaran & Penugasan Training: {$penugasan->nama_training}";
+
+            Mail::send('emails.penugasan_training', [
+                'penugasan' => $penugasan,
+                'namaIm' => $recipientName,
+                'portalUrl' => $portalUrl,
+            ], function ($message) use ($recipientEmail, $recipientName, $subject, $pdfBinary, $pdfFileName) {
+                $message->to($recipientEmail, $recipientName)
+                    ->subject($subject);
+
+                if (!empty($pdfBinary)) {
+                    $message->attachData($pdfBinary, $pdfFileName, [
+                        'mime' => 'application/pdf',
+                    ]);
+                }
+            });
+
+            Log::info("Email Formulir Penugasan ({$penugasan->nama_training}) berhasil dikirim ke IM: {$recipientEmail}");
+
+            return [
+                'sent' => true,
+                'email' => $recipientEmail,
+                'recipientName' => $recipientName,
+            ];
+        } catch (\Exception $e) {
+            Log::error("Gagal mengirim email formulir penugasan ID {$penugasan->id_penugasan} ke {$recipientEmail}: " . $e->getMessage());
+
+            return [
+                'sent' => false,
+                'reason' => 'error',
+                'error' => $e->getMessage(),
+                'email' => $recipientEmail,
+                'recipientName' => $recipientName,
+            ];
+        }
     }
 }
