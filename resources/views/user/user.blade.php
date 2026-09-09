@@ -3,6 +3,33 @@
 @section('title', 'Dashboard | Learning & Development')
 
 @section('content')
+<style>
+  .metric-card-link {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.metric-card-link:hover,
+.metric-card-link:focus {
+  text-decoration: none;
+  color: inherit;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.metric-card-link:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.metric-card-link:focus-visible {
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.35);
+}
+</style>
 <main class="dashboard-content">
   <div class="container-fluid px-3 px-lg-4 py-4">
 
@@ -43,43 +70,37 @@
     <section class="row g-3" aria-label="User summary">
       <!-- ==========TOTAL PERMINTAAN TRAINING IN HOUSE========== -->
       <div class="col-12 col-sm-6 col-xl-4">
-        <a href="{{ route('users.permintaan') }}" class="metric-card metric-warning metric-card-link">
+        <a href="{{ route('users.permintaan') }}" class="metric-card-link card border-0 shadow-sm rounded-3 p-3 bg-white metric-card metric-warning">
           <div class="metric-top">
-            <span class="metric-label">Total Permintaan Training In House</span>
+            <span class="text-muted small d-block">Total Permintaan Training In House</span>
             <span class="metric-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
           </div>
-          <div class="metric-value">{{ $totalPermintaan }}</div>
-          <div class="metric-meta">
-            <span>Klik untuk melihat rincian</span>
-          </div>
+          <div class="fs-4 fw-bold text-dark">{{ $totalPermintaan }}</div>
+          
         </a>
       </div>
-      
+
       <!-- ==========TOTAL TERLAKSANA========== -->
       <div class="col-12 col-sm-6 col-xl-4">
-        <a href="{{ route('users.terlaksana') }}" class="metric-card metric-success metric-card-link">
+        <a href="{{ route('users.terlaksana') }}" class="metric-card-link card border-0 shadow-sm rounded-3 p-3 bg-white metric-card metric-success">
           <div class="metric-top">
-            <span class="metric-label">Total Terlaksana</span>
+            <span class="text-muted small d-block">Total Terlaksana</span>
             <span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
           </div>
-          <div class="metric-value">{{ $totalTerlaksana }}</div>
-          <div class="metric-meta">
-            <span>Klik untuk melihat rincian</span>
-          </div>
+          <div class="fs-4 fw-bold text-dark">{{ $totalTerlaksana }}</div>
+          
         </a>
       </div>
       
       <!-- ==========TOTAL KETIDAKHADIRAN TRAINING========== -->
       <div class="col-12 col-sm-6 col-xl-4">
-        <a href="{{ route('users.tidakhadir') }}" class="metric-card metric-danger metric-card-link">
+        <a href="{{ route('users.tidakhadir') }}" class="metric-card-link card border-0 shadow-sm rounded-3 p-3 bg-white metric-card metric-danger">
           <div class="metric-top">
-            <span class="metric-label">Total Ketidakhadiran Training</span>
+            <span class="text-muted small d-block">Total Ketidakhadiran Training</span>
             <span class="metric-icon"><i class="bi bi-slash-circle" aria-hidden="true"></i></span>
           </div>
-          <div class="metric-value">{{ $totalKetidakhadiran }}</div>
-          <div class="metric-meta">
-            <span>Klik untuk melihat rincian</span>
-          </div>
+          <div class="fs-4 fw-bold text-dark">{{ $totalKetidakhadiran }}</div>
+          
         </a>
       </div>
     </section>

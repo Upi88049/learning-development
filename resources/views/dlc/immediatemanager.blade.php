@@ -24,13 +24,13 @@
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2">
                     <a class="btn btn-outline-success btn-sm" href="{{ route('staff.export', ['divisi' => $selectedDivisi, 'department' => $selectedDepartment]) }}">
-                        <i class="bi bi-download me-1" aria-hidden="true"></i> Export Excel
+                        <i class="bi bi-download me-1" aria-hidden="true"></i> Export
                     </a>
                     <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalImportStaff">
-                        <i class="bi bi-upload me-1" aria-hidden="true"></i> Import Excel Staff
+                        <i class="bi bi-upload me-1" aria-hidden="true"></i> Import Staff
                     </button>
                     <button class="btn btn-outline-info btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalImportTraining">
-                        <i class="bi bi-journal-arrow-up me-1" aria-hidden="true"></i> Import History Training
+                        <i class="bi bi-journal-arrow-up me-1" aria-hidden="true"></i> Import Training
                     </button>
                     <a class="btn btn-primary btn-sm" href="{{ route('users.create') }}">
                         <i class="bi bi-person-plus me-1" aria-hidden="true"></i> Tambah Staff

@@ -89,10 +89,12 @@
             <div class="dropdown ms-2">
               <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person-circle"></i>
-                <span>{{ session('user')->nama_staff }} ({{ session('user')->npk_staff }})</span>
+                <span>{{ session('user')->nama_staff ?? session('user')->username ?? 'User' }}@if(!empty(session('user')->npk_staff)) ({{ session('user')->npk_staff }})@endif</span>
               </button>
               <ul class="dropdown-menu dropdown-menu-end">
+                @if(!empty(session('user')->bagian_staff))
                 <li><span class="dropdown-item-text text-muted small">Bagian: {{ session('user')->bagian_staff }}</span></li>
+                @endif
                 <li><span class="dropdown-item-text text-muted small">Role: {{ session('role', 'Immediate Manager') }}</span></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>

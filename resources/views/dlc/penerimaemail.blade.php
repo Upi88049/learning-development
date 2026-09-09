@@ -274,18 +274,18 @@
                         <i class="bi bi-file-earmark-arrow-down"></i> Unduh Template
                     </a> -->
                     <a href="{{ route('penerima-email.export') }}" class="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1" title="Export seluruh kontak manager ke CSV/Excel">
-                        <i class="bi bi-file-earmark-excel"></i> Export CSV
+                        <i class="bi bi-file-earmark-excel"></i> Export
                     </a>
                     <button type="button" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1" data-bs-toggle="modal" data-bs-target="#modalImportEmail">
-                        <i class="bi bi-file-earmark-arrow-up"></i> Import Kontak
+                        <i class="bi bi-file-earmark-arrow-up"></i> Import
                     </button>
                 </div>
             </div>
 
             {{-- Table --}}
-            <div class="table-smooth-container">
+            <!-- <div class="table-smooth-container"> -->
                 <div class="table-responsive">
-                    <table class="table-smooth">
+                    <table class="table table-hover align-middle mb-0 small">
                         <thead>
                             <tr>
                                 <th style="width: 50px;" class="text-center">#</th>
@@ -388,7 +388,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            <!-- </div> -->
             
             {{-- Footer Summary --}}
             <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between mt-3 text-muted small">

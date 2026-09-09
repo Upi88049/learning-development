@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\StaffModel;
 use App\Models\EmailConfigModel;
+use App\Helpers\StaffSpreadsheetHelper;
 use Illuminate\Support\Facades\Log;
 
 class PenerimaEmailController extends Controller
@@ -235,45 +236,17 @@ class PenerimaEmailController extends Controller
         ]);
 
         $file = $request->file('file');
-        $rawContent = file_get_contents($file->getRealPath());
-
-        if (empty(trim($rawContent))) {
-            return redirect()->route('penerima-email')->with('error', 'Berkas import kosong atau tidak dapat dibaca.');
+        try {
+            $rows = StaffSpreadsheetHelper::readRowsFromAny($file);
+        } catch (\Exception $e) {
+            return redirect()->route('penerima-email')->with('error', 'Gagal membaca berkas import: ' . $e->getMessage());
         }
 
-        // Pecah file menjadi baris-baris
-        $lines = preg_split('/\r\n|\r|\n/', $rawContent);
-        $cleanedLines = [];
-
-        foreach ($lines as $idx => $line) {
-            if ($idx === 0) {
-                $line = preg_replace('/^\xEF\xBB\xBF/', '', $line); // Hapus BOM
-            }
-            $lineTrim = trim($line);
-            if ($lineTrim === '' || stripos($lineTrim, 'sep=') === 0) {
-                continue;
-            }
-            $cleanedLines[] = $line;
+        if (empty($rows) || count($rows) < 2) {
+            return redirect()->route('penerima-email')->with('error', 'Berkas import kosong atau tidak memiliki data yang valid.');
         }
 
-        if (empty($cleanedLines)) {
-            return redirect()->route('penerima-email')->with('error', 'Tidak ada data valid yang ditemukan pada berkas import.');
-        }
-
-        // Deteksi delimiter (koma, titik koma, tab)
-        $firstLine = $cleanedLines[0];
-        $delimiters = [',', ';', "\t", '|'];
-        $detectedDelimiter = ',';
-        $maxCount = 0;
-        foreach ($delimiters as $delim) {
-            $cnt = count(str_getcsv($firstLine, $delim));
-            if ($cnt > $maxCount) {
-                $maxCount = $cnt;
-                $detectedDelimiter = $delim;
-            }
-        }
-
-        $headerRow = str_getcsv($cleanedLines[0], $detectedDelimiter);
+        $headerRow = array_shift($rows);
         $headerRow = array_map(function ($h) {
             return strtolower(trim(preg_replace('/[^a-zA-Z0-9]/', '', $h)));
         }, $headerRow);
@@ -304,8 +277,7 @@ class PenerimaEmailController extends Controller
         $skippedCount = 0;
         $notFoundNpks = [];
 
-        for ($i = 1; $i < count($cleanedLines); $i++) {
-            $row = str_getcsv($cleanedLines[$i], $detectedDelimiter);
+        foreach ($rows as $row) {
             if (empty(array_filter($row, fn($v) => trim($v) !== ''))) {
                 continue;
             }

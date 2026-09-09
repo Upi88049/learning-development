@@ -343,18 +343,21 @@
             </div>
         </section>
 
-        {{-- Training Sections dynamically grouped by jenis_training in Accordion --}}
+        {{-- Training Sections dynamically grouped by jenis_training in Accordion (Khusus In House) --}}
         @php
-            $groupedTrainings = $trainings->groupBy('jenis_training');
+            $inHouseTrainings = $trainings->filter(function ($t) {
+                return ($t->scope_training ?? 'In House') !== 'Out House';
+            });
+            $groupedTrainings = $inHouseTrainings->groupBy('jenis_training');
         @endphp
 
         <div class="mb-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
                 <div class="d-flex align-items-center gap-2">
                     <i class="bi bi-collection-play-fill text-primary fs-5"></i>
-                    <h5 class="mb-0 fw-bold text-dark">Modul Training</h5>
+                    <h5 class="mb-0 fw-bold text-dark">Modul Training (In House)</h5>
                     <span class="badge bg-light text-secondary border">
-                        {{ count($groupedTrainings) }} Kategori &bull; {{ count($trainings) }} Total
+                        {{ count($groupedTrainings) }} Kategori &bull; {{ count($inHouseTrainings) }} Total
                     </span>
                 </div>
                 <div class="btn-group btn-group-sm" role="group">

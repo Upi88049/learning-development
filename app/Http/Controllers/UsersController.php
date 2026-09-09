@@ -44,8 +44,12 @@ class UsersController extends Controller
 
         $staffIds = $staff->pluck('id_staff')->toArray();
 
-        // Ambil data counts untuk 3 metrik
-        $allStaffTrainings = StaffTrainingModel::whereIn('id_staff', $staffIds)->get();
+        // Ambil data counts untuk 3 metrik (khusus In House Training)
+        $allStaffTrainings = StaffTrainingModel::whereIn('id_staff', $staffIds)
+            ->whereHas('training', function ($q) {
+                $q->where('scope_training', 'In House')->orWhereNull('scope_training');
+            })
+            ->get();
 
         $totalPermintaan = $allStaffTrainings->whereIn('id_status', [2, 4])->count();
         $totalTerlaksana = $allStaffTrainings->where('id_status', 1)->count();
@@ -99,7 +103,9 @@ class UsersController extends Controller
         }
 
         $staff = $query->get();
-        $masterTrainings = UserModel::orderBy('id_training', 'asc')->get();
+        $masterTrainings = UserModel::where(function ($q) {
+            $q->where('scope_training', 'In House')->orWhereNull('scope_training');
+        })->orderBy('id_training', 'asc')->get();
 
         return view('dlc.immediatemanager', compact('staff', 'divisiList', 'departments', 'selectedDivisi', 'selectedDepartment', 'masterTrainings'));
     }
@@ -107,10 +113,19 @@ class UsersController extends Controller
     public function detail($id_staff)
     {
         $staff = StaffModel::with(['department', 'levelJabatan', 'immediateManager'])->findOrFail($id_staff);
-        $trainings = UserModel::all();
+        
+        // Khusus training In House yang dimasukkan ke modul training staff
+        $trainings = UserModel::where(function ($q) {
+            $q->where('scope_training', 'In House')
+              ->orWhereNull('scope_training');
+        })->get();
 
-        // Ambil semua record status training milik staff ini, di-key berdasarkan id_training
+        // Ambil record status training milik staff ini khusus modul In House, di-key berdasarkan id_training
         $staffTrainings = StaffTrainingModel::where('id_staff', $id_staff)
+            ->whereHas('training', function ($q) {
+                $q->where('scope_training', 'In House')
+                  ->orWhereNull('scope_training');
+            })
             ->get()
             ->keyBy('id_training');
 
@@ -369,6 +384,15 @@ class UsersController extends Controller
             'id_status' => 'nullable',
         ]);
 
+        // Pastikan bukan training Out House
+        $targetTraining = UserModel::find($request->id_training);
+        if ($targetTraining && $targetTraining->scope_training === 'Out House') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Training Out House tidak dapat diubah statusnya di modul training staff (hanya untuk training In House).',
+            ], 422);
+        }
+
         $role = session('role');
 
         if ($role === 'Immediate Manager') {
@@ -429,6 +453,9 @@ class UsersController extends Controller
         $trainingsCollection = StaffTrainingModel::with(['training', 'staff'])
             ->whereIn('id_staff', $staffIds)
             ->whereIn('id_status', $statusArray)
+            ->whereHas('training', function ($q) {
+                $q->where('scope_training', 'In House')->orWhereNull('scope_training');
+            })
             ->get();
 
         $grouped = [];
