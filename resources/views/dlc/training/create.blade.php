@@ -42,7 +42,7 @@
         @endif
 
         <section class="row g-3">
-            <div class="col-12 col-xl-8">
+            <div class="col-12 col-xl-12">
                 <form action="{{ route('training.store') }}" method="POST" class="panel p-4">
                     @csrf
                     <div class="panel-header border-bottom pb-3 mb-3">

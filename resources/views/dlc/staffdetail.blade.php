@@ -54,10 +54,19 @@
 .card-blue span { color: rgba(255, 255, 255, 0.85); }
 
 .card-gray {
-    background: #ffffff;
+    /* ==========START CARD WARNA PUTIH========== */
+    /* background: #ffffff;
     border-color: #e2e8f0;
-    color: #1e293b;
+    color: #1e293b; */
+    /* ==========END CARD WARNA PUTIH========== */
+    background: linear-gradient(145deg, #475569 0%, #334155 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
 }
+/* .card-gray:hover {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+} */
 .card-gray strong { color: #0f172a; font-weight: 700; }
 .card-gray span { color: #64748b; }
 
@@ -72,7 +81,7 @@
     backdrop-filter: blur(8px);
 }
 .card-gray select.form-select {
-    background-color: #f8fafc;
+    background-color: #ffffff;
     color: #334155;
     border-color: #cbd5e1;
 }
@@ -164,35 +173,55 @@
             </div>
         </div>
 
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
         {{-- Status Legend Chips --}}
         <section class="panel p-3 mb-4">
             <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
                 <i class="bi bi-palette-fill text-primary"></i>
                 <h6 class="mb-0 fw-bold text-dark">Keterangan Warna Status Training</h6>
             </div>
-            <div class="row g-2 pt-1">
-                <div class="col-12 col-sm-6 col-xl-3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-2 pt-1">
+                <div class="col">
                     <div class="legend-chip w-100">
                         <span class="legend-dot-circle bg-success"></span>
                         <span>Sudah Terlaksana</span>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col">
                     <div class="legend-chip w-100">
                         <span class="legend-dot-circle bg-warning"></span>
                         <span>Mandatory Training</span>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col">
                     <div class="legend-chip w-100">
                         <span class="legend-dot-circle bg-danger"></span>
-                        <span>Tidak Hadir Saat Training</span>
+                        <span>Tidak Hadir</span>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col">
                     <div class="legend-chip w-100">
                         <span class="legend-dot-circle bg-primary"></span>
-                        <span>In House Training Ingin Diikuti</span>
+                        <span>In House Training</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="legend-chip w-100">
+                        <span class="legend-dot-circle" style="background-color: #94a3b8;"></span>
+                        <span>Belum Mengikuti</span>
                     </div>
                 </div>
             </div>
@@ -273,7 +302,7 @@
                                         
                                         {{-- Dropdown Status Training --}}
                                         <select class="form-select form-select-sm mt-3 status-select" data-training="{{ $t->id_training }}">
-                                            <option value="" {{ !$record ? 'selected' : '' }} disabled>- Pilih Status -</option>
+                                            <option value="0" {{ !$record ? 'selected' : '' }}>- Belum Mengikuti -</option>
                                             <option value="1" {{ $record && $record->id_status == 1 ? 'selected' : '' }}>Sudah Terlaksana</option>
                                             <option value="2" {{ $record && $record->id_status == 2 ? 'selected' : '' }}>Mandatory Training</option>
                                             <option value="3" {{ $record && $record->id_status == 3 ? 'selected' : '' }}>Tidak Hadir</option>
@@ -446,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     card.classList.remove('card-gray', 'card-green', 'card-yellow', 'card-red', 'card-blue');
-                    card.classList.add(colorMap[idStatus]);
+                    card.classList.add(colorMap[idStatus] || 'card-gray');
                 } else {
                     alert('Gagal memperbarui status training.');
                 }

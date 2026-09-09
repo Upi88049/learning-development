@@ -44,16 +44,21 @@
         @endif
 
         <section class="panel mt-3">
-            <div class="panel-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="panel-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-3 border-bottom mb-3">
                 <div>
-                    <h2 class="h5 mb-1 section-title"><i class="bi bi-table me-2 text-primary" aria-hidden="true"></i><span>Data Divisi</span></h2>
+                    <h2 class="h5 mb-1 section-title">
+                        <i class="bi bi-table me-2 text-primary" aria-hidden="true"></i><span>Data Divisi</span>
+                    </h2>
                     <p class="text-muted mb-0 small">Daftar seluruh divisi operasional perusahaan.</p>
                 </div>
-                <div class="input-group input-group-sm" style="max-width: 280px;">
-                    <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                    <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari divisi..." data-table-search="divisiTable" aria-label="Search divisi">
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="input-group input-group-sm" style="max-width: 280px;">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari divisi..." data-table-search="divisiTable" aria-label="Search divisi">
+                    </div>
                 </div>
             </div>
+            
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0" id="divisiTable" data-searchable-table>
                     <thead>
@@ -80,16 +85,18 @@
                                 </span>
                             </td>
                             <td class="text-end">
-                                <a class="btn btn-outline-primary btn-sm me-1" href="{{ route('divisi.edit', $d->id_divisi) }}" title="Edit">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <form action="{{ route('divisi.destroy', $d->id_divisi) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus divisi ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm" title="Hapus">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-outline-primary btn-sm me-1" href="{{ route('divisi.edit', $d->id_divisi) }}" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form action="{{ route('divisi.destroy', $d->id_divisi) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus divisi ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" title="Hapus">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -104,7 +111,7 @@
                 </table>
             </div>
             <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-3 pb-3">
-                <p class="text-muted small mb-0">Total <strong>{{ count($divisi) }}</strong> divisi terdaftar</p>
+                <p class="text-muted small mb-0">Total <strong class="text-dark">{{ count($divisi) }}</strong> divisi terdaftar</p>
             </div>
         </section>
     </div>

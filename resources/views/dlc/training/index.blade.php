@@ -123,14 +123,11 @@
             <div class="panel-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-3 border-bottom mb-3">
                 <div>
                     <h2 class="h5 mb-1 section-title">
-                        <i class="bi bi-table text-primary me-1" aria-hidden="true"></i>
+                        <i class="bi bi-table text-primary me-2" aria-hidden="true"></i>
                         <span>Training List</span>
                     </h2>
                     <p class="text-muted mb-0 small">
                         Daftar silabus pelatihan yang tersedia di sistem
-                        @if(request('scope'))
-                            &bull; Filter Scope: <strong class="text-primary">{{ request('scope') }}</strong>
-                        @endif
                     </p>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2">
@@ -153,8 +150,10 @@
                             <input type="hidden" name="scope" value="{{ request('scope') }}">
                         @endif
                         <div class="input-group input-group-sm">
-                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                            <input class="form-control border-start-0 ps-0" type="search" name="search" placeholder="Cari kode, judul, atau jenis..." value="{{ request('search') }}" aria-label="Search training">
+                            <div class="input-group input-group-sm" style="max-width: 280px;">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                                <input class="form-control border-start-0 ps-0" type="search" name="search" placeholder="Cari kode, judul, atau jenis..." value="{{ request('search') }}" aria-label="Search training">
+                            </div> 
                         </div>
                         @if(request('search'))
                             <a href="{{ route('training.index', request('scope') ? ['scope' => request('scope')] : []) }}" class="btn btn-outline-secondary btn-sm" title="Reset Cari">

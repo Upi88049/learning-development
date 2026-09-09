@@ -74,8 +74,8 @@ class TrainingController extends Controller
             'jenis_training' => $request->jenis_training,
             'nama_training' => $request->nama_training,
             'scope_training' => $request->scope_training,
-            'mandatory_training' => $request->mandatory_training,
-            'gol_training' => $request->gol_training,
+            'mandatory_training' => $request->filled('mandatory_training') ? trim($request->mandatory_training) : null,
+            'gol_training' => $request->filled('gol_training') ? trim($request->gol_training) : null,
         ]);
 
         return redirect()->route('training.index')->with('success', 'Training berhasil ditambahkan.');
@@ -112,8 +112,8 @@ class TrainingController extends Controller
             'jenis_training' => $request->jenis_training,
             'nama_training' => $request->nama_training,
             'scope_training' => $request->scope_training,
-            'mandatory_training' => $request->mandatory_training,
-            'gol_training' => $request->gol_training,
+            'mandatory_training' => $request->filled('mandatory_training') ? trim($request->mandatory_training) : null,
+            'gol_training' => $request->filled('gol_training') ? trim($request->gol_training) : null,
         ]);
 
         return redirect()->route('training.index')->with('success', 'Training berhasil diperbarui.');

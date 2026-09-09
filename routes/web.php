@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardDlcController;
 use App\Http\Controllers\UsersController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PenerimaEmailController;
 use App\Http\Controllers\BodyEmailController;
 use App\Http\Controllers\PeriodeTnaController;
@@ -30,78 +29,89 @@ Route::middleware(['checkLogin'])->group(function () {
         return redirect()->route('dashboard');
     })->name('home');
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboarddlc', [DashboardDlcController::class, 'index'])->name('dashboarddlc');
+    // ==========================================
+    // 1. KHUSUS ROLE DLC (SUPER ADMIN)
+    // ==========================================
+    Route::middleware(['role:DLC'])->group(function () {
+        Route::get('/dashboarddlc', [DashboardDlcController::class, 'index'])->name('dashboarddlc');
 
-    // ==========DLC==========
-    // Staff / Member Management
-    Route::get('/member-list', [UsersController::class, 'dlc'])->name('member-list');
-    Route::get('/immediate-manager', function () {
-        return redirect()->route('member-list');
-    })->name('immediate-manager');
+        // Staff / Member Management
+        Route::get('/member-list', [UsersController::class, 'dlc'])->name('member-list');
+        Route::get('/immediate-manager', function () {
+            return redirect()->route('member-list');
+        })->name('immediate-manager');
 
-    Route::get('/staff/export', [UsersController::class, 'exportStaff'])->name('staff.export');
-    Route::get('/staff/template', [UsersController::class, 'templateStaff'])->name('staff.template');
-    Route::post('/staff/import', [UsersController::class, 'importStaff'])->name('staff.import');
-    Route::get('/staff-training/template', [UsersController::class, 'templateStaffTraining'])->name('staffTraining.template');
-    Route::post('/staff-training/import', [UsersController::class, 'importStaffTraining'])->name('staffTraining.import');
+        Route::get('/staff/export', [UsersController::class, 'exportStaff'])->name('staff.export');
+        Route::get('/staff/template', [UsersController::class, 'templateStaff'])->name('staff.template');
+        Route::post('/staff/import', [UsersController::class, 'importStaff'])->name('staff.import');
+        Route::get('/staff-training/template', [UsersController::class, 'templateStaffTraining'])->name('staffTraining.template');
+        Route::post('/staff-training/import', [UsersController::class, 'importStaffTraining'])->name('staffTraining.import');
 
-    Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
-    Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
-    Route::get('/staff/detail/{id_staff}', [UsersController::class, 'detail'])->name('staff.detail');
-    Route::get('/staff/edit/{id}', [UsersController::class, 'editStaff'])->name('staff.edit');
-    Route::put('/staff/update/{id}', [UsersController::class, 'updateStaff'])->name('staff.update');
-    Route::delete('/staff/destroy/{id}', [UsersController::class, 'destroyStaff'])->name('staff.destroy');
-    Route::delete('/staff/bulk-destroy', [UsersController::class, 'bulkDestroyStaff'])->name('staff.bulkDestroy');
+        Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+        Route::post('/users/store', [UsersController::class, 'store'])->name('users.store');
+        Route::get('/staff/detail/{id_staff}', [UsersController::class, 'detail'])->name('staff.detail');
+        Route::get('/staff/edit/{id}', [UsersController::class, 'editStaff'])->name('staff.edit');
+        Route::put('/staff/update/{id}', [UsersController::class, 'updateStaff'])->name('staff.update');
+        Route::delete('/staff/destroy/{id}', [UsersController::class, 'destroyStaff'])->name('staff.destroy');
+        Route::delete('/staff/bulk-destroy', [UsersController::class, 'bulkDestroyStaff'])->name('staff.bulkDestroy');
 
-    // Training Management (CRUD)
-    Route::resource('training', TrainingController::class);
+        // Training Management (CRUD)
+        Route::resource('training', TrainingController::class);
 
-    // Divisi Management (CRUD)
-    Route::resource('divisi', DivisiController::class);
+        // Divisi Management (CRUD)
+        Route::resource('divisi', DivisiController::class);
 
-    // Department Management (CRUD)
-    Route::resource('department', DepartmentController::class);
+        // Department Management (CRUD)
+        Route::resource('department', DepartmentController::class);
 
-    // Out House Training Management (DLC)
-    Route::get('/dlc/request-outhouse', [RequestOuthouseController::class, 'index'])->name('outhouse.index');
-    Route::put('/dlc/request-outhouse/{id}/status', [RequestOuthouseController::class, 'updateStatus'])->name('outhouse.updateStatus');
-    Route::delete('/dlc/request-outhouse/{id}', [RequestOuthouseController::class, 'destroyDlc'])->name('outhouse.destroyDlc');
+        // Out House Training Management (DLC)
+        Route::get('/dlc/request-outhouse', [RequestOuthouseController::class, 'index'])->name('outhouse.index');
+        Route::put('/dlc/request-outhouse/{id}/status', [RequestOuthouseController::class, 'updateStatus'])->name('outhouse.updateStatus');
+        Route::delete('/dlc/request-outhouse/{id}', [RequestOuthouseController::class, 'destroyDlc'])->name('outhouse.destroyDlc');
 
-    // Formulir Pendaftaran & Penugasan Training (DLC)
-    Route::get('/dlc/penugasan/{id}/pdf', [PenugasanTrainingController::class, 'downloadPdf'])->name('penugasan.downloadPdf');
-    Route::get('/dlc/penugasan/{id}/preview', [PenugasanTrainingController::class, 'previewPdf'])->name('penugasan.previewPdf');
-    Route::post('/dlc/penugasan/{id}/send-to-im', [PenugasanTrainingController::class, 'sendToIm'])->name('penugasan.sendToIm');
-    Route::post('/dlc/penugasan/{id}/cancel-send-to-im', [PenugasanTrainingController::class, 'cancelSendToIm'])->name('penugasan.cancelSendToIm');
-    Route::resource('/dlc/penugasan', PenugasanTrainingController::class)->names('penugasan');
+        // Formulir Pendaftaran & Penugasan Training (DLC)
+        Route::get('/dlc/penugasan/{id}/pdf', [PenugasanTrainingController::class, 'downloadPdf'])->name('penugasan.downloadPdf');
+        Route::get('/dlc/penugasan/{id}/preview', [PenugasanTrainingController::class, 'previewPdf'])->name('penugasan.previewPdf');
+        Route::post('/dlc/penugasan/{id}/send-to-im', [PenugasanTrainingController::class, 'sendToIm'])->name('penugasan.sendToIm');
+        Route::post('/dlc/penugasan/{id}/cancel-send-to-im', [PenugasanTrainingController::class, 'cancelSendToIm'])->name('penugasan.cancelSendToIm');
+        Route::resource('/dlc/penugasan', PenugasanTrainingController::class)->names('penugasan');
 
-    // Email & TNA Settings
-    Route::get('/penerima-email', [PenerimaEmailController::class, 'index'])->name('penerima-email');
-    Route::get('/penerima-email/export', [PenerimaEmailController::class, 'export'])->name('penerima-email.export');
-    Route::get('/penerima-email/template', [PenerimaEmailController::class, 'template'])->name('penerima-email.template');
-    Route::post('/penerima-email/import', [PenerimaEmailController::class, 'import'])->name('penerima-email.import');
-    Route::put('/penerima-email/{id}', [PenerimaEmailController::class, 'update'])->name('penerima-email.update');
-    Route::post('/penerima-email', [PenerimaEmailController::class, 'store'])->name('penerima-email.store');
-    Route::get('/body-email', [BodyEmailController::class, 'index'])->name('body-email');
-    Route::post('/body-email', [BodyEmailController::class, 'store'])->name('body-email.store');
-    Route::get('/periode-tna', [PeriodeTnaController::class, 'index'])->name('periode-tna');
-    Route::post('/periode-tna/save-period', [PeriodeTnaController::class, 'savePeriod'])->name('periode-tna.savePeriod');
-    Route::post('/periode-tna/close-tna', [PeriodeTnaController::class, 'closeTna'])->name('periode-tna.closeTna');
-    Route::post('/periode-tna/send-email', [PeriodeTnaController::class, 'sendEmail'])->name('periode-tna.sendEmail');
-    // ==========DLC==========
+        // Email & TNA Settings
+        Route::get('/penerima-email', [PenerimaEmailController::class, 'index'])->name('penerima-email');
+        Route::get('/penerima-email/export', [PenerimaEmailController::class, 'export'])->name('penerima-email.export');
+        Route::get('/penerima-email/template', [PenerimaEmailController::class, 'template'])->name('penerima-email.template');
+        Route::post('/penerima-email/import', [PenerimaEmailController::class, 'import'])->name('penerima-email.import');
+        Route::put('/penerima-email/{id}', [PenerimaEmailController::class, 'update'])->name('penerima-email.update');
+        Route::post('/penerima-email', [PenerimaEmailController::class, 'store'])->name('penerima-email.store');
+        Route::get('/body-email', [BodyEmailController::class, 'index'])->name('body-email');
+        Route::post('/body-email', [BodyEmailController::class, 'store'])->name('body-email.store');
+        Route::get('/periode-tna', [PeriodeTnaController::class, 'index'])->name('periode-tna');
+        Route::post('/periode-tna/save-period', [PeriodeTnaController::class, 'savePeriod'])->name('periode-tna.savePeriod');
+        Route::post('/periode-tna/close-tna', [PeriodeTnaController::class, 'closeTna'])->name('periode-tna.closeTna');
+        Route::post('/periode-tna/send-email', [PeriodeTnaController::class, 'sendEmail'])->name('periode-tna.sendEmail');
+    });
 
-    // ==========DEPHEAD / IMMEDIATE MANAGER==========
-    Route::get('/users', [UsersController::class, 'index'])->name('users');
-    Route::get('/users/detail/{id_staff}', [UsersController::class, 'detail'])->name('users.detail');
-    Route::post('/staff-training/update', [UsersController::class, 'update'])->name('staffTraining.update');
-    Route::get('/users/permintaan', [UsersController::class, 'permintaan'])->name('users.permintaan');
-    Route::get('/users/terlaksana', [UsersController::class, 'terlaksana'])->name('users.terlaksana');
-    Route::get('/users/tidakhadir', [UsersController::class, 'tidakhadir'])->name('users.tidakhadir');
+    // ==========================================
+    // 2. KHUSUS ROLE IMMEDIATE MANAGER
+    // ==========================================
+    Route::middleware(['role:Immediate Manager'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/users', [UsersController::class, 'index'])->name('users');
+        Route::get('/users/detail/{id_staff}', [UsersController::class, 'detail'])->name('users.detail');
+        Route::get('/users/permintaan', [UsersController::class, 'permintaan'])->name('users.permintaan');
+        Route::get('/users/terlaksana', [UsersController::class, 'terlaksana'])->name('users.terlaksana');
+        Route::get('/users/tidakhadir', [UsersController::class, 'tidakhadir'])->name('users.tidakhadir');
 
-    // Request Training Out House (Immediate Manager)
-    Route::post('/request-outhouse/store', [RequestOuthouseController::class, 'store'])->name('outhouse.store');
-    Route::put('/request-outhouse/{id}', [RequestOuthouseController::class, 'update'])->name('outhouse.update');
-    Route::delete('/request-outhouse/{id}', [RequestOuthouseController::class, 'destroy'])->name('outhouse.destroy');
-    // ==========DEPHEAD / IMMEDIATE MANAGER==========
+        // Request Training Out House (Immediate Manager)
+        Route::post('/request-outhouse/store', [RequestOuthouseController::class, 'store'])->name('outhouse.store');
+        Route::put('/request-outhouse/{id}', [RequestOuthouseController::class, 'update'])->name('outhouse.update');
+        Route::delete('/request-outhouse/{id}', [RequestOuthouseController::class, 'destroy'])->name('outhouse.destroy');
+    });
 
+    // ==========================================
+    // 3. AKSES BERSAMA (DLC & IMMEDIATE MANAGER)
+    // ==========================================
+    Route::middleware(['role:DLC,Immediate Manager'])->group(function () {
+        Route::post('/staff-training/update', [UsersController::class, 'update'])->name('staffTraining.update');
+    });
 });

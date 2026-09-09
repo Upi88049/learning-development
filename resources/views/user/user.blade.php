@@ -10,7 +10,7 @@
     <div class="hero-header-card mb-4">
       <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
         <div class="d-flex align-items-center gap-3">
-          <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem;">
+          <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
             <i class="bi bi-people" aria-hidden="true"></i>
           </div>
           <div>
@@ -24,6 +24,20 @@
         </div>
       </div>
     </div>
+
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
+        <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+        <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
 
     <!-- ========== KARTU METRIK UTAMA ========== -->
     <section class="row g-3" aria-label="User summary">

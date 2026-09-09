@@ -20,9 +20,15 @@
     --admin-sidebar: #111827;
     --admin-sidebar-soft: #1f2937;
     --admin-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-    --admin-shadow-sm: 0 2px 6px -1px rgba(15, 23, 42, 0.06), 0 1px 4px -1px rgba(15, 23, 42, 0.04);
-    --admin-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
-    --admin-shadow-lg: 0 18px 36px -6px rgba(15, 23, 42, 0.08), 0 8px 16px -4px rgba(15, 23, 42, 0.04);
+    --admin-shadow-sm:
+        0 2px 6px -1px rgba(15, 23, 42, 0.06),
+        0 1px 4px -1px rgba(15, 23, 42, 0.04);
+    --admin-shadow:
+        0 8px 24px -4px rgba(15, 23, 42, 0.06),
+        0 4px 10px -2px rgba(15, 23, 42, 0.03);
+    --admin-shadow-lg:
+        0 18px 36px -6px rgba(15, 23, 42, 0.08),
+        0 8px 16px -4px rgba(15, 23, 42, 0.04);
     --admin-shadow-xl: 0 25px 50px -12px rgba(15, 23, 42, 0.15);
     --admin-ring: 0 0 0 3.5px rgba(37, 99, 235, 0.15);
     --admin-radius-sm: 8px;
@@ -66,7 +72,14 @@ body {
         #f1f5f9 100%
     );
     color: var(--admin-text);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -456,6 +469,8 @@ html[data-theme="dark"] .profile-button .avatar-sm {
 
 .dashboard-content {
     min-height: calc(100vh - 132px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .dashboard-content > .container-fluid {
@@ -545,7 +560,10 @@ html[data-theme="dark"] .profile-button .avatar-sm {
     min-height: 164px;
     padding: 1.35rem;
     overflow: hidden;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    transition:
+        transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s ease;
 }
 
 .metric-card::before {
@@ -635,7 +653,9 @@ html[data-theme="dark"] .profile-button .avatar-sm {
 
 .panel {
     padding: 1.35rem;
-    transition: box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    transition:
+        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s ease;
 }
 
 .panel:hover {
@@ -792,49 +812,57 @@ html[data-theme="dark"] .profile-button .avatar-sm {
     line-height: 1.25;
 }
 
-.badge.bg-success, .badge-success {
+.badge.bg-success,
+.badge-success {
     background-color: #dcfce7 !important;
     color: #15803d !important;
     border: 1px solid #bbf7d0;
 }
 
-.badge.bg-warning, .badge-warning {
+.badge.bg-warning,
+.badge-warning {
     background-color: #fef3c7 !important;
     color: #92400e !important;
     border: 1px solid #fde68a;
 }
 
-.badge.bg-danger, .badge-danger {
+.badge.bg-danger,
+.badge-danger {
     background-color: #fee2e2 !important;
     color: #b91c1c !important;
     border: 1px solid #fecaca;
 }
 
-.badge.bg-info, .badge-info {
+.badge.bg-info,
+.badge-info {
     background-color: #e0f2fe !important;
     color: #0369a1 !important;
     border: 1px solid #bae6fd;
 }
 
-.badge.bg-primary, .badge-primary {
+.badge.bg-primary,
+.badge-primary {
     background-color: #eff6ff !important;
     color: #1d4ed8 !important;
     border: 1px solid #bfdbfe;
 }
 
-.badge.bg-secondary, .badge-secondary {
+.badge.bg-secondary,
+.badge-secondary {
     background-color: #f1f5f9 !important;
     color: #475569 !important;
     border: 1px solid #e2e8f0;
 }
 
-.badge.bg-light, .badge-light {
+.badge.bg-light,
+.badge-light {
     background-color: #f8fafc !important;
     color: #334155 !important;
     border: 1px solid #e2e8f0;
 }
 
-.badge.bg-dark, .badge-dark {
+.badge.bg-dark,
+.badge-dark {
     background-color: #1e293b !important;
     color: #f8fafc !important;
     border: 1px solid #334155;
@@ -1462,7 +1490,9 @@ html[data-theme="dark"] .auth-body {
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--admin-text);
-    transition: background-color 0.14s ease, color 0.14s ease;
+    transition:
+        background-color 0.14s ease,
+        color 0.14s ease;
 }
 
 .dropdown-item:hover,
@@ -1544,7 +1574,10 @@ html[data-theme="dark"] .auth-body {
     color: var(--admin-text);
     padding: 0.55rem 0.85rem;
     font-size: 0.875rem;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background-color 0.15s ease;
 }
 
 .form-control:hover:not(:focus),
@@ -1792,6 +1825,8 @@ html[data-theme="dark"] .text-bg-danger {
     .dashboard-content > .container-fluid {
         padding-top: 1.25rem !important;
         padding-bottom: 1.25rem !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
     }
 
     .admin-sidebar {
@@ -2101,7 +2136,10 @@ html[data-theme="dark"] {
     text-decoration: none !important;
     color: inherit !important;
     cursor: pointer;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    transition:
+        transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.2s ease;
 }
 
 .metric-card-link:hover,
@@ -2208,7 +2246,9 @@ html[data-theme="dark"] {
     box-shadow: var(--admin-shadow-sm);
     overflow: hidden;
     margin-bottom: 1.25rem;
-    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    transition:
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .step-panel:hover {

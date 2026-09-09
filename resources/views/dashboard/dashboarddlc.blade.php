@@ -31,6 +31,20 @@
       </div>
     </div>
 
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
+        <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+        <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <section class="row g-3 mt-1" aria-label="Dashboard metrics">
       <div class="col-12 col-sm-6 col-xl-3">
         <article class="metric-card metric-primary">

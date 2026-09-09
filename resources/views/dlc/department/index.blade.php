@@ -56,7 +56,7 @@
                 <div class="d-flex flex-wrap gap-2">
                     <div class="input-group input-group-sm" style="max-width: 280px;">
                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                        <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari nama department..." data-table-search="deptTable" aria-label="Search department">
+                        <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari department..." data-table-search="deptTable" aria-label="Search department">
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
                             </td>
                             <td class="text-end">
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-outline-primary btn-sm" href="{{ route('department.edit', $d->id_department) }}" title="Edit">
+                                    <a class="btn btn-outline-primary btn-sm me-1" href="{{ route('department.edit', $d->id_department) }}" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                     <form action="{{ route('department.destroy', $d->id_department) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus department ini?')">
@@ -112,7 +112,7 @@
                 </table>
             </div>
 
-            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-2 pt-2 border-top">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-3 pb-3">
                 <p class="text-muted small mb-0">Total <strong class="text-dark">{{ count($departments) }}</strong> department terdaftar</p>
             </div>
         </section>

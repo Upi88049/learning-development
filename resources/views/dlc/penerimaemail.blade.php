@@ -5,14 +5,14 @@
 @section('content')
 <style>
 /* ========== SMOOTH GLOBAL ENHANCEMENTS ========== */
-.penerima-hero-card {
+/* .penerima-hero-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 1.5rem;
     box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
     margin-bottom: 1.5rem;
-}
+} */
 
 .panel-smooth {
     background: #ffffff;
@@ -156,20 +156,18 @@
     <div class="container-fluid px-3 px-lg-4 py-4">
 
         {{-- Page Hero Header --}}
-        <div class="penerima-hero-card">
+        <div class="hero-header-card mb-4">
             <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white" style="width: 52px; height: 52px; font-size: 1.4rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
                         <i class="bi bi-envelope-at"></i>
                     </div>
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1" style="font-size: 0.72rem;">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">
                                 Setting Notifikasi
                             </span>
-                            <span class="badge bg-light text-secondary border rounded-pill px-2 py-1 font-monospace" style="font-size: 0.72rem;">
-                                Immediate Manager Contacts
-                            </span>
+                            <span class="text-muted small">Immediate Manager Contacts</span>
                         </div>
                         <h1 class="h4 mb-1 text-dark fw-bold">Daftar Penerima Email Immediate Manager</h1>
                         <p class="text-muted mb-0 small">Kelola data kontak email Immediate Manager dari member list untuk keperluan notifikasi pembukaan TNA dan persetujuan training.</p>

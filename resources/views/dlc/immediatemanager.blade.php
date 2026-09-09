@@ -58,9 +58,12 @@
             @method('DELETE')
 
             <section class="panel mt-3">
-                <div class="panel-header">
+                <div class="panel-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-3 border-bottom mb-3">
                     <div>
-                        <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Member List</span></h2>
+                        <h2 class="h5 mb-1 section-title">
+                            <i class="bi bi-table me-2 text-primary" aria-hidden="true"></i><span>Member List</span>
+                        </h2>
+                        <p class="text-muted mb-0 small">Daftar member perusahaan.</p>
                     </div>
                     <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 ms-auto">
                         <button type="submit" id="btnBulkDelete" class="btn btn-danger btn-sm d-none">
@@ -98,7 +101,10 @@
                             @endif
                         </div>
 
-                        <input class="form-control form-control-sm table-search" type="search" placeholder="Search staff" data-table-search="usersTable" aria-label="Search staff">
+                        <div class="input-group input-group-sm" style="max-width: 280px;">
+                            <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input class="form-control border-start-0 ps-0" type="search" placeholder="Search" data-table-search="usersTable" aria-label="Search">
+                        </div>
                     </div>
                 </div>
                 <div class="px-3 pt-2">
@@ -112,7 +118,7 @@
                     @endif
                 </div>
                 <div class="table-responsive">
-                    <table class="table align-middle mb-0" id="usersTable" data-searchable-table>
+                    <table class="table table-hover align-middle mb-0" id="usersTable" data-searchable-table>
                         <thead>
                             <tr>
                                 <th scope="col" style="min-width: 40px;" class="text-center">

@@ -124,6 +124,15 @@ class UsersController extends Controller
             return view('dlc.staffdetail', compact('staff', 'trainings', 'staffTrainings', 'outhouseRequests'));
         }
 
+        // Khusus Immediate Manager: pastikan hanya dapat melihat staff bawahannya atau dirinya sendiri
+        $sessionUser = session('user');
+        if ($sessionUser && isset($sessionUser->id_staff)) {
+            $isSubordinate = ($staff->id_immediate_manager == $sessionUser->id_staff) || ($staff->id_staff == $sessionUser->id_staff);
+            if (!$isSubordinate) {
+                return redirect()->route('users')->with('error', 'Akses ditolak! Anda hanya dapat melihat detail staff yang berada di bawah supervisi Anda.');
+            }
+        }
+
         $isTnaActive = EmailConfigModel::isTnaActive();
         $tnaStartDate = EmailConfigModel::getTnaStartDate();
         $tnaEndDate = EmailConfigModel::getTnaEndDate();
@@ -357,7 +366,7 @@ class UsersController extends Controller
         $request->validate([
             'id_staff' => 'required|integer',
             'id_training' => 'required|integer',
-            'id_status' => 'required|integer',
+            'id_status' => 'nullable',
         ]);
 
         $role = session('role');
@@ -371,13 +380,22 @@ class UsersController extends Controller
                 ], 403);
             }
 
-            // Immediate Manager hanya boleh memilih status 4 (In House Training)
-            if ((int)$request->id_status !== 4) {
+            // Immediate Manager hanya boleh memilih status 4 (In House Training) atau 0 (Reset/Belum Mengikuti)
+            if (!empty($request->id_status) && (int)$request->id_status !== 4 && (int)$request->id_status !== 0) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Immediate Manager hanya diizinkan memilih status In House Training.',
                 ], 403);
             }
+        }
+
+        // Jika id_status kosong atau 0, hapus record dari tbl_staff_training (kembali ke Belum Mengikuti / card-gray)
+        if (empty($request->id_status) || (int)$request->id_status === 0) {
+            StaffTrainingModel::where('id_staff', $request->id_staff)
+                ->where('id_training', $request->id_training)
+                ->delete();
+
+            return response()->json(['success' => true, 'reset' => true]);
         }
 
         StaffTrainingModel::updateOrCreate(

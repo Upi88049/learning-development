@@ -4,242 +4,110 @@
 
 @section('content')
 <style>
-/* ========== SMOOTH GLOBAL ENHANCEMENTS ========== */
-.dashboard-content {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+/* ========== MODERN MINI CARDS (HARMONIZED WITH DLC STAFFDETAIL) ========== */
+.mini-card {
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid transparent;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 145px;
+}
+.mini-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
 }
 
-/* Page Hero Card */
-.profile-hero-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-    margin-bottom: 1.5rem;
-    transition: all 0.2s ease;
+.card-green {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-color: #047857;
+    color: #ffffff;
 }
-.staff-meta-pill {
+.card-green strong { color: #ffffff; font-weight: 700; }
+.card-green span, .card-green .card-subtext { color: rgba(255, 255, 255, 0.85); }
+
+.card-yellow {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    border-color: #b45309;
+    color: #ffffff;
+}
+.card-yellow strong { color: #ffffff; font-weight: 700; }
+.card-yellow span, .card-yellow .card-subtext { color: rgba(255, 255, 255, 0.85); }
+
+.card-red {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    border-color: #b91c1c;
+    color: #ffffff;
+}
+.card-red strong { color: #ffffff; font-weight: 700; }
+.card-red span, .card-red .card-subtext { color: rgba(255, 255, 255, 0.85); }
+
+.card-blue {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+.card-blue strong { color: #ffffff; font-weight: 700; }
+.card-blue span, .card-blue .card-subtext { color: rgba(255, 255, 255, 0.85); }
+
+.card-gray {
+    /* ==========START CARD WARNA PUTIH========== */
+    /* background: #ffffff;
+    border-color: #e2e8f0;
+    color: #1e293b; */
+    /* ==========END CARD WARNA PUTIH========== */
+    background: linear-gradient(145deg, #475569 0%, #334155 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+.card-gray strong { color: #0f172a; font-weight: 700; }
+.card-gray span, .card-gray .card-subtext { color: #64748b; }
+
+/* Status dropdown in mini-card */
+.mini-card select.form-select {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+}
+.card-gray select.form-select {
+    background-color: #ffffff;
+    color: #334155;
+    border-color: #cbd5e1;
+}
+.mini-card select.form-select option {
+    color: #0f172a;
+    background: #ffffff;
+}
+
+/* Legend Chips */
+.legend-chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 9999px;
-    padding: 4px 12px;
-    font-size: 0.8rem;
-    color: #475569;
-    font-weight: 500;
-}
-.staff-meta-pill strong {
-    color: #1e293b;
-}
-
-/* Legend / Keterangan Card */
-.legend-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 1.5rem;
-}
-.legend-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 10px;
-}
-.legend-chip {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    gap: 8px;
     padding: 8px 14px;
     border-radius: 10px;
-    background: #f8fafc;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
     font-weight: 500;
     color: #334155;
-    transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
-.legend-chip:hover {
-    background: #ffffff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-.legend-dot {
+.legend-dot-circle {
     width: 10px;
     height: 10px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
-/* Training Mini Cards (Smooth & Modern) */
-.mini-card {
-    border-radius: 14px;
-    padding: 14px;
-    border: 1px solid transparent;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.mini-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-}
-
-.card-green {
-    background: linear-gradient(145deg, #059669 0%, #047857 100%);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-.card-green strong { color: #ffffff; font-weight: 700; }
-.card-green .card-subtext { color: rgba(255, 255, 255, 0.85); font-size: 0.725rem; }
-
-.card-yellow {
-    background: linear-gradient(145deg, #d97706 0%, #b45309 100%);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-.card-yellow strong { color: #ffffff; font-weight: 700; }
-.card-yellow .card-subtext { color: rgba(255, 255, 255, 0.85); font-size: 0.725rem; }
-
-.card-red {
-    background: linear-gradient(145deg, #e11d48 0%, #be123c 100%);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-.card-red strong { color: #ffffff; font-weight: 700; }
-.card-red .card-subtext { color: rgba(255, 255, 255, 0.85); font-size: 0.725rem; }
-
-.card-blue {
-    background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 100%);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-.card-blue strong { color: #ffffff; font-weight: 700; }
-.card-blue .card-subtext { color: rgba(255, 255, 255, 0.85); font-size: 0.725rem; }
-
-.card-gray {
-    background: linear-gradient(145deg, #475569 0%, #334155 100%);
-    border-color: rgba(255, 255, 255, 0.15);
-    color: #ffffff;
-}
-.card-gray strong { color: #ffffff; font-weight: 700; }
-.card-gray .card-subtext { color: rgba(255, 255, 255, 0.8); font-size: 0.725rem; }
-
-/* Dropdown inside Mini Card */
-.mini-card select.form-select {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 8px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    backdrop-filter: blur(4px);
-    transition: all 0.2s ease;
-}
-.mini-card select.form-select:hover,
-.mini-card select.form-select:focus {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-.mini-card select.form-select option {
-    background-color: #ffffff;
-    color: #1e293b;
-}
-
-/* Accordion Smooth Styling */
-.training-accordion .accordion-item {
-    border: 1px solid #e2e8f0;
-    border-radius: 14px !important;
-    margin-bottom: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
-    transition: all 0.2s ease;
-    background: #ffffff;
-}
-.training-accordion .accordion-item:hover {
-    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
-}
-.training-accordion .accordion-button {
-    padding: 1rem 1.25rem;
-    background: #ffffff;
-    border: none;
-    font-weight: 700;
-    color: #1e293b;
-    border-radius: 14px;
-    transition: all 0.2s ease;
-}
-.training-accordion .accordion-button:not(.collapsed) {
-    background: #f8fafc;
-    color: #2563eb;
-    box-shadow: inset 0 -1px 0 #e2e8f0;
-}
-.training-accordion .accordion-button:focus {
-    box-shadow: none;
-}
-.training-accordion .accordion-body {
-    background: #f8fafc;
-    padding: 1.25rem;
-}
-
-/* Panels & Card Container */
-.panel-smooth {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-    padding: 1.5rem;
-}
-
-/* Modern Clean Table */
-.table-smooth-container {
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    overflow: hidden;
-    background: #ffffff;
-}
-.table-smooth {
-    width: 100%;
-    margin-bottom: 0;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-.table-smooth thead th {
-    background-color: #f8fafc;
-    color: #475569;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 12px 16px;
-    border-bottom: 1.5px solid #e2e8f0;
-    border-top: none;
-}
-.table-smooth tbody td {
-    padding: 14px 16px;
-    border-bottom: 1px solid #f1f5f9;
-    vertical-align: middle;
-    font-size: 0.875rem;
-    color: #1e293b;
-    transition: background-color 0.15s ease;
-}
-.table-smooth tbody tr:hover td {
-    background-color: #f8fafc;
-}
-.table-smooth tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* Modern Pill Badges */
+/* Download Action Buttons & Out House styling */
 .badge-pill-soft {
     display: inline-flex;
     align-items: center;
@@ -271,36 +139,32 @@
     border: 1px solid #fecaca;
 }
 
-/* Download Action Buttons */
 .btn-download-active {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #ffffff !important;
     border: none;
-    border-radius: 9px;
+    border-radius: 8px;
     padding: 6px 14px;
     font-weight: 600;
     font-size: 0.8rem;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
     display: inline-flex;
     align-items: center;
     gap: 6px;
     text-decoration: none;
+    transition: all 0.2s ease;
 }
 .btn-download-active:hover {
     background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    transform: translateY(-1.5px);
-    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
-}
-.btn-download-active:active {
-    transform: translateY(0);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
 }
 
 .btn-download-disabled {
     background-color: #f1f5f9;
     color: #94a3b8 !important;
     border: 1px solid #e2e8f0;
-    border-radius: 9px;
+    border-radius: 8px;
     padding: 6px 14px;
     font-weight: 500;
     font-size: 0.8rem;
@@ -311,10 +175,9 @@
     opacity: 0.85;
 }
 
-/* Action Icon Buttons */
 .btn-action-icon {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -340,22 +203,6 @@
     color: #dc2626;
     border-color: #fecaca;
 }
-
-/* Form Controls Smooth */
-.form-control-smooth {
-    border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-    background-color: #ffffff;
-}
-.form-control-smooth:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-    background-color: #ffffff;
-    outline: none;
-}
 </style>
 
 @php
@@ -370,47 +217,69 @@
 <main class="dashboard-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
 
-        {{-- Page Hero Header Card --}}
-        <div class="profile-hero-card">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
-                        <i class="bi bi-person-badge"></i>
+        {{-- Profile Hero Card --}}
+        <div class="hero-header-card mb-4">
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+                <div class="d-flex align-items-start gap-3">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; font-size: 1.75rem; flex-shrink: 0;">
+                        <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
                     </div>
                     <div>
-                        <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 font-monospace" style="font-size: 0.72rem;">
-                                NPK: {{ $staff->npk_staff }}
-                            </span>
-                            <span class="badge bg-secondary-subtle text-secondary rounded-pill px-2 py-1" style="font-size: 0.72rem;">
-                                Immediate Manager View
-                            </span>
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">Staff Profile</span>
+                            <span class="badge bg-light text-dark border font-monospace">{{ $staff->npk_staff }}</span>
+                            @if($staff->levelJabatan)
+                                <span class="badge bg-info text-dark">{{ $staff->levelJabatan->kode_level_jabatan }}</span>
+                            @endif
+                            <span class="badge bg-secondary-subtle text-secondary border">Immediate Manager View</span>
                         </div>
-                        <h1 class="h4 mb-2 text-dark fw-bold">{{ $staff->nama_staff }}</h1>
-                        <div class="d-flex flex-wrap gap-2">
-                            <span class="staff-meta-pill">
-                                <i class="bi bi-diagram-3 text-primary"></i> Divisi: <strong>{{ $staff->divisi ? $staff->divisi->nama_divisi : '-' }}</strong>
+                        <h1 class="h3 mb-2 fw-bold text-dark">{{ $staff->nama_staff }}</h1>
+                        
+                        <div class="d-flex flex-wrap align-items-center gap-2 text-muted small">
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-diagram-3 text-secondary"></i>
+                                Divisi: <strong class="text-dark">{{ $staff->divisi ? $staff->divisi->nama_divisi : '-' }}</strong>
                             </span>
-                            <span class="staff-meta-pill">
-                                <i class="bi bi-building text-info"></i> Dept: <strong>{{ $staff->department ? $staff->department->nama_department : '-' }}</strong>
+                            <span class="text-muted opacity-50">&bull;</span>
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-building text-secondary"></i>
+                                Dept: <strong class="text-dark">{{ $staff->department ? $staff->department->nama_department : '-' }}</strong>
                             </span>
-                            <span class="staff-meta-pill">
-                                <i class="bi bi-award text-warning"></i> Level: <strong>{{ $staff->levelJabatan ? $staff->levelJabatan->kode_level_jabatan : '-' }}</strong>
+                            <span class="text-muted opacity-50">&bull;</span>
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-calendar3 text-secondary"></i>
+                                Umur: <strong class="text-dark">{{ $staff->umur ? $staff->umur . ' Tahun' : '-' }}</strong>
                             </span>
-                            <span class="staff-meta-pill">
-                                <i class="bi bi-calendar3 text-success"></i> Umur: <strong>{{ $staff->umur ? $staff->umur : '-' }}</strong>
+                            <span class="text-muted opacity-50">&bull;</span>
+                            <span class="d-flex align-items-center gap-1">
+                                <i class="bi bi-person-badge text-secondary"></i>
+                                Manager: <strong class="text-dark">{{ $staff->immediateManager ? $staff->immediateManager->nama_staff : '-' }}</strong>
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <a class="btn btn-outline-secondary btn-sm px-3 py-2 rounded-3 d-inline-flex align-items-center gap-2" href="{{ route('users') }}">
-                        <i class="bi bi-arrow-left"></i> Kembali ke Daftar Staff
+                <div class="d-flex gap-2">
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ route('users') }}">
+                        <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Kembali ke Daftar Staff
                     </a>
                 </div>
             </div>
         </div>
+
+        @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle me-1"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
 
         {{-- Status Periode TNA Notice --}}
         @if(!$isTnaActive)
@@ -434,42 +303,60 @@
             </div>
         @endif
 
-        {{-- Keterangan / Legend Card --}}
-        <div class="legend-card">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <i class="bi bi-palette text-primary"></i>
-                <h6 class="fw-bold mb-0 text-dark">Keterangan Status Training</h6>
+        {{-- Status Legend Chips --}}
+        <section class="panel p-3 mb-4">
+            <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
+                <i class="bi bi-palette-fill text-primary"></i>
+                <h6 class="mb-0 fw-bold text-dark">Keterangan Warna Status Training</h6>
             </div>
-            <div class="legend-grid">
-                <div class="legend-chip">
-                    <span class="legend-dot" style="background-color: #059669;"></span>
-                    <span>Sudah Terlaksana</span>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-2 pt-1">
+                <div class="col">
+                    <div class="legend-chip w-100">
+                        <span class="legend-dot-circle bg-success"></span>
+                        <span>Sudah Terlaksana</span>
+                    </div>
                 </div>
-                <div class="legend-chip">
-                    <span class="legend-dot" style="background-color: #d97706;"></span>
-                    <span>Mandatory Training (Rekomendasi DLC)</span>
+                <div class="col">
+                    <div class="legend-chip w-100">
+                        <span class="legend-dot-circle bg-warning"></span>
+                        <span>Mandatory Training</span>
+                    </div>
                 </div>
-                <div class="legend-chip">
-                    <span class="legend-dot" style="background-color: #e11d48;"></span>
-                    <span>Didaftarkan Tetapi Tidak Hadir</span>
+                <div class="col">
+                    <div class="legend-chip w-100">
+                        <span class="legend-dot-circle bg-danger"></span>
+                        <span>Tidak Hadir</span>
+                    </div>
                 </div>
-                <div class="legend-chip">
-                    <span class="legend-dot" style="background-color: #2563eb;"></span>
-                    <span>In House Training (Pilihan IM)</span>
+                <div class="col">
+                    <div class="legend-chip w-100">
+                        <span class="legend-dot-circle bg-primary"></span>
+                        <span>In House Training</span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="legend-chip w-100">
+                        <span class="legend-dot-circle" style="background-color: #94a3b8;"></span>
+                        <span>Belum Mengikuti</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        {{-- Training Panels dynamically grouped in Accordion --}}
+        {{-- Training Sections dynamically grouped by jenis_training in Accordion --}}
         @php
             $groupedTrainings = $trainings->groupBy('jenis_training');
         @endphp
 
         <div class="mb-4">
             <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-                <span class="text-muted small fw-semibold d-inline-flex align-items-center gap-2">
-                    <i class="bi bi-collection text-primary"></i> Modul Training ({{ count($groupedTrainings) }} Kategori, {{ count($trainings) }} Total Training)
-                </span>
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-collection-play-fill text-primary fs-5"></i>
+                    <h5 class="mb-0 fw-bold text-dark">Modul Training</h5>
+                    <span class="badge bg-light text-secondary border">
+                        {{ count($groupedTrainings) }} Kategori &bull; {{ count($trainings) }} Total
+                    </span>
+                </div>
                 <div class="btn-group btn-group-sm" role="group">
                     <button type="button" class="btn btn-outline-secondary btn-sm" id="btnExpandAllTrainings">
                         <i class="bi bi-arrows-expand me-1"></i> Buka Semua
@@ -486,9 +373,9 @@
                     $collapseId = 'collapseCat_' . md5($jenis);
                     $headingId = 'headingCat_' . md5($jenis);
                 @endphp
-                <div class="accordion-item">
-                    <h2 class="accordion-header position-relative" id="{{ $headingId }}">
-                        <button class="accordion-button collapsed pe-5" 
+                <div class="accordion-item shadow-xs mb-3">
+                    <h2 class="accordion-header" id="{{ $headingId }}">
+                        <button class="accordion-button collapsed py-3 px-4 bg-white fw-bold pe-5" 
                                 type="button" 
                                 data-bs-toggle="collapse" 
                                 data-bs-target="#{{ $collapseId }}" 
@@ -496,17 +383,17 @@
                                 aria-controls="{{ $collapseId }}">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-journal-bookmark-fill text-primary fs-5"></i>
-                                <span class="fs-6 text-dark fw-bold">{{ $jenis ?: 'Training Lainnya' }}</span>
+                                <span class="fs-6 text-dark">{{ $jenis ?: 'Training Lainnya' }}</span>
                             </div>
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-1.5 position-absolute" style="right: 4.5rem;">
+                                {{ count($items) }} Training
+                            </span>
                         </button>
-                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 position-absolute top-50 translate-middle-y" style="right: 3.5rem; font-size: 0.75rem; pointer-events: none;">
-                            {{ count($items) }} Training
-                        </span>
                     </h2>
                     <div id="{{ $collapseId }}" 
                          class="accordion-collapse collapse" 
                          aria-labelledby="{{ $headingId }}">
-                        <div class="accordion-body">
+                        <div class="accordion-body p-3 bg-light bg-opacity-50">
                             <div class="row g-3">
                                 @foreach ($items as $t)
                                 @php
@@ -519,46 +406,45 @@
                                         <div>
                                             <div class="d-flex align-items-center justify-content-between gap-1 mb-1">
                                                 @if($t->kode_training)
-                                                    <span class="badge bg-white bg-opacity-25 text-white font-monospace" style="font-size: 0.68rem;">{{ $t->kode_training }}</span>
+                                                    <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.68rem;">{{ $t->kode_training }}</span>
                                                 @else
                                                     <span></span>
                                                 @endif
-                                                <span class="badge bg-white bg-opacity-20 text-white border border-white border-opacity-25" style="font-size: 0.68rem;">{{ $t->scope_training ?: 'In House' }}</span>
+                                                <span class="badge {{ $t->scope_training == 'Out House' ? 'bg-warning-subtle text-warning border' : 'bg-info-subtle text-info border' }}" style="font-size: 0.68rem;">{{ $t->scope_training ?: 'In House' }}</span>
                                             </div>
-                                            <span class="card-subtext d-block">{{ $t->mandatory_training ?: '-' }}</span>
-                                            <strong class="d-block my-1 text-white" style="font-size: 0.9rem; line-height: 1.3;">{{ $t->nama_training }}</strong>
-                                            <span class="card-subtext d-block">{{ $t->gol_training ?: '-' }}</span>
+                                            <span style="font-size: 0.75rem; display: block;" class="text-uppercase fw-semibold">{{ $t->mandatory_training ?: '-' }}</span>
+                                            <strong class="d-block my-1.5 fs-6">{{ $t->nama_training }}</strong>
+                                            <span style="font-size: 0.75rem; display: block;">Gol: {{ $t->gol_training ?: '-' }}</span>
                                         </div>
                                         
-                                        {{-- Dropdown Status Training (Immediate Manager logic) --}}
-                                        <div class="mt-3">
-                                            @if(!$isTnaActive)
-                                                {{-- Read-only mode saat TNA ditutup --}}
-                                                <div class="pt-2 border-top border-white border-opacity-25 small" style="color: rgba(255,255,255,0.85); font-size: 0.75rem;">
-                                                    Status: <strong class="text-white">
-                                                        @if($statusId == 1) Sudah Terlaksana
-                                                        @elseif($statusId == 2) Mandatory Training
-                                                        @elseif($statusId == 3) Tidak Hadir
-                                                        @elseif($statusId == 4) In House Training
-                                                        @else Belum Diisi
-                                                        @endif
-                                                    </strong>
-                                                </div>
-                                            @else
-                                                {{-- Active TNA Mode: Immediate Manager hanya boleh memilih In House Training --}}
-                                                <select class="form-select form-select-sm status-select" data-training="{{ $t->id_training }}" {{ in_array($statusId, [1, 2, 3]) ? 'disabled' : '' }}>
-                                                    @if(in_array($statusId, [1, 2, 3]))
-                                                        @if($statusId == 1) <option selected disabled>Sudah Terlaksana (DLC)</option>
-                                                        @elseif($statusId == 2) <option selected disabled>Mandatory (DLC)</option>
-                                                        @elseif($statusId == 3) <option selected disabled>Tidak Hadir (DLC)</option>
-                                                        @endif
-                                                    @else
-                                                        <option value="" {{ !$record ? 'selected' : '' }} disabled>- Pilih Status -</option>
-                                                        <option value="4" {{ $statusId == 4 ? 'selected' : '' }}>In House Training</option>
+                                        {{-- Status Selection / Display (Immediate Manager logic) --}}
+                                        @if(!$isTnaActive)
+                                            {{-- Read-only mode saat TNA ditutup --}}
+                                            <div class="mt-3 pt-2 border-top border-secondary border-opacity-25 small">
+                                                <span class="card-subtext">Status:</span> 
+                                                <strong>
+                                                    @if($statusId == 1) Sudah Terlaksana
+                                                    @elseif($statusId == 2) Mandatory Training
+                                                    @elseif($statusId == 3) Tidak Hadir
+                                                    @elseif($statusId == 4) In House Training
+                                                    @else Belum Mengikuti
                                                     @endif
-                                                </select>
-                                            @endif
-                                        </div>
+                                                </strong>
+                                            </div>
+                                        @else
+                                            {{-- Active TNA Mode: Status 1,2,3 dari DLC disabled; IM hanya boleh pilih In House Training (4) atau Belum Mengikuti (0) --}}
+                                            <select class="form-select form-select-sm mt-3 status-select" data-training="{{ $t->id_training }}" {{ in_array($statusId, [1, 2, 3]) ? 'disabled' : '' }}>
+                                                @if(in_array($statusId, [1, 2, 3]))
+                                                    @if($statusId == 1) <option selected disabled>Sudah Terlaksana (DLC)</option>
+                                                    @elseif($statusId == 2) <option selected disabled>Mandatory (DLC)</option>
+                                                    @elseif($statusId == 3) <option selected disabled>Tidak Hadir (DLC)</option>
+                                                    @endif
+                                                @else
+                                                    <option value="0" {{ !$record || $statusId != 4 ? 'selected' : '' }}>- Belum Mengikuti -</option>
+                                                    <option value="4" {{ $record && $statusId == 4 ? 'selected' : '' }}>In House Training</option>
+                                                @endif
+                                            </select>
+                                        @endif
                                     </div>
                                 </div>
                                 @endforeach
@@ -567,81 +453,82 @@
                     </div>
                 </div>
                 @empty
-                <div class="panel-smooth text-center text-muted py-4">
-                    Belum ada data training yang terdaftar.
+                <div class="panel p-5 text-center text-muted">
+                    <i class="bi bi-inbox fs-2 d-block mb-2 text-muted opacity-50"></i>
+                    Belum ada data training yang terdaftar di master data.
                 </div>
                 @endforelse
             </div>
         </div>
 
         {{-- ========== SECTION REQUEST TRAINING OUT HOUSE (OH) ========== --}}
-        <section class="mt-4">
-            <div class="panel-smooth">
-                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4 pb-3 border-bottom">
-                    <div>
-                        <h2 class="h5 mb-1 text-dark fw-bold d-inline-flex align-items-center gap-2">
-                            <i class="bi bi-box-arrow-up-right text-primary"></i>
-                            <span>Request Training Out House (OH)</span>
-                        </h2>
-                        <p class="text-muted mb-0 small">
-                            Form pengajuan permohonan training Out House untuk staff: <strong>{{ $staff->nama_staff }} ({{ $staff->npk_staff }})</strong>
-                        </p>
-                    </div>
-                </div>
-
-                {{-- Form Input Request OH --}}
-                <form action="{{ route('outhouse.store') }}" method="POST" class="p-4 bg-light bg-opacity-50 border rounded-3 mb-4">
-                    @csrf
-                    <input type="hidden" name="id_staff" value="{{ $staff->id_staff }}">
-                    
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <label for="judul_training" class="form-label fw-semibold text-dark small mb-1">Judul Training <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control form-control-smooth" id="judul_training" name="judul_training" placeholder="Contoh: Pelatihan Sertifikasi BNSP, Advanced Data Analytics, dll." required>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="deskripsi_training" class="form-label fw-semibold text-dark small mb-1">Deskripsi Training <span class="text-danger">*</span></label>
-                            <textarea class="form-control form-control-smooth" id="deskripsi_training" name="deskripsi_training" rows="3" placeholder="Uraikan ringkasan materi, lembaga/vendor penyelenggara, atau silabus..." required></textarea>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label for="reason" class="form-label fw-semibold text-dark small mb-1">Reason / Alasan Kebutuhan <span class="text-danger">*</span></label>
-                            <textarea class="form-control form-control-smooth" id="reason" name="reason" rows="3" placeholder="Jelaskan alasan bisnis, urgensi tugas kerja, atau kompetensi yang ingin ditingkatkan..." required></textarea>
-                        </div>
-
-                        <div class="col-12 text-end pt-2">
-                            <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm d-inline-flex align-items-center gap-2">
-                                <i class="bi bi-send"></i> Ajukan Request Training OH
-                            </button>
+        <section class="row g-3 mt-2">
+            <div class="col-12">
+                <div class="panel p-4">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-3 border-bottom">
+                        <div>
+                            <h2 class="h5 mb-1 section-title">
+                                <i class="bi bi-box-arrow-up-right me-1 text-primary"></i>
+                                <span>Request Training Out House (OH)</span>
+                            </h2>
+                            <p class="text-muted mb-0 small">
+                                Form pengajuan permohonan training Out House untuk staff: <strong>{{ $staff->nama_staff }} ({{ $staff->npk_staff }})</strong>
+                            </p>
                         </div>
                     </div>
-                </form>
 
-                {{-- Tabel Riwayat Request Training OH --}}
-                <div class="table-smooth-container">
+                    {{-- Form Input Request OH --}}
+                    <form action="{{ route('outhouse.store') }}" method="POST" class="p-3 bg-light bg-opacity-50 border rounded-3 mb-4">
+                        @csrf
+                        <input type="hidden" name="id_staff" value="{{ $staff->id_staff }}">
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="judul_training" class="form-label fw-semibold text-dark small mb-1">Judul Training <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="judul_training" name="judul_training" placeholder="Contoh: Pelatihan Sertifikasi BNSP, Advanced Data Analytics, dll." required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="deskripsi_training" class="form-label fw-semibold text-dark small mb-1">Deskripsi Training <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="deskripsi_training" name="deskripsi_training" rows="3" placeholder="Uraikan ringkasan materi, lembaga/vendor penyelenggara, atau silabus..." required></textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="reason" class="form-label fw-semibold text-dark small mb-1">Reason / Alasan Kebutuhan <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="reason" name="reason" rows="3" placeholder="Jelaskan alasan bisnis, urgensi tugas kerja, atau kompetensi yang ingin ditingkatkan..." required></textarea>
+                            </div>
+
+                            <div class="col-12 text-end pt-1">
+                                <button type="submit" class="btn btn-primary btn-sm px-3 py-2 rounded-2 shadow-xs d-inline-flex align-items-center gap-2">
+                                    <i class="bi bi-send"></i> Ajukan Request Training OH
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    {{-- Tabel Riwayat Request Training OH --}}
                     <div class="table-responsive">
-                        <table class="table-smooth align-middle">
+                        <table class="table table-hover align-middle mb-0 small">
                             <thead>
                                 <tr>
-                                    <th scope="col" style="width: 170px;">No. Request</th>
-                                    <th scope="col">Judul Training</th>
-                                    <th scope="col">Deskripsi Training</th>
-                                    <th scope="col">Reason</th>
-                                    <th scope="col" style="width: 150px;">Status</th>
-                                    <th scope="col" style="width: 180px;">Dokumen Formulir</th>
-                                    <th scope="col" class="text-end" style="width: 110px;">Action</th>
+                                    <th scope="col" style="min-width: 140px;">No. Request</th>
+                                    <th scope="col" style="min-width: 180px;">Judul Training</th>
+                                    <th scope="col" style="min-width: 200px;">Deskripsi Training</th>
+                                    <th scope="col" style="min-width: 160px;">Reason</th>
+                                    <th scope="col" style="min-width: 140px;">Status</th>
+                                    <th scope="col" style="min-width: 160px;">Dokumen Formulir</th>
+                                    <th scope="col" class="text-end" style="min-width: 100px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($outhouseRequests ?? [] as $req)
                                 <tr>
                                     <td>
-                                        <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.75rem;">{{ $req->no_request }}</span>
-                                        <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">{{ $req->created_at ? $req->created_at->format('d/m/Y H:i') : '' }}</small>
+                                        <span class="badge bg-light text-dark border font-monospace">{{ $req->no_request }}</span>
+                                        <small class="text-muted d-block mt-1">{{ $req->created_at ? $req->created_at->format('d/m/Y H:i') : '' }}</small>
                                     </td>
                                     <td>
-                                        <strong class="text-dark d-block" style="font-size: 0.88rem;">{{ $req->judul_training }}</strong>
+                                        <strong class="text-dark d-block">{{ $req->judul_training }}</strong>
                                     </td>
                                     <td><small class="text-muted">{{ $req->deskripsi_training }}</small></td>
                                     <td><small class="text-muted">{{ $req->reason }}</small></td>
@@ -674,7 +561,6 @@
                                     <td>
                                         @if($req->status === 'Verified by DLC' || $req->status === 'Approve')
                                             @if($req->penugasan && $req->penugasan->is_sent)
-                                                {{-- ENABLE: Formulir telah dibuat dan dikirim oleh DLC --}}
                                                 <a href="{{ route('penugasan.downloadPdf', $req->penugasan->id_penugasan) }}" class="btn-download-active" title="Unduh Dokumen Formulir Pendaftaran Training Resmi">
                                                     <i class="bi bi-file-earmark-pdf-fill"></i> Unduh Formulir
                                                 </a>
@@ -682,7 +568,6 @@
                                                     <i class="bi bi-check2-all me-1"></i>Siap diunduh
                                                 </small>
                                             @else
-                                                {{-- DISABLE: Formulir belum dibuat atau belum dikirim oleh DLC --}}
                                                 <button type="button" class="btn-download-disabled" disabled title="Formulir belum dikirim oleh DLC">
                                                     <i class="bi bi-file-earmark-pdf"></i> Unduh Formulir
                                                 </button>
@@ -720,15 +605,15 @@
                                                         <div class="modal-body p-4">
                                                             <div class="mb-3">
                                                                 <label class="form-label fw-semibold text-dark small">Judul Training <span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control form-control-smooth" name="judul_training" value="{{ old('judul_training', $req->judul_training) }}" required>
+                                                                <input type="text" class="form-control" name="judul_training" value="{{ old('judul_training', $req->judul_training) }}" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label class="form-label fw-semibold text-dark small">Deskripsi Training <span class="text-danger">*</span></label>
-                                                                <textarea class="form-control form-control-smooth" name="deskripsi_training" rows="3" required>{{ old('deskripsi_training', $req->deskripsi_training) }}</textarea>
+                                                                <textarea class="form-control" name="deskripsi_training" rows="3" required>{{ old('deskripsi_training', $req->deskripsi_training) }}</textarea>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label class="form-label fw-semibold text-dark small">Reason / Alasan Kebutuhan <span class="text-danger">*</span></label>
-                                                                <textarea class="form-control form-control-smooth" name="reason" rows="3" required>{{ old('reason', $req->reason) }}</textarea>
+                                                                <textarea class="form-control" name="reason" rows="3" required>{{ old('reason', $req->reason) }}</textarea>
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer bg-light">
@@ -773,8 +658,8 @@
                                 @empty
                                 <tr>
                                     <td colspan="7" class="text-center text-muted py-5">
-                                        <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary opacity-50"></i>
-                                        <span>Belum ada request training Out House yang diajukan untuk staff ini.</span>
+                                        <i class="bi bi-inbox fs-2 d-block mb-2 text-muted opacity-50"></i>
+                                        Belum ada request training Out House yang diajukan untuk staff ini.
                                     </td>
                                 </tr>
                                 @endforelse
@@ -821,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     card.classList.remove('card-gray', 'card-green', 'card-yellow', 'card-red', 'card-blue');
-                    card.classList.add(colorMap[idStatus]);
+                    card.classList.add(colorMap[idStatus] || 'card-gray');
                 } else {
                     alert(data.message || 'Gagal update status training.');
                 }

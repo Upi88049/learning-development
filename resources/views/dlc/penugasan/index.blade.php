@@ -3,20 +3,20 @@
 @section('content')
 <style>
 /* ========== SMOOTH GLOBAL ENHANCEMENTS ========== */
-.admin-content {
+/* .admin-content {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
+} */
 
 /* Page Hero Header */
-.penugasan-hero-card {
+/* .penugasan-hero-card {
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 1.5rem;
     box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
     margin-bottom: 1.5rem;
-}
+} */
 
 /* Main Container Panel */
 .panel-smooth {
@@ -57,7 +57,7 @@
 }
 
 /* Table Styling */
-.table-smooth-container {
+/* .table-smooth-container {
     border: 1px solid #e2e8f0;
     border-radius: 14px;
     overflow: hidden;
@@ -93,7 +93,7 @@
 }
 .table-smooth tbody tr:last-child td {
     border-bottom: none;
-}
+} */
 
 /* Pill Badges */
 .badge-pill-soft {
@@ -174,32 +174,28 @@
 }
 </style>
 
-<main class="admin-content">
+<main class="dashboard-content">
     <div class="container-fluid px-3 px-lg-4 py-4">
 
         {{-- Page Hero Header --}}
-        <div class="penugasan-hero-card">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="hero-header-card mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-circle d-flex align-items-center justify-content-center bg-primary text-white" style="width: 52px; height: 52px; font-size: 1.4rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                    <div class="page-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; font-size: 1.5rem; flex-shrink: 0;">
                         <i class="bi bi-file-earmark-text"></i>
                     </div>
                     <div>
                         <div class="d-flex align-items-center gap-2 mb-1">
-                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1" style="font-size: 0.72rem;">
-                                DLC Administrator
-                            </span>
-                            <span class="badge bg-light text-secondary border rounded-pill px-2 py-1 font-monospace" style="font-size: 0.72rem;">
-                                Form 013/WI-
-                            </span>
+                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-2.5 py-1">DLC Administrator</span>
+                            <span class="text-muted small">Form Penugasan</span>
                         </div>
-                        <h1 class="h4 mb-1 text-dark fw-bold">Formulir Pendaftaran &amp; Penugasan Training</h1>
+                        <h1 class="h3 mb-1 text-dark fw-bold">Formulir Pendaftaran &amp; Penugasan Training</h1>
                         <p class="text-muted mb-0 small">Kelola, buka akses pengiriman ke Immediate Manager, dan unduh dokumen resmi Dharma Learning Center.</p>
                     </div>
                 </div>
-                <div>
-                    <a href="{{ route('penugasan.create') }}" class="btn btn-primary px-4 py-2 rounded-3 shadow-sm d-inline-flex align-items-center gap-2">
-                        <i class="bi bi-plus-circle"></i> Buat Form Penugasan Baru
+                <div class="d-flex gap-2">
+                    <a href="{{ route('penugasan.create') }}" class="btn btn-primary btn-sm d-inline-flex align-items-center gap-1 shadow-sm px-3 py-2">
+                        <i class="bi bi-plus-lg"></i> Buat Form Penugasan Baru
                     </a>
                 </div>
             </div>
@@ -247,155 +243,154 @@
             </form>
 
             {{-- Table --}}
-            <div class="table-smooth-container">
-                <div class="table-responsive">
-                    <table class="table-smooth align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 50px;" class="text-center">No.</th>
-                                <th scope="col">Nama Training</th>
-                                <th scope="col">Jenis</th>
-                                <th scope="col">SubCo / Divisi</th>
-                                <th scope="col">Peserta</th>
-                                <th scope="col">Biaya Investasi</th>
-                                <th scope="col">Tempat &amp; Tanggal</th>
-                                <th scope="col" style="min-width: 140px;">Status Kirim IM</th>
-                                <th scope="col">Dibuat</th>
-                                <th scope="col" class="text-end" style="width: 160px;">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($penugasanList as $index => $item)
-                            @php
-                                $peserta = $item->peserta;
-                            @endphp
-                            <tr>
-                                <td class="text-center text-muted fw-bold">{{ $index + 1 }}</td>
-                                <td>
-                                    <strong class="text-dark d-block" style="font-size: 0.9rem;">{{ $item->nama_training }}</strong>
-                                    <span class="badge bg-light text-secondary border font-monospace mt-1" style="font-size: 0.72rem;">{{ $item->no_form }}</span>
-                                    @if($item->requestOuthouse)
-                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace ms-1" style="font-size: 0.72rem;" title="Terkait Request OH">
-                                            <i class="bi bi-link-45deg"></i> {{ $item->requestOuthouse->no_request }}
-                                        </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <span class="badge bg-light text-dark border rounded-pill px-3 py-1" style="font-size: 0.75rem;">{{ $item->jenis_training }}</span>
-                                </td>
-                                <td>
-                                    <div class="fw-semibold text-dark">{{ $item->sub_co }}</div>
-                                    <small class="text-muted">Div: {{ $item->divisi ?: '-' }}</small>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 fw-bold" style="font-size: 0.75rem;">
-                                        {{ $item->jumlah_peserta }} Peserta
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="penugasanTable" data-searchable-table>
+                    <thead>
+                        <tr>
+                            <th scope="col" style="width: 50px;" class="text-center">No.</th>
+                            <th scope="col">Nama Training</th>
+                            <th scope="col">Jenis</th>
+                            <th scope="col">SubCo / Divisi</th>
+                            <th scope="col">Peserta</th>
+                            <th scope="col">Biaya Investasi</th>
+                            <th scope="col">Tempat &amp; Tanggal</th>
+                            <th scope="col" style="min-width: 140px;">Status Kirim IM</th>
+                            <th scope="col">Dibuat</th>
+                            <th scope="col" class="text-end" style="width: 160px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($penugasanList as $index => $item)
+                        @php
+                            $peserta = $item->peserta;
+                        @endphp
+                        <tr>
+                            <td class="text-center text-muted fw-bold">{{ $index + 1 }}</td>
+                            <td>
+                                <strong class="text-dark d-block" style="font-size: 0.9rem;">{{ $item->nama_training }}</strong>
+                                <span class="badge bg-light text-secondary border font-monospace mt-1" style="font-size: 0.72rem;">{{ $item->no_form }}</span>
+                                @if($item->requestOuthouse)
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace ms-1" style="font-size: 0.72rem;" title="Terkait Request OH">
+                                        <i class="bi bi-link-45deg"></i> {{ $item->requestOuthouse->no_request }}
                                     </span>
-                                    @if(!empty($peserta))
-                                        <div class="mt-1 text-muted" style="max-width: 180px; font-size: 0.72rem;">
-                                            {{ implode(', ', array_slice(array_column($peserta, 'nama'), 0, 2)) }}
-                                            @if(count($peserta) > 2) ... @endif
-                                        </div>
-                                    @endif
-                                </td>
-                                <td>
-                                    <strong class="text-success d-block" style="font-size: 0.88rem;">Rp {{ number_format($item->total_biaya, 0, ',', '.') }}</strong>
-                                    <small class="text-muted d-block" style="font-size: 0.72rem;">(@ Rp {{ number_format($item->biaya_per_peserta, 0, ',', '.') }})</small>
-                                </td>
-                                <td>
-                                    <small class="text-muted">{{ $item->tempat_tanggal_training ?: '-' }}</small>
-                                </td>
-                                <td>
-                                    @if($item->is_sent)
-                                        <div class="d-flex flex-column gap-1">
-                                            <span class="badge-pill-soft badge-sent-im">
-                                                <i class="bi bi-check2-all"></i> Terkirim ke IM
-                                            </span>
-                                            <small class="text-muted" style="font-size: 0.72rem;">
-                                                <i class="bi bi-clock-history me-1"></i>{{ $item->sent_at ? $item->sent_at->format('d/m/Y H:i') : '' }}
-                                            </small>
-                                            <form action="{{ route('penugasan.cancelSendToIm', $item->id_penugasan) }}" method="POST"
-                                                onsubmit="return confirm('Batalkan akses download dokumen ini untuk Immediate Manager?');">
-                                                @csrf
-                                                <button type="submit" class="btn btn-link p-0 text-danger small text-decoration-none" style="font-size: 0.72rem;" title="Batalkan Pengiriman">
-                                                    <i class="bi bi-x-circle me-1"></i>Batal Kirim
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @else
-                                        <div class="d-flex flex-column gap-1">
-                                            <form action="{{ route('penugasan.sendToIm', $item->id_penugasan) }}" method="POST"
-                                                onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager? Immediate Manager akan dapat mengunduh dokumen.');">
-                                                @csrf
-                                                <button type="submit" class="btn-send-im" title="Kirim / Buka Akses Dokumen ke Immediate Manager">
-                                                    <i class="bi bi-send-fill"></i> Kirim ke IM
-                                                </button>
-                                            </form>
-                                            <small class="text-muted" style="font-size: 0.72rem;">
-                                                <i class="bi bi-hourglass-split me-1"></i>Belum dikirim
-                                            </small>
-                                        </div>
-                                    @endif
-                                </td>
-                                <td>
-                                    <small class="text-muted">{{ $item->created_at ? $item->created_at->format('d/m/Y') : '-' }}</small>
-                                </td>
-                                <td class="text-end">
-                                    <div class="d-inline-flex gap-1" role="group">
-                                        <a href="{{ route('penugasan.previewPdf', $item->id_penugasan) }}" target="_blank" class="btn-action-icon btn-action-view" title="Preview PDF">
-                                            <i class="bi bi-eye"></i>
-                                        </a>
-                                        <a href="{{ route('penugasan.downloadPdf', $item->id_penugasan) }}" class="btn-action-icon btn-action-download" title="Download PDF">
-                                            <i class="bi bi-download"></i>
-                                        </a>
-                                        <a href="{{ route('penugasan.edit', $item->id_penugasan) }}" class="btn-action-icon btn-action-edit" title="Edit Form">
-                                            <i class="bi bi-pencil"></i>
-                                        </a>
-                                        <button type="button" class="btn-action-icon btn-action-delete" data-bs-toggle="modal" data-bs-target="#modalDeletePenugasan{{ $item->id_penugasan }}" title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                                @endif
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border rounded-pill px-3 py-1" style="font-size: 0.75rem;">{{ $item->jenis_training }}</span>
+                            </td>
+                            <td>
+                                <div class="fw-semibold text-dark">{{ $item->sub_co }}</div>
+                                <small class="text-muted">Div: {{ $item->divisi ?: '-' }}</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 fw-bold" style="font-size: 0.75rem;">
+                                    {{ $item->jumlah_peserta }} Peserta
+                                </span>
+                                @if(!empty($peserta))
+                                    <div class="mt-1 text-muted" style="max-width: 180px; font-size: 0.72rem;">
+                                        {{ implode(', ', array_slice(array_column($peserta, 'nama'), 0, 2)) }}
+                                        @if(count($peserta) > 2) ... @endif
                                     </div>
+                                @endif
+                            </td>
+                            <td>
+                                <strong class="text-success d-block" style="font-size: 0.88rem;">Rp {{ number_format($item->total_biaya, 0, ',', '.') }}</strong>
+                                <small class="text-muted d-block" style="font-size: 0.72rem;">(@ Rp {{ number_format($item->biaya_per_peserta, 0, ',', '.') }})</small>
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ $item->tempat_tanggal_training ?: '-' }}</small>
+                            </td>
+                            <td>
+                                @if($item->is_sent)
+                                    <div class="d-flex flex-column gap-1">
+                                        <span class="badge-pill-soft badge-sent-im">
+                                            <i class="bi bi-check2-all"></i> Terkirim ke IM
+                                        </span>
+                                        <small class="text-muted" style="font-size: 0.72rem;">
+                                            <i class="bi bi-clock-history me-1"></i>{{ $item->sent_at ? $item->sent_at->format('d/m/Y H:i') : '' }}
+                                        </small>
+                                        <form action="{{ route('penugasan.cancelSendToIm', $item->id_penugasan) }}" method="POST"
+                                            onsubmit="return confirm('Batalkan akses download dokumen ini untuk Immediate Manager?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-link p-0 text-danger small text-decoration-none" style="font-size: 0.72rem;" title="Batalkan Pengiriman">
+                                                <i class="bi bi-x-circle me-1"></i>Batal Kirim
+                                            </button>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div class="d-flex flex-column gap-1">
+                                        <form action="{{ route('penugasan.sendToIm', $item->id_penugasan) }}" method="POST"
+                                            onsubmit="return confirm('Kirim dokumen formulir ini ke akun Immediate Manager? Immediate Manager akan dapat mengunduh dokumen.');">
+                                            @csrf
+                                            <button type="submit" class="btn-send-im" title="Kirim / Buka Akses Dokumen ke Immediate Manager">
+                                                <i class="bi bi-send-fill"></i> Kirim ke IM
+                                            </button>
+                                        </form>
+                                        <small class="text-muted" style="font-size: 0.72rem;">
+                                            <i class="bi bi-hourglass-split me-1"></i>Belum dikirim
+                                        </small>
+                                    </div>
+                                @endif
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ $item->created_at ? $item->created_at->format('d/m/Y') : '-' }}</small>
+                            </td>
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-1" role="group">
+                                    <a href="{{ route('penugasan.previewPdf', $item->id_penugasan) }}" target="_blank" class="btn-action-icon btn-action-view" title="Preview PDF">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ route('penugasan.downloadPdf', $item->id_penugasan) }}" class="btn-action-icon btn-action-download" title="Download PDF">
+                                        <i class="bi bi-download"></i>
+                                    </a>
+                                    <a href="{{ route('penugasan.edit', $item->id_penugasan) }}" class="btn-action-icon btn-action-edit" title="Edit Form">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button type="button" class="btn-action-icon btn-action-delete" data-bs-toggle="modal" data-bs-target="#modalDeletePenugasan{{ $item->id_penugasan }}" title="Hapus">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
 
-                                    {{-- Modal Delete Penugasan --}}
-                                    <div class="modal fade text-start" id="modalDeletePenugasan{{ $item->id_penugasan }}" tabindex="-1" aria-labelledby="modalDeletePenugasanLabel{{ $item->id_penugasan }}" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content" style="border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden;">
-                                                <form action="{{ route('penugasan.destroy', $item->id_penugasan) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div class="modal-header bg-danger bg-opacity-10 text-danger">
-                                                        <h5 class="modal-title fs-6 fw-bold" id="modalDeletePenugasanLabel{{ $item->id_penugasan }}">
-                                                            <i class="bi bi-exclamation-triangle me-2"></i>Konfirmasi Hapus Dokumen
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body p-4">
-                                                        Apakah Anda yakin ingin menghapus Formulir Penugasan Training <strong>{{ $item->nama_training }}</strong>?
-                                                    </div>
-                                                    <div class="modal-footer bg-light">
-                                                        <button type="button" class="btn btn-outline-secondary btn-sm px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
-                                                        <button type="submit" class="btn btn-danger btn-sm px-4 rounded-3">
-                                                            <i class="bi bi-trash me-1"></i> Ya, Hapus Dokumen
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
+                                {{-- Modal Delete Penugasan --}}
+                                <div class="modal fade text-start" id="modalDeletePenugasan{{ $item->id_penugasan }}" tabindex="-1" aria-labelledby="modalDeletePenugasanLabel{{ $item->id_penugasan }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content" style="border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden;">
+                                            <form action="{{ route('penugasan.destroy', $item->id_penugasan) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <div class="modal-header bg-danger bg-opacity-10 text-danger">
+                                                    <h5 class="modal-title fs-6 fw-bold" id="modalDeletePenugasanLabel{{ $item->id_penugasan }}">
+                                                        <i class="bi bi-exclamation-triangle me-2"></i>Konfirmasi Hapus Dokumen
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body p-4">
+                                                    Apakah Anda yakin ingin menghapus Formulir Penugasan Training <strong>{{ $item->nama_training }}</strong>?
+                                                </div>
+                                                <div class="modal-footer bg-light">
+                                                    <button type="button" class="btn btn-outline-secondary btn-sm px-3 rounded-3" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm px-4 rounded-3">
+                                                        <i class="bi bi-trash me-1"></i> Ya, Hapus Dokumen
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="10" class="text-center text-muted py-5">
-                                    <i class="bi bi-file-earmark-x fs-2 d-block mb-2 text-secondary opacity-50"></i>
-                                    <span>Belum ada formulir pendaftaran &amp; penugasan training yang dibuat.</span>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="10" class="text-center text-muted py-5">
+                                <i class="bi bi-file-earmark-x fs-2 d-block mb-2 text-secondary opacity-50"></i>
+                                <span>Belum ada formulir pendaftaran &amp; penugasan training yang dibuat.</span>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
+
 
             <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center text-muted small">
                 <span>Total <strong>{{ count($penugasanList) }}</strong> formulir penugasan training tercatat.</span>

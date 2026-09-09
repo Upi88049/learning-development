@@ -154,7 +154,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted small d-block">Pending</span>
-                            <span class="fs-4 fw-bold text-warning">{{ $countPending }}</span>
+                            <span class="fs-4 fw-bold text-dark">{{ $countPending }}</span>
                         </div>
                         <span class="p-2 rounded-3 bg-warning-subtle text-warning fs-4"><i class="bi bi-hourglass-split"></i></span>
                     </div>
@@ -167,7 +167,7 @@
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <span class="text-muted small d-block">Verified by DLC</span>
-                            <span class="fs-4 fw-bold text-info">{{ $countVerified }}</span>
+                            <span class="fs-4 fw-bold text-dark">{{ $countVerified }}</span>
                         </div>
                         <span class="p-2 rounded-3 bg-info-subtle text-info fs-4"><i class="bi bi-patch-check"></i></span>
                     </div>
@@ -179,8 +179,8 @@
                 <div class="metric-card-link card border-0 shadow-sm rounded-3 p-3 bg-white">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <span class="text-muted small d-block">Approve</span>
-                            <span class="fs-4 fw-bold text-success">{{ $countApproved }}</span>
+                            <span class="text-muted small d-block">Approved</span>
+                            <span class="fs-4 fw-bold text-dark">{{ $countApproved }}</span>
                         </div>
                         <span class="p-2 rounded-3 bg-success-subtle text-success fs-4"><i class="bi bi-check2-circle"></i></span>
                     </div>
