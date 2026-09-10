@@ -7,7 +7,7 @@
   <!-- ==========TEST========== -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- ==========TEST========== -->
-  <title>@yield('title', 'Dashboard | Learning & Development')</title>
+  <title>@yield('title', 'Dashboard | Dharma Learning Center')</title>
   <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-icons/bootstrap-icons.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
@@ -30,7 +30,7 @@
             <img src="{{ asset('assets/images/logo-dharma.png') }}" alt="Logo Perusahaan">
           </span>
           <span class="brand-copy">
-            <span class="brand-title">Learning & <br>Development</span>
+            <span class="brand-title">Dharma Learning <br>Center</span>
             <span class="brand-subtitle">Admin</span>
           </span>
         </a>
