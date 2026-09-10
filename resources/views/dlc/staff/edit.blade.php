@@ -107,7 +107,7 @@
 
             <div class="col-md-6">
               <label class="form-label fw-semibold" for="id_immediate_manager">Immediate Manager</label>
-              <select class="form-select" id="id_immediate_manager" name="id_immediate_manager">
+              <select class="form-select select-searchable" id="id_immediate_manager" name="id_immediate_manager" data-placeholder="-- Pilih / Cari Immediate Manager --" data-search-placeholder="Ketik nama atau NPK manager...">
                 <option value="">-- Tanpa / Tidak Ada Manager --</option>
                 @foreach($managers as $mgr)
                   <option value="{{ $mgr->id_staff }}" {{ old('id_immediate_manager', $staff->id_immediate_manager) == $mgr->id_staff ? 'selected' : '' }}>
@@ -115,6 +115,7 @@
                   </option>
                 @endforeach
               </select>
+              <small class="text-muted d-block mt-1"><i class="bi bi-info-circle me-1"></i>Dapat dicari berdasarkan nama karyawan atau NPK.</small>
             </div>
           </div>
 

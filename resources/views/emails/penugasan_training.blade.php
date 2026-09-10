@@ -157,7 +157,7 @@
                                 Dharma Learning Center (DLC)
                             </p>
                             <p style="margin: 4px 0 0; font-size: 11px; color: #94a3b8;">
-                                PT Dharma Polimetal Tbk &bull; Sistem Informasi Learning & Development
+                                PT Dharma Polimetal Tbk &bull; Dharma Learning Center
                             </p>
                             <p style="margin: 8px 0 0; font-size: 10px; color: #cbd5e1;">
                                 Pesan ini dihasilkan secara otomatis oleh sistem. Harap tidak membalas email ini secara langsung.

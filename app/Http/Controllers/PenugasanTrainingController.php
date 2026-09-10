@@ -133,6 +133,15 @@ class PenugasanTrainingController extends Controller
      */
     public function store(Request $request)
     {
+        // AJAX endpoint for terbilang conversion
+        if ($request->get('action') === 'terbilang' || $request->input('action') === 'terbilang') {
+            $amount = $request->input('amount', 0);
+            return response()->json([
+                'status' => 'success',
+                'terbilang' => TerbilangHelper::convert($amount)
+            ]);
+        }
+
         $request->validate([
             'nama_training' => 'required|string|max:255',
             'jenis_training' => 'required|string|max:100',
@@ -343,6 +352,11 @@ class PenugasanTrainingController extends Controller
     {
         $penugasan = PenugasanTrainingModel::findOrFail($id);
 
+        // Jika diakses oleh Immediate Manager, pastikan formulir sudah dikirim (is_sent)
+        if (session('role') === 'Immediate Manager' && !$penugasan->is_sent) {
+            return redirect()->back()->with('error', 'Dokumen formulir belum dikirim oleh DLC.');
+        }
+
         $logoPath = public_path('assets/images/LOGO DLC.png');
         $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
 
@@ -365,6 +379,11 @@ class PenugasanTrainingController extends Controller
     public function previewPdf($id)
     {
         $penugasan = PenugasanTrainingModel::findOrFail($id);
+
+        // Jika diakses oleh Immediate Manager, pastikan formulir sudah dikirim (is_sent)
+        if (session('role') === 'Immediate Manager' && !$penugasan->is_sent) {
+            return redirect()->back()->with('error', 'Dokumen formulir belum dikirim oleh DLC.');
+        }
 
         $logoPath = public_path('assets/images/LOGO DLC.png');
         $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;

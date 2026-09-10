@@ -70,8 +70,6 @@ Route::middleware(['checkLogin'])->group(function () {
         Route::delete('/dlc/request-outhouse/{id}', [RequestOuthouseController::class, 'destroyDlc'])->name('outhouse.destroyDlc');
 
         // Formulir Pendaftaran & Penugasan Training (DLC)
-        Route::get('/dlc/penugasan/{id}/pdf', [PenugasanTrainingController::class, 'downloadPdf'])->name('penugasan.downloadPdf');
-        Route::get('/dlc/penugasan/{id}/preview', [PenugasanTrainingController::class, 'previewPdf'])->name('penugasan.previewPdf');
         Route::post('/dlc/penugasan/{id}/send-to-im', [PenugasanTrainingController::class, 'sendToIm'])->name('penugasan.sendToIm');
         Route::post('/dlc/penugasan/{id}/cancel-send-to-im', [PenugasanTrainingController::class, 'cancelSendToIm'])->name('penugasan.cancelSendToIm');
         Route::resource('/dlc/penugasan', PenugasanTrainingController::class)->names('penugasan');
@@ -112,6 +110,10 @@ Route::middleware(['checkLogin'])->group(function () {
     // 3. AKSES BERSAMA (DLC & IMMEDIATE MANAGER)
     // ==========================================
     Route::middleware(['role:DLC,Immediate Manager'])->group(function () {
+        // Download & Preview Dokumen Formulir Penugasan Training
+        Route::get('/dlc/penugasan/{id}/pdf', [PenugasanTrainingController::class, 'downloadPdf'])->name('penugasan.downloadPdf');
+        Route::get('/dlc/penugasan/{id}/preview', [PenugasanTrainingController::class, 'previewPdf'])->name('penugasan.previewPdf');
+
         Route::post('/staff-training/update', [UsersController::class, 'update'])->name('staffTraining.update');
     });
 });

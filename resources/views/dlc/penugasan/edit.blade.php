@@ -566,6 +566,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let rowIndex = document.querySelectorAll('.peserta-row').length;
 
+    function toTerbilang(num) {
+        if (typeof window.convertTerbilang === 'function') {
+            return window.convertTerbilang(num);
+        }
+        num = Math.floor(Math.abs(Number(num) || 0));
+        if (num <= 0) return 'Nol Rupiah';
+
+        const words = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+        function toWords(n) {
+            if (n < 12) return words[n];
+            if (n < 20) return words[n - 10] + ' Belas';
+            if (n < 100) return words[Math.floor(n / 10)] + ' Puluh ' + toWords(n % 10);
+            if (n < 200) return 'Seratus ' + toWords(n - 100);
+            if (n < 1000) return words[Math.floor(n / 100)] + ' Ratus ' + toWords(n % 100);
+            if (n < 2000) return 'Seribu ' + toWords(n - 1000);
+            if (n < 1000000) return toWords(Math.floor(n / 1000)) + ' Ribu ' + toWords(n % 1000);
+            if (n < 1000000000) return toWords(Math.floor(n / 1000000)) + ' Juta ' + toWords(n % 1000000);
+            if (n < 1000000000000) return toWords(Math.floor(n / 1000000000)) + ' Miliar ' + toWords(n % 1000000000);
+            if (n < 1000000000000000) return toWords(Math.floor(n / 1000000000000)) + ' Triliun ' + toWords(n % 1000000000000);
+            return '';
+        }
+
+        const result = toWords(num).replace(/\s+/g, ' ').trim();
+        return result ? result + ' Rupiah' : 'Nol Rupiah';
+    }
+
     function recalculate() {
         const rows = document.querySelectorAll('.peserta-row');
         const count = rows.length;
@@ -575,29 +601,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const total = count * biaya;
         totalDisplay.value = new Intl.NumberFormat('id-ID').format(total);
 
+        // Update terbilang secara real-time langsung di browser (tanpa perlu simpan dulu)
         if (total > 0) {
-            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-            fetch("{{ route('penugasan.store') }}?action=terbilang", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-                body: JSON.stringify({ amount: total })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.terbilang) {
-                    inputTerbilang.value = data.terbilang;
-                }
-            })
-            .catch(() => {});
+            inputTerbilang.value = toTerbilang(total);
         } else {
             inputTerbilang.value = '';
         }
     }
 
+    // Input biaya events (input, change, keyup)
     inputBiaya?.addEventListener('input', recalculate);
+    inputBiaya?.addEventListener('change', recalculate);
+    inputBiaya?.addEventListener('keyup', recalculate);
 
     function renumber() {
         const rows = document.querySelectorAll('.peserta-row');

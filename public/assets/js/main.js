@@ -363,10 +363,412 @@
       });
     }
 
+    function initSearchableSelect() {
+      var selects = document.querySelectorAll("select.select-searchable, select[data-searchable]");
+
+      Array.prototype.forEach.call(selects, function (select) {
+        if (select.dataset.searchableInitialized === "true") {
+          return;
+        }
+        select.dataset.searchableInitialized = "true";
+
+        // Hide original select visually while keeping it fully functional in DOM
+        select.classList.add("searchable-select-hidden");
+
+        var placeholder = select.getAttribute("data-placeholder") || "-- Pilih / Cari Manager --";
+
+        // Wrapper container
+        var wrapper = document.createElement("div");
+        wrapper.className = "searchable-select-wrapper";
+
+        // Toggle button
+        var toggle = document.createElement("div");
+        toggle.className = "searchable-select-toggle";
+        toggle.tabIndex = 0;
+        toggle.setAttribute("role", "combobox");
+        toggle.setAttribute("aria-expanded", "false");
+
+        var labelWrapper = document.createElement("div");
+        labelWrapper.className = "searchable-select-label-wrapper";
+
+        var personIcon = document.createElement("i");
+        personIcon.className = "bi bi-person text-muted";
+
+        var label = document.createElement("span");
+        label.className = "searchable-select-label";
+
+        labelWrapper.appendChild(personIcon);
+        labelWrapper.appendChild(label);
+
+        var actions = document.createElement("div");
+        actions.className = "searchable-select-actions";
+
+        var clearBtn = document.createElement("button");
+        clearBtn.type = "button";
+        clearBtn.className = "searchable-select-clear";
+        clearBtn.title = "Hapus pilihan";
+        clearBtn.innerHTML = '<i class="bi bi-x"></i>';
+        clearBtn.style.display = "none";
+
+        var arrowIcon = document.createElement("i");
+        arrowIcon.className = "bi bi-chevron-down searchable-select-arrow";
+
+        actions.appendChild(clearBtn);
+        actions.appendChild(arrowIcon);
+
+        toggle.appendChild(labelWrapper);
+        toggle.appendChild(actions);
+
+        // Dropdown panel
+        var dropdown = document.createElement("div");
+        dropdown.className = "searchable-select-dropdown";
+
+        // Search input box
+        var searchBox = document.createElement("div");
+        searchBox.className = "searchable-select-search-box";
+
+        var searchIcon = document.createElement("i");
+        searchIcon.className = "bi bi-search searchable-select-search-icon";
+
+        var searchInput = document.createElement("input");
+        searchInput.type = "text";
+        searchInput.className = "searchable-select-input";
+        searchInput.placeholder = select.getAttribute("data-search-placeholder") || "Ketik nama atau NPK manager...";
+        searchInput.autocomplete = "off";
+
+        var searchClearBtn = document.createElement("button");
+        searchClearBtn.type = "button";
+        searchClearBtn.className = "searchable-select-input-clear";
+        searchClearBtn.title = "Reset pencarian";
+        searchClearBtn.style.display = "none";
+        searchClearBtn.innerHTML = '<i class="bi bi-x-circle-fill"></i>';
+
+        searchBox.appendChild(searchIcon);
+        searchBox.appendChild(searchInput);
+        searchBox.appendChild(searchClearBtn);
+
+        // Meta bar
+        var metaBar = document.createElement("div");
+        metaBar.className = "searchable-select-meta";
+        var countSpan = document.createElement("span");
+        countSpan.className = "searchable-count";
+        var hintSpan = document.createElement("span");
+        hintSpan.className = "text-muted";
+        hintSpan.textContent = "Esc untuk tutup";
+        metaBar.appendChild(countSpan);
+        metaBar.appendChild(hintSpan);
+
+        // Scrollable menu list
+        var menu = document.createElement("div");
+        menu.className = "searchable-select-menu";
+        menu.setAttribute("role", "listbox");
+
+        // No results empty state
+        var noResults = document.createElement("div");
+        noResults.className = "searchable-select-no-results";
+        noResults.style.display = "none";
+        noResults.innerHTML = '<i class="bi bi-person-x"></i><div>Tidak ada data yang cocok</div>';
+
+        dropdown.appendChild(searchBox);
+        dropdown.appendChild(metaBar);
+        dropdown.appendChild(menu);
+        dropdown.appendChild(noResults);
+
+        wrapper.appendChild(toggle);
+        wrapper.appendChild(dropdown);
+
+        select.parentNode.insertBefore(wrapper, select.nextSibling);
+
+        function renderItems() {
+          menu.innerHTML = "";
+          var options = select.options;
+          var totalCount = 0;
+
+          for (var i = 0; i < options.length; i++) {
+            var opt = options[i];
+            var item = document.createElement("div");
+            item.className = "searchable-select-item";
+            item.setAttribute("role", "option");
+            item.dataset.value = opt.value;
+            item.dataset.text = opt.text;
+
+            var rawText = opt.text.trim();
+            var npkMatch = rawText.match(/^(.*?)\s*\(NPK:\s*([^)]+)\)$/i);
+
+            if (!opt.value) {
+              item.classList.add("is-empty-option");
+              item.innerHTML = '<div class="item-content"><span class="item-title text-muted">' + rawText + '</span></div><i class="bi bi-check2 check-icon"></i>';
+              item.dataset.search = rawText.toLowerCase();
+            } else if (npkMatch) {
+              totalCount++;
+              var name = npkMatch[1].trim();
+              var npk = npkMatch[2].trim();
+              item.innerHTML = '<div class="item-content"><span class="item-title">' + name + '</span><span class="item-subtitle"><i class="bi bi-person-badge me-1"></i>NPK: ' + npk + '</span></div><i class="bi bi-check2 check-icon"></i>';
+              item.dataset.search = (name + " " + npk).toLowerCase();
+            } else {
+              totalCount++;
+              item.innerHTML = '<div class="item-content"><span class="item-title">' + rawText + '</span></div><i class="bi bi-check2 check-icon"></i>';
+              item.dataset.search = rawText.toLowerCase();
+            }
+
+            if (opt.selected) {
+              item.classList.add("is-selected");
+            }
+
+            (function (optVal, optEl) {
+              optEl.addEventListener("click", function (e) {
+                e.stopPropagation();
+                selectValue(optVal);
+                closeDropdown();
+                toggle.focus();
+              });
+            })(opt.value, item);
+
+            menu.appendChild(item);
+          }
+
+          countSpan.textContent = totalCount + " manager tersedia";
+        }
+
+        function updateDisplay() {
+          var selectedOpt = select.options[select.selectedIndex];
+          if (selectedOpt && selectedOpt.value !== "") {
+            label.textContent = selectedOpt.text;
+            label.classList.remove("is-placeholder");
+            clearBtn.style.display = "inline-flex";
+          } else if (selectedOpt && selectedOpt.value === "") {
+            label.textContent = selectedOpt.text || placeholder;
+            label.classList.add("is-placeholder");
+            clearBtn.style.display = "none";
+          } else {
+            label.textContent = placeholder;
+            label.classList.add("is-placeholder");
+            clearBtn.style.display = "none";
+          }
+
+          var items = menu.querySelectorAll(".searchable-select-item");
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].dataset.value === select.value) {
+              items[i].classList.add("is-selected");
+            } else {
+              items[i].classList.remove("is-selected");
+            }
+          }
+        }
+
+        function selectValue(val) {
+          if (select.value !== val) {
+            select.value = val;
+            var event = new Event("change", { bubbles: true });
+            select.dispatchEvent(event);
+          }
+          updateDisplay();
+        }
+
+        function openDropdown() {
+          var openDropdowns = document.querySelectorAll(".searchable-select-dropdown.is-open");
+          Array.prototype.forEach.call(openDropdowns, function (d) {
+            if (d !== dropdown) {
+              d.classList.remove("is-open");
+              var pToggle = d.parentNode.querySelector(".searchable-select-toggle");
+              if (pToggle) pToggle.classList.remove("is-open");
+            }
+          });
+
+          dropdown.classList.add("is-open");
+          toggle.classList.add("is-open");
+          toggle.setAttribute("aria-expanded", "true");
+
+          searchInput.value = "";
+          searchClearBtn.style.display = "none";
+          filterOptions("");
+
+          setTimeout(function () {
+            searchInput.focus();
+          }, 50);
+
+          var selectedItem = menu.querySelector(".searchable-select-item.is-selected");
+          if (selectedItem) {
+            selectedItem.scrollIntoView({ block: "nearest" });
+          }
+        }
+
+        function closeDropdown() {
+          dropdown.classList.remove("is-open");
+          toggle.classList.remove("is-open");
+          toggle.setAttribute("aria-expanded", "false");
+          var focused = menu.querySelector(".is-focused");
+          if (focused) focused.classList.remove("is-focused");
+        }
+
+        function filterOptions(query) {
+          var q = query.trim().toLowerCase();
+          var items = menu.querySelectorAll(".searchable-select-item");
+          var visibleCount = 0;
+
+          for (var i = 0; i < items.length; i++) {
+            var it = items[i];
+            var searchTarget = it.dataset.search || it.textContent.toLowerCase();
+            if (!q || searchTarget.indexOf(q) !== -1 || it.classList.contains("is-empty-option")) {
+              it.style.display = "flex";
+              if (!it.classList.contains("is-empty-option")) visibleCount++;
+            } else {
+              it.style.display = "none";
+            }
+          }
+
+          if (q) {
+            countSpan.textContent = visibleCount + " cocok";
+            noResults.style.display = (visibleCount === 0 && !menu.querySelector('.is-empty-option[style*="flex"]')) ? "block" : "none";
+            searchClearBtn.style.display = "inline-flex";
+          } else {
+            var total = menu.querySelectorAll(".searchable-select-item:not(.is-empty-option)").length;
+            countSpan.textContent = total + " manager tersedia";
+            noResults.style.display = "none";
+            searchClearBtn.style.display = "none";
+          }
+        }
+
+        toggle.addEventListener("click", function (e) {
+          if (e.target.closest(".searchable-select-clear")) {
+            return;
+          }
+          if (dropdown.classList.contains("is-open")) {
+            closeDropdown();
+          } else {
+            openDropdown();
+          }
+        });
+
+        toggle.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+            e.preventDefault();
+            openDropdown();
+          }
+        });
+
+        clearBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          selectValue("");
+          closeDropdown();
+          toggle.focus();
+        });
+
+        searchInput.addEventListener("input", function () {
+          filterOptions(this.value);
+        });
+
+        searchClearBtn.addEventListener("click", function () {
+          searchInput.value = "";
+          filterOptions("");
+          searchInput.focus();
+        });
+
+        searchInput.addEventListener("keydown", function (e) {
+          var visibleItems = menu.querySelectorAll('.searchable-select-item:not([style*="display: none"])');
+          if (!visibleItems.length) {
+            if (e.key === "Escape") {
+              closeDropdown();
+              toggle.focus();
+            }
+            return;
+          }
+
+          var currentFocused = menu.querySelector(".searchable-select-item.is-focused");
+          var currentIndex = -1;
+          for (var i = 0; i < visibleItems.length; i++) {
+            if (visibleItems[i] === currentFocused) {
+              currentIndex = i;
+              break;
+            }
+          }
+
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            var nextIndex = currentIndex < visibleItems.length - 1 ? currentIndex + 1 : 0;
+            if (currentFocused) currentFocused.classList.remove("is-focused");
+            visibleItems[nextIndex].classList.add("is-focused");
+            visibleItems[nextIndex].scrollIntoView({ block: "nearest" });
+          } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            var prevIndex = currentIndex > 0 ? currentIndex - 1 : visibleItems.length - 1;
+            if (currentFocused) currentFocused.classList.remove("is-focused");
+            visibleItems[prevIndex].classList.add("is-focused");
+            visibleItems[prevIndex].scrollIntoView({ block: "nearest" });
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            if (currentFocused) {
+              selectValue(currentFocused.dataset.value);
+              closeDropdown();
+              toggle.focus();
+            } else if (visibleItems.length === 1) {
+              selectValue(visibleItems[0].dataset.value);
+              closeDropdown();
+              toggle.focus();
+            }
+          } else if (e.key === "Escape") {
+            e.preventDefault();
+            closeDropdown();
+            toggle.focus();
+          }
+        });
+
+        document.addEventListener("click", function (e) {
+          if (!wrapper.contains(e.target)) {
+            closeDropdown();
+          }
+        });
+
+        select.addEventListener("change", updateDisplay);
+
+        renderItems();
+        updateDisplay();
+      });
+    }
+
+    function convertTerbilang(num) {
+      num = Math.floor(Math.abs(Number(num) || 0));
+      if (num <= 0) return 'Nol Rupiah';
+
+      var words = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+
+      function toWords(n) {
+        if (n < 12) {
+          return words[n];
+        } else if (n < 20) {
+          return words[n - 10] + ' Belas';
+        } else if (n < 100) {
+          return words[Math.floor(n / 10)] + ' Puluh ' + toWords(n % 10);
+        } else if (n < 200) {
+          return 'Seratus ' + toWords(n - 100);
+        } else if (n < 1000) {
+          return words[Math.floor(n / 100)] + ' Ratus ' + toWords(n % 100);
+        } else if (n < 2000) {
+          return 'Seribu ' + toWords(n - 1000);
+        } else if (n < 1000000) {
+          return toWords(Math.floor(n / 1000)) + ' Ribu ' + toWords(n % 1000);
+        } else if (n < 1000000000) {
+          return toWords(Math.floor(n / 1000000)) + ' Juta ' + toWords(n % 1000000);
+        } else if (n < 1000000000000) {
+          return toWords(Math.floor(n / 1000000000)) + ' Miliar ' + toWords(n % 1000000000);
+        } else if (n < 1000000000000000) {
+          return toWords(Math.floor(n / 1000000000000)) + ' Triliun ' + toWords(n % 1000000000000);
+        }
+        return '';
+      }
+
+      var result = toWords(num).replace(/\s+/g, ' ').trim();
+      return result ? result + ' Rupiah' : 'Nol Rupiah';
+    }
+
+    window.initSearchableSelect = initSearchableSelect;
+    window.convertTerbilang = convertTerbilang;
+
     initValidation();
     initTableSearch();
     initTablePagination();
     initThemeToggle();
+    initSearchableSelect();
 
     // Initialize user profile values in UI. Provide a window.adminHMDUser object to override defaults.
     function initUserProfile() {
