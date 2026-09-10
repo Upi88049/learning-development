@@ -54,9 +54,9 @@
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="kode_training">Kode Training <span class="text-muted small">(Opsional)</span></label>
-                            <input class="form-control font-monospace" id="kode_training" name="kode_training" type="text" value="{{ old('kode_training', $suggestedKode) }}" placeholder="Contoh: TRN-040">
-                            <small class="text-muted d-block mt-1">Akan digenerate otomatis jika dibiarkan kosong.</small>
+                            <label class="form-label fw-semibold" for="kode_training">Kode Training <span class="text-danger">*</span></label>
+                            <input class="form-control font-monospace" id="kode_training" name="kode_training" type="text" value="{{ old('kode_training') }}" placeholder="Contoh: TRN-040" required>
+                            <small class="text-muted d-block mt-1">Masukkan kode unik training secara manual.</small>
                         </div>
 
                         <div class="col-md-6">

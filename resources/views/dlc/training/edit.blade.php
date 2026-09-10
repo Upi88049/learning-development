@@ -55,8 +55,8 @@
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold" for="kode_training">Kode Training <span class="text-muted small">(Opsional)</span></label>
-                            <input class="form-control font-monospace" id="kode_training" name="kode_training" type="text" value="{{ old('kode_training', $training->kode_training) }}" placeholder="Contoh: TRN-001">
+                            <label class="form-label fw-semibold" for="kode_training">Kode Training <span class="text-danger">*</span></label>
+                            <input class="form-control font-monospace" id="kode_training" name="kode_training" type="text" value="{{ old('kode_training', $training->kode_training) }}" placeholder="Contoh: TRN-001" required>
                             <small class="text-muted d-block mt-1">Kode identifikasi unik untuk silabus training.</small>
                         </div>
 

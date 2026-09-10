@@ -242,6 +242,19 @@
                 </div>
             </form>
 
+            {{-- Table Entries Selector --}}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="table-entries-selector">
+                    <span>Show</span>
+                    <select class="form-select form-select-sm" data-table-entries="penugasanTable">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span>entries</span>
+                </div>
+            </div>
+
             {{-- Table --}}
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0" id="penugasanTable" data-searchable-table>
@@ -392,9 +405,9 @@
             </div>
 
 
-            <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center text-muted small">
-                <span>Total <strong>{{ count($penugasanList) }}</strong> formulir penugasan training tercatat.</span>
-                <span class="badge bg-light text-secondary border">Form 013/WI- Official Document</span>
+            <div class="table-pagination-footer" data-table-pagination="penugasanTable">
+                <p class="table-pagination-info"></p>
+                <div class="pagination-container"></div>
             </div>
         </div>
     </div>

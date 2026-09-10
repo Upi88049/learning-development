@@ -39,16 +39,27 @@
           </h2>
           <p class="text-muted mb-0 small">Rincian topik pelatihan yang sudah terlaksana beserta daftar staff yang hadir</p>
         </div>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          {{-- Selector Entries --}}
+          <div class="table-entries-selector me-sm-2">
+            <span>Show</span>
+            <select class="form-select form-select-sm" data-table-entries="terlaksanaTable">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+            <span>entries</span>
+          </div>
+
           <div class="input-group input-group-sm" style="max-width: 280px;">
             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-            <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari Training..." data-table-search="usersTable" aria-label="Search training">
+            <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari Training..." data-table-search="terlaksanaTable" aria-label="Search training">
           </div>
         </div>
       </div>
 
       <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" id="usersTable" data-searchable-table>
+        <table class="table table-hover align-middle mb-0" id="terlaksanaTable" data-searchable-table>
           <thead>
             <tr>
               <th scope="col" style="min-width: 180px;">Jenis Training</th>
@@ -104,8 +115,10 @@
         </table>
       </div>
 
-      <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-2 pt-2 border-top">
-        <p class="text-muted small mb-0">Total <strong class="text-dark">{{ count($trainings) }}</strong> topik training ditemukan</p>
+      {{-- Table Pagination Footer --}}
+      <div class="table-pagination-footer" data-table-pagination="terlaksanaTable">
+        <p class="table-pagination-info"></p>
+        <div class="pagination-container"></div>
       </div>
     </section>
   </div>

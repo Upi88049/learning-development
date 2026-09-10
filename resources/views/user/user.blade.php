@@ -115,7 +115,18 @@
           </h2>
           <p class="text-muted mb-0 small">Bawahan langsung dalam lingkup departemen <strong>{{ $departmentName }}</strong></p>
         </div>
-        <div class="d-flex flex-wrap gap-2">
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          {{-- Selector Entries --}}
+          <div class="table-entries-selector me-sm-2">
+            <span>Show</span>
+            <select class="form-select form-select-sm" data-table-entries="usersTable">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </select>
+            <span>entries</span>
+          </div>
+
           <div class="input-group input-group-sm" style="max-width: 280px;">
             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
             <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari nama / NPK..." data-table-search="usersTable" aria-label="Search staff">
@@ -174,6 +185,12 @@
             @endforelse
           </tbody>
         </table>
+      </div>
+
+      {{-- Table Pagination Footer --}}
+      <div class="table-pagination-footer" data-table-pagination="usersTable">
+        <p class="table-pagination-info"></p>
+        <div class="pagination-container"></div>
       </div>
     </section>
   </div>

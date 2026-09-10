@@ -131,6 +131,17 @@
                     </p>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2">
+                    {{-- Selector Entries --}}
+                    <div class="table-entries-selector me-sm-2">
+                        <span>Show</span>
+                        <select class="form-select form-select-sm" data-table-entries="trainingTable">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        <span>entries</span>
+                    </div>
+
                     {{-- Filter Scope Pill Buttons --}}
                     <div class="btn-group btn-group-sm" role="group" aria-label="Filter Scope">
                         <a href="{{ route('training.index') }}" class="btn {{ !request('scope') ? 'btn-primary' : 'btn-outline-secondary' }}">
@@ -241,9 +252,9 @@
                 </table>
             </div>
 
-            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-2 pt-2 border-top">
-                <p class="text-muted small mb-0">Menampilkan <strong class="text-dark">{{ count($trainings) }}</strong> topik training</p>
-                <p class="text-muted small mb-0">Total Keseluruhan: <strong class="text-dark">{{ $totalTrainings }}</strong> topik</p>
+            <div class="table-pagination-footer" data-table-pagination="trainingTable">
+                <p class="table-pagination-info"></p>
+                <div class="pagination-container"></div>
             </div>
         </section>
     </div>

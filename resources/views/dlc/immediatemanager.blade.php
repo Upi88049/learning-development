@@ -66,6 +66,17 @@
                         <p class="text-muted mb-0 small">Daftar member perusahaan.</p>
                     </div>
                     <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 ms-auto">
+                        {{-- Selector Entries --}}
+                        <div class="table-entries-selector me-sm-2">
+                            <span>Show</span>
+                            <select class="form-select form-select-sm" data-table-entries="usersTable">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                            <span>entries</span>
+                        </div>
+
                         <button type="submit" id="btnBulkDelete" class="btn btn-danger btn-sm d-none">
                             <i class="bi bi-trash me-1"></i> Hapus Terpilih (<span id="selectedCount">0</span>)
                         </button>
@@ -101,9 +112,9 @@
                             @endif
                         </div>
 
-                        <div class="input-group input-group-sm" style="max-width: 280px;">
+                        <div class="input-group input-group-sm" style="max-width: 240px;">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
-                            <input class="form-control border-start-0 ps-0" type="search" placeholder="Search" data-table-search="usersTable" aria-label="Search">
+                            <input class="form-control border-start-0 ps-0" type="search" placeholder="Search staff..." data-table-search="usersTable" aria-label="Search">
                         </div>
                     </div>
                 </div>
@@ -130,8 +141,8 @@
                                 <th scope="col">Umur</th>
                                 <th scope="col">Divisi</th>
                                 <th scope="col">Department</th>
-                                <th scope="col">Nama Immediate Manager</th>
-                                <th scope="col">Level Jabatan</th>
+                                <th scope="col">Nama Immediate <br>Manager</th>
+                                <th scope="col" class="text-center">Level <br>Jabatan</th>
                                 <th scope="col" class="text-end" style="width: 140px;">Action</th>
                             </tr>
                         </thead>
@@ -154,7 +165,7 @@
                                 <td>{{ $s->divisi ? $s->divisi->nama_divisi : '-' }}</td>
                                 <td>{{ $s->department ? $s->department->nama_department : '-' }}</td>
                                 <td>{{ $s->immediateManager ? $s->immediateManager->nama_staff : '-' }}</td>
-                                <td>{{ $s->levelJabatan ? $s->levelJabatan->kode_level_jabatan : '-' }}</td>
+                                <td class="text-center" style="white-space: nowrap;">{{ $s->levelJabatan ? $s->levelJabatan->kode_level_jabatan : '-' }}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group" aria-label="Aksi Staff">
                                         <a class="btn btn-outline-info btn-sm" href="{{ route('staff.detail', $s->id_staff) }}" title="Lihat Detail Training">
@@ -177,8 +188,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-3 pb-3">
-                    <p class="text-muted small mb-0">Total {{ count($staff) }} staff terdaftar</p>
+                <div class="table-pagination-footer" data-table-pagination="usersTable">
+                    <p class="table-pagination-info"></p>
+                    <div class="pagination-container"></div>
                 </div>
             </section>
         </form>

@@ -224,9 +224,22 @@
                 </div>
             </form>
 
+            {{-- Table Entries & Actions --}}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="table-entries-selector">
+                    <span>Show</span>
+                    <select class="form-select form-select-sm" data-table-entries="outhouseTable">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                    </select>
+                    <span>entries</span>
+                </div>
+            </div>
+
             {{-- Table of Requests --}}
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 small">
+                <table class="table table-hover align-middle mb-0 small" id="outhouseTable">
                     <thead class="table-light">
                         <tr>
                             <th scope="col" style="min-width: 140px;">No. Request</th>
@@ -419,8 +432,9 @@
                 </table>
             </div>
 
-            <div class="mt-3 pt-3 border-top text-muted small">
-                Total {{ count($requests) }} data request training ditampilkan.
+            <div class="table-pagination-footer" data-table-pagination="outhouseTable">
+                <p class="table-pagination-info"></p>
+                <div class="pagination-container"></div>
             </div>
         </div>
     </div>

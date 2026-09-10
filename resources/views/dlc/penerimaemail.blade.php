@@ -254,25 +254,35 @@
         <div class="panel-smooth">
             {{-- Toolbar: Search & Action Buttons --}}
             <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
-                {{-- Search Form --}}
-                <form action="{{ route('penerima-email') }}" method="GET" class="d-flex gap-2" style="max-width: 420px; width: 100%;">
-                    <div class="input-group search-input-group flex-grow-1">
-                        <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input type="text" name="search" class="form-control" placeholder="Cari NPK, Nama, atau Email..." value="{{ request('search') }}">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    {{-- Selector Entries --}}
+                    <div class="table-entries-selector me-sm-2">
+                        <span>Show</span>
+                        <select class="form-select form-select-sm" data-table-entries="penerimaTable">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        <span>entries</span>
                     </div>
-                    @if(request('search'))
-                    <a href="{{ route('penerima-email') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center px-3" title="Reset Pencarian">
-                        <i class="bi bi-x-lg"></i>
-                    </a>
-                    @endif
-                    <button type="submit" class="btn btn-primary btn-sm px-3">Cari</button>
-                </form>
+
+                    {{-- Search Form --}}
+                    <form action="{{ route('penerima-email') }}" method="GET" class="d-flex gap-2" style="max-width: 360px;">
+                        <div class="input-group search-input-group flex-grow-1">
+                            <span class="input-group-text"><i class="bi bi-search"></i></span>
+                            <input type="text" name="search" class="form-control" placeholder="Cari NPK, Nama, atau Email..." value="{{ request('search') }}" data-table-search="penerimaTable">
+                        </div>
+                        @if(request('search'))
+                        <a href="{{ route('penerima-email') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center px-3" title="Reset Pencarian">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                        @endif
+                        <button type="submit" class="btn btn-primary btn-sm px-3">Cari</button>
+                    </form>
+                </div>
 
                 {{-- Action Buttons: Export, Import, Template --}}
                 <div class="d-flex flex-wrap gap-2">
-                    <!-- <a href="{{ route('penerima-email.template') }}" class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1" title="Unduh format file untuk import email">
-                        <i class="bi bi-file-earmark-arrow-down"></i> Unduh Template
-                    </a> -->
                     <a href="{{ route('penerima-email.export') }}" class="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1" title="Export seluruh kontak manager ke CSV/Excel">
                         <i class="bi bi-file-earmark-excel"></i> Export
                     </a>
@@ -283,9 +293,8 @@
             </div>
 
             {{-- Table --}}
-            <!-- <div class="table-smooth-container"> -->
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0 small">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 small" id="penerimaTable">
                         <thead>
                             <tr>
                                 <th style="width: 50px;" class="text-center">#</th>
@@ -390,9 +399,13 @@
                 </div>
             <!-- </div> -->
             
-            {{-- Footer Summary --}}
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-between mt-3 text-muted small">
-                <span>Menampilkan <strong>{{ $managers->count() }}</strong> Immediate Manager</span>
+            {{-- Table Pagination Footer --}}
+            <div class="table-pagination-footer" data-table-pagination="penerimaTable">
+                <p class="table-pagination-info"></p>
+                <div class="pagination-container"></div>
+            </div>
+
+            <div class="text-end text-muted small mt-2">
                 <span>Sinkronisasi otomatis dengan notifikasi pembukaan TNA</span>
             </div>
         </div>

@@ -51,8 +51,17 @@
                     </h2>
                     <p class="text-muted mb-0 small">Daftar seluruh divisi operasional perusahaan.</p>
                 </div>
-                <div class="d-flex flex-wrap gap-2">
-                    <div class="input-group input-group-sm" style="max-width: 280px;">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <div class="table-entries-selector me-sm-2">
+                        <span>Show</span>
+                        <select class="form-select form-select-sm" data-table-entries="divisiTable">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                        <span>entries</span>
+                    </div>
+                    <div class="input-group input-group-sm" style="max-width: 260px;">
                         <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
                         <input class="form-control border-start-0 ps-0" type="search" placeholder="Cari divisi..." data-table-search="divisiTable" aria-label="Search divisi">
                     </div>
@@ -110,8 +119,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mt-3 px-3 pb-3">
-                <p class="text-muted small mb-0">Total <strong class="text-dark">{{ count($divisi) }}</strong> divisi terdaftar</p>
+            <div class="table-pagination-footer" data-table-pagination="divisiTable">
+                <p class="table-pagination-info"></p>
+                <div class="pagination-container"></div>
             </div>
         </section>
     </div>
