@@ -64,14 +64,8 @@ class UsersController extends Controller
         ));
     }
 
-    public function dlc(Request $request)
+    private function buildDlcStaffQuery($selectedDivisi, $selectedDepartment)
     {
-        $selectedDivisi = $request->query('divisi');
-        $selectedDepartment = $request->query('department');
-
-        $divisiList = DivisiModel::orderBy('nama_divisi', 'asc')->get();
-        $departments = DepartmentModel::orderBy('nama_department', 'asc')->get();
-
         $query = StaffModel::with(['divisi', 'department', 'levelJabatan', 'immediateManager'])
             ->leftJoin('divisi', 'staff.id_divisi', '=', 'divisi.id_divisi')
             ->leftJoin('department', 'staff.id_department', '=', 'department.id_department')
@@ -83,26 +77,65 @@ class UsersController extends Controller
         if ($selectedDivisi && $selectedDivisi !== 'all') {
             if ($selectedDivisi === 'none') {
                 $query->whereNull('staff.id_divisi');
+            } elseif (is_numeric($selectedDivisi)) {
+                $query->where('staff.id_divisi', (int) $selectedDivisi);
             } else {
-                $query->where(function ($q) use ($selectedDivisi) {
-                    $q->where('divisi.nama_divisi', $selectedDivisi)
-                      ->orWhere('staff.id_divisi', $selectedDivisi);
-                });
+                $query->where('divisi.nama_divisi', $selectedDivisi);
             }
         }
 
         if ($selectedDepartment && $selectedDepartment !== 'all') {
             if ($selectedDepartment === 'none') {
                 $query->whereNull('staff.id_department');
+            } elseif (is_numeric($selectedDepartment)) {
+                $query->where('staff.id_department', (int) $selectedDepartment);
             } else {
-                $query->where(function ($q) use ($selectedDepartment) {
-                    $q->where('department.nama_department', $selectedDepartment)
-                      ->orWhere('staff.id_department', $selectedDepartment);
-                });
+                $query->where('department.nama_department', $selectedDepartment);
             }
         }
 
+        return $query;
+    }
+
+    public function dlc(Request $request)
+    {
+        $selectedDivisi = $request->query('divisi');
+        $selectedDepartment = $request->query('department');
+
+        $divisiList = DivisiModel::orderBy('nama_divisi', 'asc')->get();
+
+        // Filter daftar department di dropdown sesuai divisi yang dipilih jika ada
+        if ($selectedDivisi && $selectedDivisi !== 'all' && $selectedDivisi !== 'none') {
+            $divisiModel = DivisiModel::where('nama_divisi', $selectedDivisi)
+                ->orWhere('id_divisi', is_numeric($selectedDivisi) ? (int)$selectedDivisi : 0)
+                ->first();
+
+            if ($divisiModel) {
+                $departments = DepartmentModel::with('divisi')
+                    ->where(function ($q) use ($divisiModel) {
+                        $q->where('id_divisi', $divisiModel->id_divisi)
+                          ->orWhereIn('id_department', StaffModel::where('id_divisi', $divisiModel->id_divisi)->pluck('id_department')->filter());
+                    })
+                    ->orderBy('nama_department', 'asc')
+                    ->get();
+            } else {
+                $departments = DepartmentModel::with('divisi')->orderBy('nama_department', 'asc')->get();
+            }
+        } elseif ($selectedDivisi === 'none') {
+            $departments = DepartmentModel::with('divisi')
+                ->where(function ($q) {
+                    $q->whereNull('id_divisi')
+                      ->orWhereIn('id_department', StaffModel::whereNull('id_divisi')->pluck('id_department')->filter());
+                })
+                ->orderBy('nama_department', 'asc')
+                ->get();
+        } else {
+            $departments = DepartmentModel::with('divisi')->orderBy('nama_department', 'asc')->get();
+        }
+
+        $query = $this->buildDlcStaffQuery($selectedDivisi, $selectedDepartment);
         $staff = $query->get();
+
         $masterTrainings = UserModel::where(function ($q) {
             $q->where('scope_training', 'In House')->orWhereNull('scope_training');
         })->orderBy('id_training', 'asc')->get();
@@ -285,36 +318,7 @@ class UsersController extends Controller
         $selectedDivisi = $request->query('divisi');
         $selectedDepartment = $request->query('department');
 
-        $query = StaffModel::with(['divisi', 'department', 'levelJabatan', 'immediateManager'])
-            ->leftJoin('divisi', 'staff.id_divisi', '=', 'divisi.id_divisi')
-            ->leftJoin('department', 'staff.id_department', '=', 'department.id_department')
-            ->orderByRaw('COALESCE(divisi.nama_divisi, "ZZZ") ASC')
-            ->orderByRaw('COALESCE(department.nama_department, "ZZZ") ASC')
-            ->orderBy('staff.nama_staff', 'asc')
-            ->select('staff.*');
-
-        if ($selectedDivisi && $selectedDivisi !== 'all') {
-            if ($selectedDivisi === 'none') {
-                $query->whereNull('staff.id_divisi');
-            } else {
-                $query->where(function ($q) use ($selectedDivisi) {
-                    $q->where('divisi.nama_divisi', $selectedDivisi)
-                      ->orWhere('staff.id_divisi', $selectedDivisi);
-                });
-            }
-        }
-
-        if ($selectedDepartment && $selectedDepartment !== 'all') {
-            if ($selectedDepartment === 'none') {
-                $query->whereNull('staff.id_department');
-            } else {
-                $query->where(function ($q) use ($selectedDepartment) {
-                    $q->where('department.nama_department', $selectedDepartment)
-                      ->orWhere('staff.id_department', $selectedDepartment);
-                });
-            }
-        }
-
+        $query = $this->buildDlcStaffQuery($selectedDivisi, $selectedDepartment);
         $staff = $query->get();
 
         return StaffSpreadsheetHelper::exportStaff($staff, $selectedDepartment, $selectedDivisi);

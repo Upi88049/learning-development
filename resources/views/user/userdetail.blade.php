@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Detail Training Staff | Learning & Development')
+@section('title', 'Detail Training Staff | Dharma Learning Center')
 
 @section('content')
 <style>

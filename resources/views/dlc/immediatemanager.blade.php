@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-wrap align-items-center gap-2">
-                    <a class="btn btn-outline-success btn-sm" href="{{ route('staff.export', ['divisi' => $selectedDivisi, 'department' => $selectedDepartment]) }}">
+                    <a class="btn btn-outline-success btn-sm" href="{{ route('staff.export', array_filter(['divisi' => $selectedDivisi, 'department' => $selectedDepartment])) }}">
                         <i class="bi bi-download me-1" aria-hidden="true"></i> Export
                     </a>
                     <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modalImportStaff">
@@ -72,7 +72,7 @@
                         
                         {{-- Dropdown Filter Divisi --}}
                         <div class="d-flex align-items-center gap-1">
-                            <select id="filterDivisi" class="form-select form-select-sm" style="min-width: 140px;" onchange="applyFilters()">
+                            <select id="filterDivisi" class="form-select form-select-sm" style="min-width: 140px;" onchange="handleDivisiChange()">
                                 <option value="">-- Semua Divisi --</option>
                                 <option value="none" {{ $selectedDivisi === 'none' ? 'selected' : '' }}>-- Tanpa Divisi (N/A) --</option>
                                 @foreach($divisiList as $div)
@@ -85,7 +85,7 @@
 
                         {{-- Dropdown Filter Department --}}
                         <div class="d-flex align-items-center gap-1">
-                            <select id="filterDepartment" class="form-select form-select-sm" style="min-width: 150px;" onchange="applyFilters()">
+                            <select id="filterDepartment" class="form-select form-select-sm" style="min-width: 150px;" onchange="handleDepartmentChange()">
                                 <option value="">-- Semua Department --</option>
                                 <option value="none" {{ $selectedDepartment === 'none' ? 'selected' : '' }}>-- Tanpa Department (N/A) --</option>
                                 @foreach($departments as $dept)
@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
         selectAll.addEventListener('change', function () {
             staffCheckboxes.forEach(cb => {
                 const row = cb.closest('tr');
-                if (row && row.style.display !== 'none') {
+                if (row && row.style.display !== 'none' && !row.hidden) {
                     cb.checked = selectAll.checked;
                 }
             });
@@ -358,7 +358,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function applyFilters() {
+function handleDivisiChange() {
+    const divisi = document.getElementById('filterDivisi')?.value || '';
+    const params = new URLSearchParams();
+    if (divisi) params.set('divisi', divisi);
+    // Saat mengganti divisi, reset department agar tidak terjadi kombinasi filter yang menghasilkan 0 data
+    const qs = params.toString();
+    window.location.href = '{{ route("member-list") }}' + (qs ? '?' + qs : '');
+}
+
+function handleDepartmentChange() {
     const divisi = document.getElementById('filterDivisi')?.value || '';
     const department = document.getElementById('filterDepartment')?.value || '';
     const params = new URLSearchParams();

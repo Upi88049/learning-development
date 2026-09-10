@@ -138,7 +138,7 @@
                                 <tr>
                                     <td align="center">
                                         <a href="{{ $portalUrl }}" target="_blank" style="display: inline-block; background-color: #0d6efd; color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 6px; box-shadow: 0 2px 6px rgba(13, 110, 253, 0.35);">
-                                            Buka Portal Learning & Development
+                                            Buka Portal Dharma Learning Center
                                         </a>
                                     </td>
                                 </tr>
@@ -154,7 +154,7 @@
                     <tr>
                         <td style="background-color: #f8fafc; border-top: 1px solid #e2e8f0; padding: 20px 30px; text-align: center;">
                             <p style="margin: 0; font-size: 12px; color: #64748b; font-weight: 500;">
-                                Learning & Development Center (DLC)
+                                Dharma Learning Center (DLC)
                             </p>
                             <p style="margin: 4px 0 0; font-size: 11px; color: #94a3b8;">
                                 PT Dharma Polimetal Tbk &bull; Sistem Informasi Learning & Development

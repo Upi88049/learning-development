@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Permintaan Training | Learning & Development')
+@section('title', 'Permintaan Training | Dharma Learning Center')
 
 @section('content')
 <main class="dashboard-content">
