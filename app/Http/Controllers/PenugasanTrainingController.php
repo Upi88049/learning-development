@@ -214,17 +214,22 @@ class PenugasanTrainingController extends Controller
             'sent_at' => ($request->has('is_sent') || $request->has('action_save_send')) ? now() : null,
         ]);
 
+        $emailResult = null;
+        $isSent = (bool) $penugasan->is_sent;
+        if ($isSent) {
+            $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+        }
+
         if ($request->has('action_save_download')) {
             return redirect()->route('penugasan.downloadPdf', $penugasan->id_penugasan);
         }
 
-        if ($request->has('action_save_send')) {
-            $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+        if ($isSent && $emailResult) {
             if ($emailResult['sent']) {
                 return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan dikirim ke akun serta email Immediate Manager ({$emailResult['email']}).");
             }
             if ($emailResult['reason'] === 'no_email') {
-                return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan diaktifkan di akun IM. Namun email tidak dapat dikirim karena kontak email Immediate Manager belum terdaftar.");
+                return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan diaktifkan di akun IM. Namun email tidak dapat dikirim karena kontak email {$emailResult['recipientName']} belum terdaftar di menu Penerima Email.");
             }
             return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dibuat dan diaktifkan di akun IM, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 100));
         }
@@ -286,6 +291,18 @@ class PenugasanTrainingController extends Controller
 
         $terbilang = !empty($request->terbilang) ? trim($request->terbilang) : TerbilangHelper::convert($totalBiaya);
 
+        $wasSent = (bool) $penugasan->is_sent;
+        $isSentSubmitted = $request->has('is_sent_submitted');
+        $isSentChecked = $request->has('is_sent') || $request->has('action_save_send');
+
+        if ($isSentSubmitted || $request->has('action_save_send')) {
+            $isSent = $isSentChecked;
+        } else {
+            $isSent = $penugasan->is_sent;
+        }
+
+        $sentAt = $isSent ? ($penugasan->sent_at ?: now()) : null;
+
         $penugasan->update([
             'no_form' => $request->no_form ?: 'Form 013/WI-',
             'nama_training' => $request->nama_training,
@@ -311,23 +328,31 @@ class PenugasanTrainingController extends Controller
             'penyetujui_jabatan' => $request->jabatan_direktur ?: ($request->penyetujui_jabatan ?: 'Director'),
             'konfirmasi_nama' => $request->konfirmasi_nama ?: 'Herwin Gultom',
             'konfirmasi_jabatan' => $request->konfirmasi_jabatan ?: 'HRD Deputy Div. Head',
-            'is_sent' => $request->has('action_save_send') ? true : ($request->has('is_sent') ? true : ($request->has('is_sent_submitted') ? false : $penugasan->is_sent)),
-            'sent_at' => ($request->has('action_save_send') || $request->has('is_sent')) ? ($penugasan->sent_at ?: now()) : ($request->has('is_sent_submitted') ? null : $penugasan->sent_at),
+            'is_sent' => $isSent,
+            'sent_at' => $sentAt,
         ]);
+
+        $emailResult = null;
+        if ($isSent) {
+            $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+        }
 
         if ($request->has('action_save_download')) {
             return redirect()->route('penugasan.downloadPdf', $penugasan->id_penugasan);
         }
 
-        if ($request->has('action_save_send')) {
-            $emailResult = $this->sendPenugasanEmailToIm($penugasan);
+        if ($isSent && $emailResult) {
             if ($emailResult['sent']) {
                 return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan dikirim ke akun serta email Immediate Manager ({$emailResult['email']}).");
             }
             if ($emailResult['reason'] === 'no_email') {
-                return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan diaktifkan di akun IM. Namun email tidak dapat dikirim karena kontak email Immediate Manager belum terdaftar.");
+                return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan diaktifkan di akun IM. Namun email tidak dapat dikirim karena kontak email {$emailResult['recipientName']} belum terdaftar di menu Penerima Email.");
             }
             return redirect()->route('penugasan.index')->with('warning', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan diaktifkan di akun IM, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 100));
+        }
+
+        if ($wasSent && !$isSent) {
+            return redirect()->route('penugasan.index')->with('info', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui dan akses unduh akun Immediate Manager dinonaktifkan.");
         }
 
         return redirect()->route('penugasan.index')->with('success', "Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil diperbarui.");
@@ -413,14 +438,14 @@ class PenugasanTrainingController extends Controller
         $emailResult = $this->sendPenugasanEmailToIm($penugasan);
 
         if ($emailResult['sent']) {
-            return redirect()->back()->with('success', "Dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dikirim ke akun dan email Immediate Manager ({$emailResult['email']}). Akses download telah aktif.");
+            return redirect()->route('penugasan.index')->with('success', "Dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) berhasil dikirim ke akun dan email Immediate Manager ({$emailResult['email']}). Akses download telah aktif.");
         }
 
         if ($emailResult['reason'] === 'no_email') {
-            return redirect()->back()->with('warning', "Dokumen Formulir ({$penugasan->nama_training}) berhasil diaktifkan di portal Immediate Manager, namun email tidak dapat dikirim karena alamat email {$emailResult['recipientName']} belum terdaftar di menu Penerima Email.");
+            return redirect()->route('penugasan.index')->with('warning', "Dokumen Formulir ({$penugasan->nama_training}) berhasil diaktifkan di portal Immediate Manager, namun email tidak dapat dikirim karena alamat email {$emailResult['recipientName']} belum terdaftar di menu Penerima Email.");
         }
 
-        return redirect()->back()->with('warning', "Dokumen Formulir ({$penugasan->nama_training}) berhasil diaktifkan di portal Immediate Manager, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 120));
+        return redirect()->route('penugasan.index')->with('warning', "Dokumen Formulir ({$penugasan->nama_training}) berhasil diaktifkan di portal Immediate Manager, namun pengiriman email ke {$emailResult['email']} mengalami kendala: " . Str::limit($emailResult['error'], 120));
     }
 
     /**
@@ -434,7 +459,7 @@ class PenugasanTrainingController extends Controller
             'sent_at' => null,
         ]);
 
-        return redirect()->back()->with('info', "Pengiriman dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) ke akun Immediate Manager telah dinonaktifkan.");
+        return redirect()->route('penugasan.index')->with('info', "Pengiriman dokumen Formulir Pendaftaran Training ({$penugasan->nama_training}) ke akun Immediate Manager telah dinonaktifkan.");
     }
 
     /**
@@ -465,10 +490,52 @@ class PenugasanTrainingController extends Controller
 
         // 3. Cek berdasarkan pencocokan nama_im di tabel staff
         if (empty($recipientEmail) && !empty($penugasan->nama_im)) {
-            $imStaff = StaffModel::where('nama_staff', 'like', trim($penugasan->nama_im))->whereNotNull('email')->where('email', '!=', '')->first();
+            $trimmedIm = trim($penugasan->nama_im);
+            $imStaff = StaffModel::where('nama_staff', $trimmedIm)->whereNotNull('email')->where('email', '!=', '')->first();
+            if (!$imStaff) {
+                $imStaff = StaffModel::where('nama_staff', 'like', '%' . $trimmedIm . '%')->whereNotNull('email')->where('email', '!=', '')->first();
+            }
             if ($imStaff) {
                 $recipientEmail = trim($imStaff->email);
                 $recipientName = $imStaff->nama_staff;
+            }
+        }
+
+        // 4. Cek berdasarkan pencocokan nama_atasan di tabel staff
+        if (empty($recipientEmail) && !empty($penugasan->nama_atasan)) {
+            $trimmedAtasan = trim($penugasan->nama_atasan);
+            $atasanStaff = StaffModel::where('nama_staff', $trimmedAtasan)->whereNotNull('email')->where('email', '!=', '')->first();
+            if (!$atasanStaff) {
+                $atasanStaff = StaffModel::where('nama_staff', 'like', '%' . $trimmedAtasan . '%')->whereNotNull('email')->where('email', '!=', '')->first();
+            }
+            if ($atasanStaff) {
+                $recipientEmail = trim($atasanStaff->email);
+                $recipientName = $atasanStaff->nama_staff;
+            }
+        }
+
+        // 5. Cek berdasarkan peserta training (peserta_json)
+        if (empty($recipientEmail) && !empty($penugasan->peserta_json)) {
+            $pesertaArr = json_decode($penugasan->peserta_json, true);
+            if (is_array($pesertaArr)) {
+                foreach ($pesertaArr as $p) {
+                    if (!empty($p['npk'])) {
+                        $pStaff = StaffModel::where('npk_staff', $p['npk'])->with('immediateManager')->first();
+                        if ($pStaff && $pStaff->immediateManager && !empty($pStaff->immediateManager->email)) {
+                            $recipientEmail = trim($pStaff->immediateManager->email);
+                            $recipientName = $pStaff->immediateManager->nama_staff;
+                            break;
+                        }
+                    }
+                    if (!empty($p['atasan'])) {
+                        $atasanP = StaffModel::where('nama_staff', 'like', '%' . trim($p['atasan']) . '%')->whereNotNull('email')->where('email', '!=', '')->first();
+                        if ($atasanP) {
+                            $recipientEmail = trim($atasanP->email);
+                            $recipientName = $atasanP->nama_staff;
+                            break;
+                        }
+                    }
+                }
             }
         }
 

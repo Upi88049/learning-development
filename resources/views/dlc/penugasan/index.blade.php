@@ -323,7 +323,7 @@
                                             <i class="bi bi-clock-history me-1"></i>{{ $item->sent_at ? $item->sent_at->format('d/m/Y H:i') : '' }}
                                         </small>
                                         <form action="{{ route('penugasan.cancelSendToIm', $item->id_penugasan) }}" method="POST"
-                                            onsubmit="return confirm('Batalkan akses download dokumen ini untuk Immediate Manager?');">
+                                            onsubmit="if(confirm('Batalkan akses download dokumen ini untuk Immediate Manager?')) { const btn = this.querySelector('button'); btn.disabled = true; btn.innerHTML = '<span class=\'spinner-border spinner-border-sm me-1\'></span> Membatalkan...'; return true; } return false;">
                                             @csrf
                                             <button type="submit" class="btn btn-link p-0 text-danger small text-decoration-none" style="font-size: 0.72rem;" title="Batalkan Pengiriman">
                                                 <i class="bi bi-x-circle me-1"></i>Batal Kirim
@@ -333,7 +333,7 @@
                                 @else
                                     <div class="d-flex flex-column gap-1">
                                         <form action="{{ route('penugasan.sendToIm', $item->id_penugasan) }}" method="POST"
-                                            onsubmit="return confirm('Kirim dokumen formulir ini ke akun dan email Immediate Manager?');">
+                                            onsubmit="if(confirm('Kirim dokumen formulir ini ke akun dan email Immediate Manager?')) { const btn = this.querySelector('button'); btn.disabled = true; btn.innerHTML = '<span class=\'spinner-border spinner-border-sm me-1\'></span> Mengirim...'; return true; } return false;">
                                             @csrf
                                             <button type="submit" class="btn-send-im" title="Kirim Formulir ke Akun &amp; Email Immediate Manager">
                                                 <i class="bi bi-send-fill"></i> Kirim ke IM &amp; Email

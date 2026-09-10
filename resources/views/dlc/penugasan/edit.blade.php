@@ -526,11 +526,15 @@
                     <input type="hidden" name="is_sent_submitted" value="1">
                     <input class="form-check-input" type="checkbox" name="is_sent" value="1" id="checkIsSent" {{ old('is_sent', $penugasan->is_sent) ? 'checked' : '' }} style="cursor: pointer;">
                     <label class="form-check-label fw-semibold text-dark small" for="checkIsSent" style="cursor: pointer;">
-                        <i class="bi bi-send me-1 text-primary"></i> Buka akses unduh untuk Immediate Manager (Kirim ke IM)
+                        <i class="bi bi-send-check me-1 text-primary"></i> Buka akses unduh &amp; kirim formulir ke email Immediate Manager
                     </label>
                     @if($penugasan->is_sent && $penugasan->sent_at)
                         <small class="text-success d-block" style="font-size: 0.75rem;">
-                            <i class="bi bi-check2-all me-1"></i>Telah dikirim: {{ $penugasan->sent_at->format('d/m/Y H:i') }}
+                            <i class="bi bi-check2-all me-1"></i>Akses unduh aktif (Telah dikirim: {{ $penugasan->sent_at->format('d/m/Y H:i') }}). Menyimpan form ini akan memperbarui dokumen dan mengirimkan file PDF terbaru ke email Immediate Manager.
+                        </small>
+                    @else
+                        <small class="text-muted d-block" style="font-size: 0.75rem;">
+                            Centang untuk membuka hak unduh dokumen pada portal akun IM sekaligus mengirimkan dokumen formulir PDF ke email Immediate Manager.
                         </small>
                     @endif
                 </div>
@@ -542,6 +546,10 @@
                     @if(!$penugasan->is_sent)
                     <button type="submit" name="action_save_send" value="1" class="btn btn-gradient-blue px-3 py-2 rounded-3 d-inline-flex align-items-center gap-1">
                         <i class="bi bi-send-fill"></i> Simpan &amp; Kirim ke IM
+                    </button>
+                    @else
+                    <button type="submit" name="action_save_send" value="1" class="btn btn-gradient-blue px-3 py-2 rounded-3 d-inline-flex align-items-center gap-1" title="Kirim Ulang Dokumen Terkini ke Email IM">
+                        <i class="bi bi-arrow-repeat"></i> Simpan &amp; Kirim Ulang ke IM
                     </button>
                     @endif
                     <button type="submit" name="action_save_download" value="1" class="btn btn-gradient-green px-3 py-2 rounded-3 d-inline-flex align-items-center gap-1">
@@ -678,6 +686,35 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     recalculate();
+
+    // Form submit loading feedback
+    const formEl = document.querySelector('form');
+    let clickedSubmitBtn = null;
+    formEl?.querySelectorAll('button[type="submit"]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            clickedSubmitBtn = this;
+        });
+    });
+
+    formEl?.addEventListener('submit', function () {
+        const isSentChecked = document.getElementById('checkIsSent')?.checked;
+        const isSendAction = clickedSubmitBtn && clickedSubmitBtn.name === 'action_save_send';
+        const targetBtn = clickedSubmitBtn || formEl.querySelector('button[type="submit"]');
+
+        if (targetBtn) {
+            if (isSentChecked || isSendAction) {
+                targetBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan &amp; Mengirim Email...';
+            } else {
+                targetBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Menyimpan...';
+            }
+            setTimeout(() => {
+                formEl.querySelectorAll('button[type="submit"]').forEach(b => {
+                    b.style.pointerEvents = 'none';
+                    b.style.opacity = '0.7';
+                });
+            }, 50);
+        }
+    });
 });
 </script>
 @endsection
