@@ -11,6 +11,7 @@ use App\Http\Controllers\PeriodeTnaController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RequestOuthouseController;
 use App\Http\Controllers\PenugasanTrainingController;
 
@@ -63,6 +64,9 @@ Route::middleware(['checkLogin'])->group(function () {
 
         // Department Management (CRUD)
         Route::resource('department', DepartmentController::class);
+
+        // Provider Management (CRUD)
+        Route::resource('provider', ProviderController::class);
 
         // Out House Training Management (DLC)
         Route::get('/dlc/request-outhouse', [RequestOuthouseController::class, 'index'])->name('outhouse.index');

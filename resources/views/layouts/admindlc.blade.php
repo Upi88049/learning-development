@@ -42,7 +42,7 @@
 
         <!-- ========== MASTER DATA (COLLAPSIBLE SUBMENU) ========== -->
         @php
-            $isMasterDataActive = request()->routeIs('divisi.*', 'department.*', 'training.*');
+            $isMasterDataActive = request()->routeIs('divisi.*', 'department.*', 'training.*', 'provider.*');
         @endphp
         <a class="nav-link submenu-toggle {{ $isMasterDataActive ? 'active' : 'collapsed' }}"
            href="#masterDataSubmenu"
@@ -68,6 +68,10 @@
             <a class="nav-link {{ request()->routeIs('training.*') ? 'active' : '' }}" href="{{ route('training.index') }}">
               <span class="nav-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
               <span class="nav-text">Master Training</span>
+            </a>
+            <a class="nav-link {{ request()->routeIs('provider.*') ? 'active' : '' }}" href="{{ route('provider.index') }}">
+              <span class="nav-icon"><i class="bi bi-building-gear" aria-hidden="true"></i></span>
+              <span class="nav-text">Master Provider</span>
             </a>
           </div>
         </div>
