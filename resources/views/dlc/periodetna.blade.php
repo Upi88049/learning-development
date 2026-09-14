@@ -127,12 +127,22 @@
                         <div class="p-3 bg-light border rounded">
                             <p class="mb-1 fw-semibold text-dark"><i class="bi bi-envelope-at text-primary me-2"></i>Konfigurasi Notifikasi Email:</p>
                             <small class="text-muted d-block mb-2">Terdapat <strong>{{ $recipientsCount }}</strong> alamat email penerima terdaftar.</small>
+                            @if(!empty($hasAttachment))
+                            <div class="mb-2 p-2 bg-white rounded border border-success border-opacity-25 small d-flex align-items-center justify-content-between">
+                                <span class="text-success text-truncate me-2"><i class="bi bi-paperclip me-1"></i> Lampiran: <strong>{{ $attachmentName }}</strong></span>
+                                <span class="badge bg-success bg-opacity-10 text-success flex-shrink-0">Aktif</span>
+                            </div>
+                            @else
+                            <div class="mb-2 p-2 bg-white rounded border small text-muted">
+                                <i class="bi bi-paperclip me-1"></i> Lampiran: <em>Tidak ada file</em>
+                            </div>
+                            @endif
                             <div class="d-flex gap-2">
                                 <a href="{{ route('penerima-email') }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-people me-1"></i> Penerima Email
                                 </a>
                                 <a href="{{ route('body-email') }}" class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-card-text me-1"></i> Body Email
+                                    <i class="bi bi-card-text me-1"></i> Body Email &amp; Guidance
                                 </a>
                             </div>
                         </div>

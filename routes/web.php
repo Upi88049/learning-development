@@ -83,6 +83,8 @@ Route::middleware(['checkLogin'])->group(function () {
         Route::post('/penerima-email', [PenerimaEmailController::class, 'store'])->name('penerima-email.store');
         Route::get('/body-email', [BodyEmailController::class, 'index'])->name('body-email');
         Route::post('/body-email', [BodyEmailController::class, 'store'])->name('body-email.store');
+        Route::get('/body-email/download-attachment', [BodyEmailController::class, 'downloadAttachment'])->name('body-email.download-attachment');
+        Route::delete('/body-email/delete-attachment', [BodyEmailController::class, 'deleteAttachment'])->name('body-email.delete-attachment');
         Route::get('/periode-tna', [PeriodeTnaController::class, 'index'])->name('periode-tna');
         Route::post('/periode-tna/save-period', [PeriodeTnaController::class, 'savePeriod'])->name('periode-tna.savePeriod');
         Route::post('/periode-tna/close-tna', [PeriodeTnaController::class, 'closeTna'])->name('periode-tna.closeTna');

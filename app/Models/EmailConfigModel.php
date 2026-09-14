@@ -46,4 +46,25 @@ class EmailConfigModel extends Model
         $today = Carbon::today()->format('Y-m-d');
         return ($today >= $start && $today <= $end);
     }
+
+    public static function getAttachmentPath()
+    {
+        return static::getValue('attachment_path', null);
+    }
+
+    public static function getAttachmentName()
+    {
+        return static::getValue('attachment_name', null);
+    }
+
+    public static function getAttachmentSize()
+    {
+        return static::getValue('attachment_size', null);
+    }
+
+    public static function hasAttachment(): bool
+    {
+        $path = static::getAttachmentPath();
+        return !empty($path) && \Illuminate\Support\Facades\Storage::disk('public')->exists($path);
+    }
 }
