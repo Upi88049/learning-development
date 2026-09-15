@@ -100,7 +100,7 @@
         @endif
 
         {{-- Metric Stats --}}
-        <div class="row g-3 mb-4">
+        <!-- <div class="row g-3 mb-4">
             <div class="col-12 col-md-4">
                 <a href="{{ route('provider.index') }}" class="text-decoration-none">
                     <div class="stat-card {{ !request('type') ? 'border-primary' : '' }}">
@@ -140,7 +140,7 @@
                     </div>
                 </a>
             </div>
-        </div>
+        </div> -->
 
         {{-- Main Table Panel --}}
         <section class="panel">

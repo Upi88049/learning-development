@@ -45,7 +45,7 @@
     </div>
     @endif
 
-    <section class="row g-3 mt-1" aria-label="Dashboard metrics">
+    <!-- <section class="row g-3 mt-1" aria-label="Dashboard metrics">
       <div class="col-12 col-sm-6 col-xl-3">
         <article class="metric-card metric-primary">
           <div class="metric-top">
@@ -101,9 +101,9 @@
           </div>
         </article>
       </div>
-    </section>
+    </section> -->
 
-    <section class="row g-3 mt-1">
+    <!-- <section class="row g-3 mt-1">
       <div class="col-12 col-xl-8">
         <div class="panel">
           <div class="panel-header">
@@ -141,7 +141,7 @@
           </div>
         </div>
       </div>
-    </section>
+    </section> -->
     
   </div>
 </main>

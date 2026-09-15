@@ -12,6 +12,8 @@ use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\DivisiController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\InstructorController;
+use App\Http\Controllers\VenueController;
 use App\Http\Controllers\RequestOuthouseController;
 use App\Http\Controllers\PenugasanTrainingController;
 
@@ -67,6 +69,12 @@ Route::middleware(['checkLogin'])->group(function () {
 
         // Provider Management (CRUD)
         Route::resource('provider', ProviderController::class);
+
+        // Instructor Management (CRUD)
+        Route::resource('instructor', InstructorController::class);
+
+        // Venue Management (CRUD)
+        Route::resource('venue', VenueController::class);
 
         // Out House Training Management (DLC)
         Route::get('/dlc/request-outhouse', [RequestOuthouseController::class, 'index'])->name('outhouse.index');
