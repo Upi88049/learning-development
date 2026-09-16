@@ -59,27 +59,27 @@
           <div class="sidebar-submenu">
             <a class="nav-link {{ request()->routeIs('divisi.*') ? 'active' : '' }}" href="{{ route('divisi.index') }}">
               <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
-              <span class="nav-text">Master Divisi</span>
+              <span class="nav-text">Divisi</span>
             </a>
             <a class="nav-link {{ request()->routeIs('department.*') ? 'active' : '' }}" href="{{ route('department.index') }}">
               <span class="nav-icon"><i class="bi bi-building" aria-hidden="true"></i></span>
-              <span class="nav-text">Master Department</span>
+              <span class="nav-text">Department</span>
             </a>
             <a class="nav-link {{ request()->routeIs('training.*') ? 'active' : '' }}" href="{{ route('training.index') }}">
               <span class="nav-icon"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
-              <span class="nav-text">Master Training</span>
+              <span class="nav-text">Training</span>
             </a>
             <a class="nav-link {{ request()->routeIs('provider.*') ? 'active' : '' }}" href="{{ route('provider.index') }}">
               <span class="nav-icon"><i class="bi bi-building-gear" aria-hidden="true"></i></span>
-              <span class="nav-text">Master Provider</span>
+              <span class="nav-text">Provider</span>
             </a>
             <a class="nav-link {{ request()->routeIs('instructor.*') ? 'active' : '' }}" href="{{ route('instructor.index') }}">
               <span class="nav-icon"><i class="bi bi-person-video3" aria-hidden="true"></i></span>
-              <span class="nav-text">Master Instruktur</span>
+              <span class="nav-text">Instruktur</span>
             </a>
             <a class="nav-link {{ request()->routeIs('venue.*') ? 'active' : '' }}" href="{{ route('venue.index') }}">
               <span class="nav-icon"><i class="bi bi-geo-alt" aria-hidden="true"></i></span>
-              <span class="nav-text">Master Venue</span>
+              <span class="nav-text">Venue</span>
             </a>
           </div>
         </div>
@@ -89,22 +89,90 @@
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Member List</span>
         </a>
-        <a class="nav-link {{ request()->routeIs('outhouse.*') ? 'active' : '' }}" href="{{ route('outhouse.index') }}">
-          <span class="nav-icon"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></span>
-          <span class="nav-text">Request Out House</span>
+        <!-- ========== FORMULIR (COLLAPSIBLE SUBMENU) ========== -->
+        @php
+            $isFormulirActive = request()->routeIs('outhouse.*', 'penugasan.*');
+        @endphp
+        <a class="nav-link submenu-toggle {{ $isFormulirActive ? 'active' : 'collapsed' }}"
+           href="#formulirSubmenu"
+           data-bs-toggle="collapse"
+           role="button"
+           aria-expanded="{{ $isFormulirActive ? 'true' : 'false' }}"
+           aria-controls="formulirSubmenu">
+          <span class="nav-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span>
+          <span class="nav-text">Formulir</span>
+          <i class="bi bi-chevron-down submenu-arrow" aria-hidden="true"></i>
         </a>
-        <a class="nav-link {{ request()->routeIs('penugasan.*') ? 'active' : '' }}" href="{{ route('penugasan.index') }}">
-          <span class="nav-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></span>
-          <span class="nav-text">Form Penugasan</span>
+
+        <div class="collapse {{ $isFormulirActive ? 'show' : '' }}" id="formulirSubmenu">
+          <div class="sidebar-submenu">
+            <a class="nav-link {{ request()->routeIs('outhouse.*') ? 'active' : '' }}" href="{{ route('outhouse.index') }}">
+              <span class="nav-icon"><i class="bi bi-box-arrow-up-right" aria-hidden="true"></i></span>
+              <span class="nav-text">Request Out House</span>
+            </a>
+            <a class="nav-link {{ request()->routeIs('penugasan.*') ? 'active' : '' }}" href="{{ route('penugasan.index') }}">
+              <span class="nav-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></span>
+              <span class="nav-text">Form Penugasan</span>
+            </a>
+          </div>
+        </div>
+        <!-- ========== CALENDAR OF EVENT (COE) (COLLAPSIBLE SUBMENU) ========== -->
+        @php
+            $isCoeActive = request()->routeIs('coe.*');
+        @endphp
+        <a class="nav-link submenu-toggle {{ $isCoeActive ? 'active' : 'collapsed' }}"
+           href="#coeSubmenu"
+           data-bs-toggle="collapse"
+           role="button"
+           aria-expanded="{{ $isCoeActive ? 'true' : 'false' }}"
+           aria-controls="coeSubmenu">
+          <span class="nav-icon"><i class="bi bi-calendar3" aria-hidden="true"></i></span>
+          <span class="nav-text">Calender Of Event</span>
+          <i class="bi bi-chevron-down submenu-arrow" aria-hidden="true"></i>
         </a>
-        <a class="nav-link {{ request()->routeIs('penerima-email*') ? 'active' : '' }}" href="{{ route('penerima-email') }}">
-          <span class="nav-icon"><i class="bi bi-envelope-at" aria-hidden="true"></i></span>
-          <span class="nav-text">Penerima Email</span>
+
+        <div class="collapse {{ $isCoeActive ? 'show' : '' }}" id="coeSubmenu">
+          <div class="sidebar-submenu">
+            <a class="nav-link {{ request()->routeIs('coe.kalender.*') ? 'active' : '' }}" href="{{ route('coe.kalender.index') }}">
+              <span class="nav-icon"><i class="bi bi-calendar-week" aria-hidden="true"></i></span>
+              <span class="nav-text">Calender</span>
+            </a>
+            <a class="nav-link {{ request()->routeIs('coe.training-event.*') ? 'active' : '' }}" href="{{ route('coe.training-event.index') }}">
+              <span class="nav-icon"><i class="bi bi-calendar2-check" aria-hidden="true"></i></span>
+              <span class="nav-text">Training Event</span>
+            </a>
+          </div>
+        </div>
+        <!-- ========== END CALENDAR OF EVENT (COE) ========== -->
+
+        <!-- ========== EMAIL MANAGEMENT (COLLAPSIBLE SUBMENU) ========== -->
+        @php
+            $isEmailManagementActive = request()->routeIs('penerima-email*', 'body-email*');
+        @endphp
+        <a class="nav-link submenu-toggle {{ $isEmailManagementActive ? 'active' : 'collapsed' }}"
+           href="#emailManagementSubmenu"
+           data-bs-toggle="collapse"
+           role="button"
+           aria-expanded="{{ $isEmailManagementActive ? 'true' : 'false' }}"
+           aria-controls="emailManagementSubmenu">
+          <span class="nav-icon"><i class="bi bi-envelope-gear" aria-hidden="true"></i></span>
+          <span class="nav-text">Email Management</span>
+          <i class="bi bi-chevron-down submenu-arrow" aria-hidden="true"></i>
         </a>
-        <a class="nav-link {{ request()->routeIs('body-email*') ? 'active' : '' }}" href="{{ route('body-email') }}">
-          <span class="nav-icon"><i class="bi bi-card-text" aria-hidden="true"></i></span>
-          <span class="nav-text">Body Email</span>
-        </a>
+
+        <div class="collapse {{ $isEmailManagementActive ? 'show' : '' }}" id="emailManagementSubmenu">
+          <div class="sidebar-submenu">
+            <a class="nav-link {{ request()->routeIs('penerima-email*') ? 'active' : '' }}" href="{{ route('penerima-email') }}">
+              <span class="nav-icon"><i class="bi bi-envelope-at" aria-hidden="true"></i></span>
+              <span class="nav-text">Penerima Email</span>
+            </a>
+            <a class="nav-link {{ request()->routeIs('body-email*') ? 'active' : '' }}" href="{{ route('body-email') }}">
+              <span class="nav-icon"><i class="bi bi-card-text" aria-hidden="true"></i></span>
+              <span class="nav-text">Body Email</span>
+            </a>
+          </div>
+        </div>
+        <!-- ========== END EMAIL MANAGEMENT ========== -->
         <a class="nav-link {{ request()->routeIs('periode-tna*') ? 'active' : '' }}" href="{{ route('periode-tna') }}">
           <span class="nav-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></span>
           <span class="nav-text">Periode TNA</span>

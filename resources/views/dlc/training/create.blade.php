@@ -43,12 +43,12 @@
 
         <section class="row g-3">
             <div class="col-12 col-xl-12">
-                <form action="{{ route('training.store') }}" method="POST" class="panel p-4">
+                <form action="{{ route('training.store') }}" method="POST" enctype="multipart/form-data" class="panel p-4">
                     @csrf
                     <div class="panel-header border-bottom pb-3 mb-3">
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-card-heading me-2" aria-hidden="true"></i><span>Informasi Training</span></h2>
-                            <p class="text-muted mb-0">Lengkapi informasi jenis, judul, mandatory status, dan golongan training.</p>
+                            <p class="text-muted mb-0">Lengkapi informasi jenis, judul, mandatory status, golongan, gambar, dan detail training.</p>
                         </div>
                     </div>
 
@@ -87,6 +87,39 @@
                             <label class="form-label fw-semibold" for="gol_training">Golongan Training (Opsional)</label>
                             <input class="form-control" id="gol_training" name="gol_training" type="text" value="{{ old('gol_training') }}" placeholder="Contoh: 3E - 4E, 1A - 2B">
                         </div>
+
+                        {{-- Section Gambar & Detail Training --}}
+                        <div class="col-12 mt-4 pt-3 border-top">
+                            <h3 class="h6 fw-bold text-dark mb-1">
+                                <i class="bi bi-card-image me-1 text-primary"></i> Gambar / Flyer &amp; Detail Training
+                            </h3>
+                            <p class="text-muted small mb-3">Unggah poster/brosur/infografis silabus dan rincian materi agar dapat dilihat saat training diklik.</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="gambar">
+                                Upload Gambar / Poster / Brosur Training (Opsional)
+                            </label>
+                            <input class="form-control" type="file" id="gambar" name="gambar" accept="image/jpeg,image/png,image/jpg,image/webp,image/gif">
+                            <small class="text-muted d-block mt-1">Format gambar: JPG, PNG, WEBP, atau GIF (Maks. 5 MB).</small>
+
+                            {{-- Live Image Preview Container --}}
+                            <div id="imagePreviewWrapper" class="mt-3 p-2 bg-light border rounded-3 text-center d-none" style="max-width: 320px;">
+                                <div class="d-flex justify-content-between align-items-center mb-1 px-1">
+                                    <span class="small fw-semibold text-muted">Preview Gambar:</span>
+                                    <button type="button" class="btn-close btn-sm" id="btnRemovePreview" title="Hapus gambar terpilih"></button>
+                                </div>
+                                <img id="imagePreview" src="#" alt="Preview Gambar Training" class="img-fluid rounded border shadow-xs" style="max-height: 220px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="deskripsi_training">
+                                Deskripsi / Detail Materi Training (Opsional)
+                            </label>
+                            <textarea class="form-control" id="deskripsi_training" name="deskripsi_training" rows="6" placeholder="Tuliskan ringkasan materi, silabus, tujuan pelatihan, persyaratan peserta, atau catatan penting training ini...">{{ old('deskripsi_training') }}</textarea>
+                            <small class="text-muted d-block mt-1">Deskripsi ini akan muncul pada popup detail ketika card training diklik.</small>
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
@@ -101,4 +134,33 @@
     </div>
 </main>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inputGambar = document.getElementById('gambar');
+    const previewWrapper = document.getElementById('imagePreviewWrapper');
+    const imagePreview = document.getElementById('imagePreview');
+    const btnRemove = document.getElementById('btnRemovePreview');
+
+    inputGambar?.addEventListener('change', function () {
+        const file = this.files && this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                previewWrapper.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewWrapper.classList.add('d-none');
+            imagePreview.src = '#';
+        }
+    });
+
+    btnRemove?.addEventListener('click', function () {
+        inputGambar.value = '';
+        previewWrapper.classList.add('d-none');
+        imagePreview.src = '#';
+    });
+});
+</script>
 @endsection

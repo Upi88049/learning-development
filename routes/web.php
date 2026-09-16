@@ -16,6 +16,8 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\RequestOuthouseController;
 use App\Http\Controllers\PenugasanTrainingController;
+use App\Http\Controllers\CoeKalenderController;
+use App\Http\Controllers\CoeTrainingEventController;
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -101,6 +103,22 @@ Route::middleware(['checkLogin'])->group(function () {
         Route::post('/periode-tna/save-period', [PeriodeTnaController::class, 'savePeriod'])->name('periode-tna.savePeriod');
         Route::post('/periode-tna/close-tna', [PeriodeTnaController::class, 'closeTna'])->name('periode-tna.closeTna');
         Route::post('/periode-tna/send-email', [PeriodeTnaController::class, 'sendEmail'])->name('periode-tna.sendEmail');
+
+        // ==========================================
+        // CALENDAR OF EVENT (COE)
+        // ==========================================
+        Route::prefix('coe')->name('coe.')->group(function () {
+            // Sub-menu Kalender
+            Route::get('/kalender', [CoeKalenderController::class, 'index'])->name('kalender.index');
+            Route::post('/kalender', [CoeKalenderController::class, 'store'])->name('kalender.store');
+            Route::get('/kalender/events-json', [CoeKalenderController::class, 'eventsJson'])->name('kalender.eventsJson');
+            Route::get('/kalender/{id}', [CoeKalenderController::class, 'show'])->name('kalender.show');
+            Route::put('/kalender/{id}', [CoeKalenderController::class, 'update'])->name('kalender.update');
+            Route::delete('/kalender/{id}', [CoeKalenderController::class, 'destroy'])->name('kalender.destroy');
+
+            // Sub-menu Training Event
+            Route::resource('/training-event', CoeTrainingEventController::class)->names('training-event');
+        });
     });
 
     // ==========================================

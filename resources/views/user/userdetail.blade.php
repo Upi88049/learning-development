@@ -14,11 +14,25 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 145px;
+    min-height: 200px;
+    cursor: pointer;
 }
 .mini-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+}
+.mini-card .status-select {
+    cursor: default;
+}
+.badge-inhouse {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
+}
+.badge-outhouse {
+    background-color: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
 }
 
 .card-green {
@@ -63,8 +77,8 @@
     border-color: rgba(255, 255, 255, 0.15);
     color: #ffffff;
 }
-.card-gray strong { color: #0f172a; font-weight: 700; }
-.card-gray span, .card-gray .card-subtext { color: #64748b; }
+.card-gray strong { color: #feffff; font-weight: 700; }
+.card-gray span, .card-gray .card-subtext { color: #ffffff; }
 
 /* Status dropdown in mini-card */
 .mini-card select.form-select {
@@ -405,19 +419,43 @@
                                     $statusId = $record ? $record->id_status : null;
                                 @endphp
                                 <div class="col-md-3 col-sm-6">
-                                    <div class="mini-card {{ $colorClass }}" id="card-{{ $t->id_training }}">
-                                        <div>
+                                    <div class="mini-card {{ $colorClass }} training-card-clickable" 
+                                         id="card-{{ $t->id_training }}"
+                                         data-id="{{ $t->id_training }}"
+                                         data-nama="{{ $t->nama_training }}"
+                                         data-kode="{{ $t->kode_training ?: '-' }}"
+                                         data-scope="{{ $t->scope_training ?: 'In House' }}"
+                                         data-jenis="{{ $t->jenis_training }}"
+                                         data-mandatory="{{ $t->mandatory_training ?: '-' }}"
+                                         data-gol="{{ $t->gol_training ?: '-' }}"
+                                         data-gambar="{{ $t->gambar ? asset('uploads/training/' . $t->gambar) : '' }}"
+                                         data-deskripsi="{{ $t->deskripsi_training ?: '' }}"
+                                         title="Klik untuk melihat detail &amp; silabus training"
+                                         role="button">
+                                        <div class="card-body-trigger">
                                             <div class="d-flex align-items-center justify-content-between gap-1 mb-1">
                                                 @if($t->kode_training)
                                                     <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.68rem;">{{ $t->kode_training }}</span>
                                                 @else
                                                     <span></span>
                                                 @endif
-                                                <span class="badge {{ $t->scope_training == 'Out House' ? 'bg-warning-subtle text-warning border' : 'bg-info-subtle text-info border' }}" style="font-size: 0.68rem;">{{ $t->scope_training ?: 'In House' }}</span>
+                                                <div class="d-flex align-items-center gap-1">
+                                                    @if($t->gambar)
+                                                        <span class="badge bg-white bg-opacity-25 text-white border border-white border-opacity-50" title="Ada gambar/silabus materi" style="font-size: 0.65rem;">
+                                                            <i class="bi bi-image"></i>
+                                                        </span>
+                                                    @endif
+                                                    <span class="badge {{ $t->scope_training == 'Out House' ? 'bg-warning-subtle text-warning border' : 'bg-info-subtle text-info border' }}" style="font-size: 0.68rem;">{{ $t->scope_training ?: 'In House' }}</span>
+                                                </div>
                                             </div>
                                             <span style="font-size: 0.75rem; display: block;" class="text-uppercase fw-semibold">{{ $t->mandatory_training ?: '-' }}</span>
                                             <strong class="d-block my-1.5 fs-6">{{ $t->nama_training }}</strong>
-                                            <span style="font-size: 0.75rem; display: block;">Gol: {{ $t->gol_training ?: '-' }}</span>
+                                            <div class="d-flex align-items-center justify-content-between mt-1">
+                                                <span style="font-size: 0.75rem;">Gol: {{ $t->gol_training ?: '-' }}</span>
+                                                <!-- <span class="badge bg-light text-dark border rounded-pill px-2 py-0.5" style="font-size: 0.65rem;">
+                                                    <i class="bi bi-info-circle me-1 text-primary"></i>Detail
+                                                </span> -->
+                                            </div>
                                         </div>
                                         
                                         {{-- Status Selection / Display (Immediate Manager logic) --}}
@@ -676,6 +714,56 @@
     </div>
 </main>
 
+{{-- Modal Detail & Gambar Training --}}
+<div class="modal fade text-start" id="modalTrainingDetail" tabindex="-1" aria-labelledby="modalTrainingDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden;">
+            <div class="modal-header bg-light border-bottom py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 font-monospace fs-6 px-2.5 py-1" id="modalDetailKode">-</span>
+                    <h5 class="modal-title fs-6 fw-bold text-dark mb-0" id="modalDetailNama">Detail Training</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    {{-- Media/Gambar Training --}}
+                    <div class="col-md-5">
+                        <div id="modalDetailImageWrapper" class="p-2 border rounded-3 bg-light d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
+                            <img id="modalDetailImage" src="#" alt="Poster Training" class="img-fluid rounded shadow-xs mb-2 d-none" style="max-height: 280px; width: 100%; object-fit: contain;">
+                            <div id="modalDetailNoImage" class="text-muted p-4 text-center">
+                                <i class="bi bi-image fs-1 d-block text-secondary opacity-50 mb-2"></i>
+                                <span class="small d-block">Belum ada gambar/brosur silabus yang diunggah untuk training ini.</span>
+                            </div>
+                            <a id="modalDetailImageLink" href="#" target="_blank" class="btn btn-sm btn-outline-primary d-none w-100 mt-2">
+                                <i class="bi bi-box-arrow-up-right me-1"></i> Buka Gambar Penuh
+                            </a>
+                        </div>
+                    </div>
+                    {{-- Detail & Deskripsi Training --}}
+                    <div class="col-md-7 d-flex flex-column">
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge" id="modalDetailScope">-</span>
+                            <span class="badge bg-secondary-subtle text-secondary border" id="modalDetailJenis">-</span>
+                            <span class="badge bg-light text-dark border" id="modalDetailMandatory">-</span>
+                            <span class="badge bg-light text-muted border" id="modalDetailGol">-</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2 pb-2 border-bottom">
+                            <i class="bi bi-card-text me-1 text-primary"></i> Deskripsi &amp; Silabus Materi
+                        </h6>
+                        <div class="p-3 bg-light rounded-3 border flex-grow-1" style="min-height: 160px; max-height: 240px; overflow-y: auto;">
+                            <p class="mb-0 text-secondary small" id="modalDetailDeskripsi" style="white-space: pre-line;">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-top d-flex justify-content-end py-2.5 px-4">
+                <button type="button" class="btn btn-outline-secondary btn-sm px-4 rounded-3" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if($isTnaActive)
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -741,6 +829,88 @@ document.addEventListener('DOMContentLoaded', function () {
             bootstrap.Collapse.getOrCreateInstance(el, { toggle: false }).hide();
         });
     });
+
+    // Modal Training Detail Handler
+    const modalEl = document.getElementById('modalTrainingDetail');
+    if (modalEl) {
+        const modal = new bootstrap.Modal(modalEl);
+        const elNama = document.getElementById('modalDetailNama');
+        const elKode = document.getElementById('modalDetailKode');
+        const elScope = document.getElementById('modalDetailScope');
+        const elJenis = document.getElementById('modalDetailJenis');
+        const elMandatory = document.getElementById('modalDetailMandatory');
+        const elGol = document.getElementById('modalDetailGol');
+        const elDeskripsi = document.getElementById('modalDetailDeskripsi');
+        const elImage = document.getElementById('modalDetailImage');
+        const elNoImage = document.getElementById('modalDetailNoImage');
+        const elImageLink = document.getElementById('modalDetailImageLink');
+
+        document.querySelectorAll('.training-card-clickable').forEach(function (card) {
+            card.addEventListener('click', function (e) {
+                // Abaikan jika user mengklik elemen interaktif status select
+                if (e.target.closest('.status-select, select, option, button, a')) {
+                    return;
+                }
+
+                const d = this.dataset;
+
+                if (elNama) elNama.textContent = d.nama || 'Detail Training';
+                if (elKode) elKode.textContent = d.kode || '-';
+
+                // Scope badge
+                if (elScope) {
+                    if (d.scope === 'Out House') {
+                        elScope.className = 'badge badge-outhouse rounded-pill px-2.5 py-1';
+                        elScope.innerHTML = '<i class="bi bi-box-arrow-up-right me-1"></i> Out House';
+                    } else {
+                        elScope.className = 'badge badge-inhouse rounded-pill px-2.5 py-1';
+                        elScope.innerHTML = '<i class="bi bi-building-check me-1"></i> In House';
+                    }
+                }
+
+                if (elJenis) elJenis.textContent = d.jenis || '-';
+                if (elMandatory) elMandatory.textContent = 'Mandatory: ' + (d.mandatory || '-');
+                if (elGol) elGol.textContent = 'Gol: ' + (d.gol || '-');
+
+                // Deskripsi
+                if (elDeskripsi) {
+                    if (d.deskripsi && d.deskripsi.trim() !== '') {
+                        elDeskripsi.textContent = d.deskripsi;
+                        elDeskripsi.classList.remove('text-muted', 'fst-italic');
+                    } else {
+                        elDeskripsi.textContent = 'Belum ada deskripsi materi atau silabus detail yang ditambahkan untuk training ini.';
+                        elDeskripsi.classList.add('text-muted', 'fst-italic');
+                    }
+                }
+
+                // Gambar
+                if (elImage && elNoImage && elImageLink) {
+                    if (d.gambar && d.gambar.trim() !== '') {
+                        elImage.src = d.gambar;
+                        elImage.classList.remove('d-none');
+                        elNoImage.classList.add('d-none');
+                        elImageLink.href = d.gambar;
+                        elImageLink.classList.remove('d-none');
+                    } else {
+                        elImage.src = '#';
+                        elImage.classList.add('d-none');
+                        elNoImage.classList.remove('d-none');
+                        elImageLink.href = '#';
+                        elImageLink.classList.add('d-none');
+                    }
+                }
+
+                modal.show();
+            });
+        });
+
+        // Pastikan klik pada select tidak memicu klik pada kartu
+        document.querySelectorAll('.status-select').forEach(function (select) {
+            select.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        });
+    }
 });
 </script>
 

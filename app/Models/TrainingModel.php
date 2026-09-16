@@ -17,7 +17,23 @@ class TrainingModel extends Model
         'scope_training',
         'mandatory_training',
         'gol_training',
+        'gambar',
+        'deskripsi_training',
     ];
+
+    /**
+     * Get image URL if exists
+     */
+    public function getGambarUrlAttribute(): ?string
+    {
+        if (!empty($this->gambar)) {
+            if (filter_var($this->gambar, FILTER_VALIDATE_URL)) {
+                return $this->gambar;
+            }
+            return asset('uploads/training/' . $this->gambar);
+        }
+        return null;
+    }
 
     /**
      * Auto generate format kode training seperti TRN-001

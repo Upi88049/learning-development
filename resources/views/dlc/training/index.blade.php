@@ -182,12 +182,13 @@
                         <tr>
                             <th scope="col" style="width: 50px;" class="text-center">No</th>
                             <th scope="col" style="min-width: 120px;">Kode Training</th>
-                            <th scope="col" style="min-width: 220px;">Judul Training</th>
-                            <th scope="col" style="min-width: 120px;" class="text-center">Scope Training</th>
-                            <th scope="col" style="min-width: 150px;">Jenis Training</th>
-                            <th scope="col" style="min-width: 130px;">Mandatory</th>
-                            <th scope="col" style="min-width: 120px;">Golongan</th>
-                            <th scope="col" class="text-end" style="min-width: 110px;">Aksi</th>
+                            <th scope="col" style="min-width: 200px;">Judul Training</th>
+                            <th scope="col" style="min-width: 110px;" class="text-center">Scope Training</th>
+                            <th scope="col" style="min-width: 140px;">Jenis Training</th>
+                            <th scope="col" style="min-width: 110px;">Mandatory</th>
+                            <th scope="col" style="min-width: 100px;">Golongan</th>
+                            <th scope="col" style="min-width: 120px;" class="text-center">Gambar / Detail</th>
+                            <th scope="col" class="text-end" style="min-width: 120px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,7 +201,21 @@
                                 </span>
                             </td>
                             <td>
-                                <strong class="text-dark">{{ $t->nama_training }}</strong>
+                                <strong class="text-dark cursor-pointer btn-view-detail"
+                                        role="button"
+                                        data-id="{{ $t->id_training }}"
+                                        data-nama="{{ $t->nama_training }}"
+                                        data-kode="{{ $t->kode_training ?: '-' }}"
+                                        data-scope="{{ $t->scope_training ?: 'In House' }}"
+                                        data-jenis="{{ $t->jenis_training }}"
+                                        data-mandatory="{{ $t->mandatory_training ?: '-' }}"
+                                        data-gol="{{ $t->gol_training ?: '-' }}"
+                                        data-gambar="{{ $t->gambar ? asset('uploads/training/' . $t->gambar) : '' }}"
+                                        data-deskripsi="{{ $t->deskripsi_training ?: '' }}"
+                                        data-edit-url="{{ route('training.edit', $t->id_training) }}"
+                                        title="Klik untuk melihat detail training">
+                                    {{ $t->nama_training }}
+                                </strong>
                             </td>
                             <td class="text-center">
                                 @if($t->scope_training == 'Out House')
@@ -220,8 +235,60 @@
                                 <span class="badge bg-light text-secondary border">{{ $t->mandatory_training ?: '-' }}</span>
                             </td>
                             <td>{{ $t->gol_training ?: '-' }}</td>
+                            <td class="text-center">
+                                @if($t->gambar)
+                                    <button type="button" 
+                                            class="btn btn-sm p-0 border rounded overflow-hidden shadow-2xs btn-view-detail" 
+                                            data-id="{{ $t->id_training }}"
+                                            data-nama="{{ $t->nama_training }}"
+                                            data-kode="{{ $t->kode_training ?: '-' }}"
+                                            data-scope="{{ $t->scope_training ?: 'In House' }}"
+                                            data-jenis="{{ $t->jenis_training }}"
+                                            data-mandatory="{{ $t->mandatory_training ?: '-' }}"
+                                            data-gol="{{ $t->gol_training ?: '-' }}"
+                                            data-gambar="{{ asset('uploads/training/' . $t->gambar) }}"
+                                            data-deskripsi="{{ $t->deskripsi_training ?: '' }}"
+                                            data-edit-url="{{ route('training.edit', $t->id_training) }}"
+                                            title="Lihat Gambar &amp; Detail Training">
+                                        <img src="{{ asset('uploads/training/' . $t->gambar) }}" alt="{{ $t->nama_training }}" style="width: 36px; height: 36px; object-fit: cover;">
+                                    </button>
+                                @elseif($t->deskripsi_training)
+                                    <button type="button" 
+                                            class="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-1 btn-view-detail py-1 px-2"
+                                            data-id="{{ $t->id_training }}"
+                                            data-nama="{{ $t->nama_training }}"
+                                            data-kode="{{ $t->kode_training ?: '-' }}"
+                                            data-scope="{{ $t->scope_training ?: 'In House' }}"
+                                            data-jenis="{{ $t->jenis_training }}"
+                                            data-mandatory="{{ $t->mandatory_training ?: '-' }}"
+                                            data-gol="{{ $t->gol_training ?: '-' }}"
+                                            data-gambar=""
+                                            data-deskripsi="{{ $t->deskripsi_training ?: '' }}"
+                                            data-edit-url="{{ route('training.edit', $t->id_training) }}"
+                                            title="Lihat Deskripsi Detail">
+                                        <i class="bi bi-card-text text-primary"></i> <span style="font-size: 0.72rem;">Detail</span>
+                                    </button>
+                                @else
+                                    <span class="text-muted small" title="Belum ada gambar / detail">-</span>
+                                @endif
+                            </td>
                             <td class="text-end">
                                 <div class="btn-group" role="group">
+                                    <button type="button" 
+                                            class="btn btn-outline-info btn-sm btn-view-detail" 
+                                            data-id="{{ $t->id_training }}"
+                                            data-nama="{{ $t->nama_training }}"
+                                            data-kode="{{ $t->kode_training ?: '-' }}"
+                                            data-scope="{{ $t->scope_training ?: 'In House' }}"
+                                            data-jenis="{{ $t->jenis_training }}"
+                                            data-mandatory="{{ $t->mandatory_training ?: '-' }}"
+                                            data-gol="{{ $t->gol_training ?: '-' }}"
+                                            data-gambar="{{ $t->gambar ? asset('uploads/training/' . $t->gambar) : '' }}"
+                                            data-deskripsi="{{ $t->deskripsi_training ?: '' }}"
+                                            data-edit-url="{{ route('training.edit', $t->id_training) }}"
+                                            title="Lihat Detail &amp; Gambar Training">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
                                     <a class="btn btn-outline-primary btn-sm" href="{{ route('training.edit', $t->id_training) }}" title="Edit">
                                         <i class="bi bi-pencil"></i>
                                     </a>
@@ -237,7 +304,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-5">
+                            <td colspan="9" class="text-center text-muted py-5">
                                 <i class="bi bi-inbox fs-2 d-block mb-2 text-muted opacity-50"></i>
                                 Belum ada data training yang sesuai kriteria pencarian/filter.
                                 @if(request('search') || request('scope'))
@@ -260,4 +327,133 @@
     </div>
 </main>
 
+{{-- Modal Detail & Gambar Training --}}
+<div class="modal fade text-start" id="modalTrainingDetail" tabindex="-1" aria-labelledby="modalTrainingDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="border-radius: 16px; border: 1px solid #e2e8f0; overflow: hidden;">
+            <div class="modal-header bg-light border-bottom py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 font-monospace fs-6 px-2.5 py-1" id="modalDetailKode">-</span>
+                    <h5 class="modal-title fs-6 fw-bold text-dark mb-0" id="modalDetailNama">Detail Training</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    {{-- Media/Gambar Training --}}
+                    <div class="col-md-5">
+                        <div id="modalDetailImageWrapper" class="p-2 border rounded-3 bg-light d-flex flex-column align-items-center justify-content-center" style="min-height: 250px;">
+                            <img id="modalDetailImage" src="#" alt="Poster Training" class="img-fluid rounded shadow-xs mb-2 d-none" style="max-height: 280px; width: 100%; object-fit: contain;">
+                            <div id="modalDetailNoImage" class="text-muted p-4 text-center">
+                                <i class="bi bi-image fs-1 d-block text-secondary opacity-50 mb-2"></i>
+                                <span class="small d-block">Belum ada gambar/brosur silabus yang diunggah untuk training ini.</span>
+                            </div>
+                            <a id="modalDetailImageLink" href="#" target="_blank" class="btn btn-sm btn-outline-primary d-none w-100 mt-2">
+                                <i class="bi bi-box-arrow-up-right me-1"></i> Buka Gambar Penuh
+                            </a>
+                        </div>
+                    </div>
+                    {{-- Detail & Deskripsi Training --}}
+                    <div class="col-md-7 d-flex flex-column">
+                        <div class="d-flex flex-wrap gap-1.5 mb-3">
+                            <span class="badge" id="modalDetailScope">-</span>
+                            <span class="badge bg-secondary-subtle text-secondary border" id="modalDetailJenis">-</span>
+                            <span class="badge bg-light text-dark border" id="modalDetailMandatory">-</span>
+                            <span class="badge bg-light text-muted border" id="modalDetailGol">-</span>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2 pb-2 border-bottom">
+                            <i class="bi bi-card-text me-1 text-primary"></i> Deskripsi &amp; Silabus Materi
+                        </h6>
+                        <div class="p-3 bg-light rounded-3 border flex-grow-1" style="min-height: 160px; max-height: 240px; overflow-y: auto;">
+                            <p class="mb-0 text-secondary small" id="modalDetailDeskripsi" style="white-space: pre-line;">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-light border-top d-flex justify-content-between py-2.5 px-4">
+                <a id="modalDetailEditBtn" href="#" class="btn btn-primary btn-sm px-3 rounded-3 d-inline-flex align-items-center gap-1">
+                    <i class="bi bi-pencil"></i> Edit Training
+                </a>
+                <button type="button" class="btn btn-outline-secondary btn-sm px-3 rounded-3" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modalEl = document.getElementById('modalTrainingDetail');
+    if (!modalEl) return;
+    const modal = new bootstrap.Modal(modalEl);
+
+    const elNama = document.getElementById('modalDetailNama');
+    const elKode = document.getElementById('modalDetailKode');
+    const elScope = document.getElementById('modalDetailScope');
+    const elJenis = document.getElementById('modalDetailJenis');
+    const elMandatory = document.getElementById('modalDetailMandatory');
+    const elGol = document.getElementById('modalDetailGol');
+    const elDeskripsi = document.getElementById('modalDetailDeskripsi');
+    const elImage = document.getElementById('modalDetailImage');
+    const elNoImage = document.getElementById('modalDetailNoImage');
+    const elImageLink = document.getElementById('modalDetailImageLink');
+    const elEditBtn = document.getElementById('modalDetailEditBtn');
+
+    document.querySelectorAll('.btn-view-detail').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const d = this.dataset;
+
+            elNama.textContent = d.nama || 'Detail Training';
+            elKode.textContent = d.kode || '-';
+
+            // Scope badge
+            if (d.scope === 'Out House') {
+                elScope.className = 'badge badge-outhouse rounded-pill px-2.5 py-1';
+                elScope.innerHTML = '<i class="bi bi-box-arrow-up-right me-1"></i> Out House';
+            } else {
+                elScope.className = 'badge badge-inhouse rounded-pill px-2.5 py-1';
+                elScope.innerHTML = '<i class="bi bi-building-check me-1"></i> In House';
+            }
+
+            elJenis.textContent = d.jenis || '-';
+            elMandatory.textContent = 'Mandatory: ' + (d.mandatory || '-');
+            elGol.textContent = 'Gol: ' + (d.gol || '-');
+
+            // Description
+            if (d.deskripsi && d.deskripsi.trim() !== '') {
+                elDeskripsi.textContent = d.deskripsi;
+                elDeskripsi.classList.remove('text-muted', 'fst-italic');
+            } else {
+                elDeskripsi.textContent = 'Belum ada deskripsi materi atau silabus detail yang ditambahkan untuk training ini.';
+                elDeskripsi.classList.add('text-muted', 'fst-italic');
+            }
+
+            // Image
+            if (d.gambar && d.gambar.trim() !== '') {
+                elImage.src = d.gambar;
+                elImage.classList.remove('d-none');
+                elNoImage.classList.add('d-none');
+                elImageLink.href = d.gambar;
+                elImageLink.classList.remove('d-none');
+            } else {
+                elImage.src = '#';
+                elImage.classList.add('d-none');
+                elNoImage.classList.remove('d-none');
+                elImageLink.href = '#';
+                elImageLink.classList.add('d-none');
+            }
+
+            // Edit button url
+            if (d.editUrl) {
+                elEditBtn.href = d.editUrl;
+                elEditBtn.classList.remove('d-none');
+            } else {
+                elEditBtn.classList.add('d-none');
+            }
+
+            modal.show();
+        });
+    });
+});
+</script>
 @endsection

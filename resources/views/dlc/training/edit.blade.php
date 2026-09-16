@@ -43,13 +43,13 @@
 
         <section class="row g-3">
             <div class="col-12 col-xl-12">
-                <form action="{{ route('training.update', $training->id_training) }}" method="POST" class="panel p-4">
+                <form action="{{ route('training.update', $training->id_training) }}" method="POST" enctype="multipart/form-data" class="panel p-4">
                     @csrf
                     @method('PUT')
                     <div class="panel-header border-bottom pb-3 mb-3">
                         <div>
                             <h2 class="h5 mb-1 section-title"><i class="bi bi-card-heading me-2" aria-hidden="true"></i><span>Ubah Informasi Training</span></h2>
-                            <p class="text-muted mb-0">Perbarui data training berikut.</p>
+                            <p class="text-muted mb-0">Perbarui data jenis, judul, mandatory, golongan, gambar, dan detail materi training berikut.</p>
                         </div>
                     </div>
 
@@ -88,6 +88,58 @@
                             <label class="form-label fw-semibold" for="gol_training">Golongan Training (Opsional)</label>
                             <input class="form-control" id="gol_training" name="gol_training" type="text" value="{{ old('gol_training', $training->gol_training) }}">
                         </div>
+
+                        {{-- Section Gambar & Detail Training --}}
+                        <div class="col-12 mt-4 pt-3 border-top">
+                            <h3 class="h6 fw-bold text-dark mb-1">
+                                <i class="bi bi-card-image me-1 text-primary"></i> Gambar / Flyer &amp; Detail Training
+                            </h3>
+                            <p class="text-muted small mb-3">Perbarui poster/brosur/infografis silabus dan rincian materi agar dapat dilihat saat training diklik.</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="gambar">
+                                Upload / Ganti Gambar Training (Opsional)
+                            </label>
+                            <input class="form-control" type="file" id="gambar" name="gambar" accept="image/jpeg,image/png,image/jpg,image/webp,image/gif">
+                            <small class="text-muted d-block mt-1">Format gambar: JPG, PNG, WEBP, atau GIF (Maks. 5 MB). Kosongkan jika tidak ingin mengubah gambar.</small>
+
+                            @if($training->gambar)
+                            <div class="mt-3 p-3 bg-light border rounded-3" id="currentImageWrapper">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-semibold text-dark"><i class="bi bi-image me-1 text-primary"></i>Gambar Saat Ini:</span>
+                                    <div class="form-check form-check-inline mb-0">
+                                        <input class="form-check-input" type="checkbox" id="hapus_gambar" name="hapus_gambar" value="1">
+                                        <label class="form-check-label small text-danger fw-semibold" for="hapus_gambar" style="cursor: pointer;">
+                                            <i class="bi bi-trash"></i> Hapus Gambar Ini
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <a href="{{ asset('uploads/training/' . $training->gambar) }}" target="_blank" title="Klik untuk memperbesar">
+                                        <img src="{{ asset('uploads/training/' . $training->gambar) }}" alt="{{ $training->nama_training }}" class="img-fluid rounded border shadow-xs" style="max-height: 180px; object-fit: contain;">
+                                    </a>
+                                </div>
+                            </div>
+                            @endif
+
+                            {{-- Live Image Preview Container for Newly Selected File --}}
+                            <div id="imagePreviewWrapper" class="mt-3 p-2 bg-light border rounded-3 text-center d-none" style="max-width: 320px;">
+                                <div class="d-flex justify-content-between align-items-center mb-1 px-1">
+                                    <span class="small fw-semibold text-primary">Preview Gambar Baru:</span>
+                                    <button type="button" class="btn-close btn-sm" id="btnRemovePreview" title="Batalkan pilihan gambar"></button>
+                                </div>
+                                <img id="imagePreview" src="#" alt="Preview Gambar Training" class="img-fluid rounded border shadow-xs" style="max-height: 200px; object-fit: contain;">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold" for="deskripsi_training">
+                                Deskripsi / Detail Materi Training (Opsional)
+                            </label>
+                            <textarea class="form-control" id="deskripsi_training" name="deskripsi_training" rows="6" placeholder="Tuliskan ringkasan materi, silabus, tujuan pelatihan, persyaratan peserta, atau catatan penting training ini...">{{ old('deskripsi_training', $training->deskripsi_training) }}</textarea>
+                            <small class="text-muted d-block mt-1">Deskripsi ini akan muncul pada popup detail ketika card training diklik.</small>
+                        </div>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
@@ -102,4 +154,33 @@
     </div>
 </main>
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inputGambar = document.getElementById('gambar');
+    const previewWrapper = document.getElementById('imagePreviewWrapper');
+    const imagePreview = document.getElementById('imagePreview');
+    const btnRemove = document.getElementById('btnRemovePreview');
+
+    inputGambar?.addEventListener('change', function () {
+        const file = this.files && this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                imagePreview.src = e.target.result;
+                previewWrapper.classList.remove('d-none');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewWrapper.classList.add('d-none');
+            imagePreview.src = '#';
+        }
+    });
+
+    btnRemove?.addEventListener('click', function () {
+        inputGambar.value = '';
+        previewWrapper.classList.add('d-none');
+        imagePreview.src = '#';
+    });
+});
+</script>
 @endsection
