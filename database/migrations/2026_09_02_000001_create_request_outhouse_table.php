@@ -15,8 +15,8 @@ return new class extends Migration
         Schema::create('request_outhouse', function (Blueprint $table) {
             $table->increments('id_request_outhouse');
             $table->string('no_request')->unique();
-            $table->integer('id_staff');
-            $table->integer('id_immediate_manager')->nullable();
+            $table->unsignedInteger('id_staff');
+            $table->unsignedInteger('id_immediate_manager')->nullable();
             $table->string('judul_training');
             $table->text('deskripsi_training');
             $table->text('reason');
